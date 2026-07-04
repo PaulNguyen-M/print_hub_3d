@@ -78,6 +78,41 @@ export const translations: Dict = {
   'common.price':      { vi: 'Giá',              en: 'Price' },
   'common.search':     { vi: 'Tìm kiếm…',        en: 'Search…' },
 
+  // ── Auth (login / register) ──
+  'auth.email':              { vi: 'Email',            en: 'Email' },
+  'auth.password':           { vi: 'Mật Khẩu',         en: 'Password' },
+  'auth.fullName':           { vi: 'Họ Và Tên',        en: 'Full Name' },
+  'auth.confirmPassword':    { vi: 'Xác Nhận Mật Khẩu', en: 'Confirm Password' },
+  'auth.or':                 { vi: 'hoặc',             en: 'or' },
+  'auth.google':             { vi: 'Tiếp tục với Google', en: 'Continue with Google' },
+  'auth.emailPlaceholder':   { vi: 'name@email.com',   en: 'name@email.com' },
+  'auth.namePlaceholder':    { vi: 'Nguyễn Văn A',     en: 'John Doe' },
+
+  'auth.login.title':        { vi: 'Chào Mừng Trở Lại', en: 'Welcome Back' },
+  'auth.login.subtitle':     { vi: 'Đăng nhập để tiếp tục với Print Hub 3D', en: 'Sign in to continue with Print Hub 3D' },
+  'auth.login.forgot':       { vi: 'Quên mật khẩu?',   en: 'Forgot password?' },
+  'auth.login.submit':       { vi: 'Đăng Nhập',        en: 'Sign In' },
+  'auth.login.loading':      { vi: 'Đang đăng nhập…',  en: 'Signing in…' },
+  'auth.login.noAccount':    { vi: 'Chưa có tài khoản?', en: "Don't have an account?" },
+  'auth.login.signupCta':    { vi: 'Đăng Ký Ngay',     en: 'Sign Up Now' },
+
+  'auth.register.title':     { vi: 'Tạo Tài Khoản',    en: 'Create Account' },
+  'auth.register.subtitle':  { vi: 'Tham gia cộng đồng Print Hub 3D ngay hôm nay', en: 'Join the Print Hub 3D community today' },
+  'auth.register.submit':    { vi: 'Đăng Ký',          en: 'Sign Up' },
+  'auth.register.loading':   { vi: 'Đang tạo…',        en: 'Creating…' },
+  'auth.register.haveAccount': { vi: 'Đã có tài khoản?', en: 'Already have an account?' },
+  'auth.register.loginCta':  { vi: 'Đăng Nhập',        en: 'Sign In' },
+  'auth.register.terms1':    { vi: 'Bằng cách đăng ký, bạn đồng ý với', en: 'By signing up, you agree to our' },
+  'auth.register.termsLink': { vi: 'Điều khoản sử dụng', en: 'Terms of Service' },
+  'auth.register.and':       { vi: 'và',               en: 'and' },
+  'auth.register.privacyLink': { vi: 'Chính sách bảo mật', en: 'Privacy Policy' },
+
+  'auth.hero.title.top':        { vi: 'Nền tảng mua bán', en: 'Vietnam leading' },
+  'auth.hero.title.bottom':     { vi: 'hàng đẩu Việt Nam', en: 'trading platform' },
+  'auth.hero.subtitle':          { vi: 'Upload file STL, xem preview 360°, đặt in với hàng chục vật liệu. Thanh toán VNPay, MoMo hoặc Stripe.', en: 'Upload STL files, preview in 360°, order prints in dozens of materials. Pay via VNPay, MoMo or Stripe.' },
+  
+
+
   // ── Admin sidebar / layout ──
   'admin.panel':       { vi: 'Bảng Điều Khiển',  en: 'Admin Panel' },
   'admin.title':       { vi: 'Print Hub 3D Admin', en: 'Print Hub 3D Admin' },

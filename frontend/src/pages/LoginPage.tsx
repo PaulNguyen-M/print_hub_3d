@@ -7,6 +7,7 @@ import { Loader2, Eye, EyeOff, Mail, Lock } from 'lucide-react'
 import apiClient from '../api/axios'
 import useAuthStore from '../store/authStore'
 import { useToast } from '../hooks/useToast'
+import { useTranslation } from '../i18n/useTranslation'
 
 const loginSchema = z.object({
   email: z.string().email('Email không hợp lệ'),
@@ -29,6 +30,7 @@ export default function LoginPage() {
   const { showToast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [showPw, setShowPw] = useState(false)
+  const { t } = useTranslation()
 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -53,20 +55,20 @@ export default function LoginPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-bold text-white">Chào Mừng Trở Lại</h1>
-      <p className="mb-7 text-sm text-slate-400">Đăng nhập để tiếp tục với Print Hub 3D</p>
+      <h1 className="mb-1 text-2xl font-bold text-white">{t("auth.login.title")}</h1>
+      <p className="mb-7 text-sm text-slate-400">{t("auth.login.subtitle")}</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-400">
-            Email
+            {t("auth.email")}
           </label>
           <div className="relative">
             <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               {...register('email')}
               type="email"
-              placeholder="name@email.com"
+              placeholder={t("auth.emailPlaceholder")}
               className="w-full rounded-xl border border-slate-700 bg-slate-800/80 pl-10 pr-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
             />
           </div>
@@ -76,9 +78,10 @@ export default function LoginPage() {
         <div>
           <div className="mb-1.5 flex items-center justify-between">
             <label className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-              Mật Khẩu
+              {t("auth.password")}
+
             </label>
-            <a href="#" className="text-xs text-brand-400 hover:text-brand-300">Quên mật khẩu?</a>
+            <a href="#" className="text-xs text-brand-400 hover:text-brand-300">{t("auth.login.forgot")}</a>
           </div>
           <div className="relative">
             <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
@@ -104,13 +107,13 @@ export default function LoginPage() {
           disabled={isLoading}
           className="w-full rounded-xl bg-brand-600 py-3 text-sm font-semibold text-white shadow-glow transition hover:bg-brand-500 disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center gap-2"
         >
-          {isLoading ? <><Loader2 size={16} className="animate-spin" /> Đang đăng nhập…</> : 'Đăng Nhập'}
+          {isLoading ? <><Loader2 size={16} className="animate-spin" /> {t("auth.login.loading")}</> : t("auth.login.submit")}
         </button>
       </form>
 
       <div className="my-5 flex items-center gap-3">
         <div className="flex-1 border-t border-slate-700" />
-        <span className="text-xs text-slate-500">hoặc</span>
+        <span className="text-xs text-slate-500">{t("auth.or")}</span>
         <div className="flex-1 border-t border-slate-700" />
       </div>
 
@@ -119,13 +122,13 @@ export default function LoginPage() {
         className="w-full rounded-xl border border-slate-700 bg-slate-800/50 py-2.5 text-sm font-medium text-slate-300 transition hover:border-slate-600 hover:bg-slate-800 flex items-center justify-center gap-2"
       >
         <img src="https://www.google.com/favicon.ico" alt="" className="h-4 w-4" />
-        Tiếp tục với Google
+        {t("auth.google")}
       </button>
 
       <p className="mt-6 text-center text-sm text-slate-400">
-        Chưa có tài khoản?{' '}
+        {t("auth.login.noAccount")}{' '}
         <Link to="/auth/register" className="font-semibold text-brand-400 hover:text-brand-300">
-          Đăng Ký Ngay
+          {t("auth.login.signupCta")}
         </Link>
       </p>
     </div>

@@ -1,9 +1,12 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Box } from 'lucide-react'
+import LanguageToggle from '../components/ui/LanguageToggle'
+import { useTranslation } from '../i18n/useTranslation'
 
 export default function AuthLayout() {
   const location = useLocation()
+  const {t} = useTranslation()
 
   return (
     <div className="flex min-h-screen bg-slate-950">
@@ -31,9 +34,9 @@ export default function AuthLayout() {
             transition={{ delay: 0.2, duration: 0.8 }}
             className="text-4xl font-extrabold leading-tight text-white"
           >
-            Nền tảng mua bán<br />
+            {t("auth.hero.title.top")}<br />
             <span className="text-gradient">& in 3D</span><br />
-            hàng đầu Việt Nam
+            {t("auth.hero.title.bottom")}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -41,8 +44,7 @@ export default function AuthLayout() {
             transition={{ delay: 0.4, duration: 0.7 }}
             className="mt-4 text-slate-400 leading-relaxed max-w-sm"
           >
-            Upload file STL, xem preview 360°, đặt in với hàng chục vật liệu.
-            Thanh toán VNPay, MoMo hoặc Stripe.
+            {t("auth.hero.subtitle")}
           </motion.p>
           <motion.div
             initial={{ opacity: 0 }}
@@ -60,12 +62,15 @@ export default function AuthLayout() {
 
         {/* Bottom quote */}
         <p className="relative z-10 text-xs text-slate-500">
-          © {new Date().getFullYear()} Print Hub 3D — Luận văn tốt nghiệp
+          © {new Date().getFullYear()} Print Hub 3D
         </p>
       </div>
 
       {/* Right: Form */}
       <div className="flex flex-1 items-center justify-center p-6 lg:p-12">
+        <div className="absolute right-6 top-6 z-20">
+          <LanguageToggle />
+        </div>
         <motion.div
           key={location.pathname}
           initial={{ opacity: 0, y: 20 }}

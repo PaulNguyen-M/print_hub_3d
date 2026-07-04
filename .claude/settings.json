@@ -24,7 +24,11 @@
       "Bash(xargs basename -a)",
       "Bash(grep -v '//')",
       "Bash(./mvnw.cmd -q compile)",
-      "Bash(./mvnw.cmd compile *)"
+      "Bash(./mvnw.cmd compile *)",
+      "Bash(export PGPASSWORD=290104)",
+      "Bash(psql -h localhost -p 5433 -U postgres -d print3d_db -c \"SELECT column_name FROM information_schema.columns WHERE table_name='products' ORDER BY ordinal_position;\")",
+      "PowerShell($env:PGPASSWORD='290104'; & 'C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe' -h localhost -p 5433 -U postgres -d print3d_db -c \"SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name='products' ORDER BY ordinal_position;\")",
+      "PowerShell($env:PGPASSWORD='290104'; & 'C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe' -h localhost -p 5433 -U postgres -d print3d_db -v ON_ERROR_STOP=1 -c \"ALTER TABLE products ADD COLUMN IF NOT EXISTS status VARCHAR\\(20\\) NOT NULL DEFAULT 'PENDING'; UPDATE products SET status='ACTIVE' WHERE is_active = true; CREATE INDEX IF NOT EXISTS idx_products_status ON products\\(status\\) WHERE deleted_at IS NULL;\")"
     ],
     "additionalDirectories": [
       "d:\\LEARN\\print_hub_3d"

@@ -7,6 +7,7 @@ import { Loader2, Eye, EyeOff, Mail, Lock, User } from 'lucide-react'
 import apiClient from '../api/axios'
 import useAuthStore from '../store/authStore'
 import { useToast } from '../hooks/useToast'
+import { useTranslation } from '../i18n/useTranslation'
 
 const registerSchema = z.object({
   fullName: z.string()
@@ -44,7 +45,7 @@ export default function RegisterPage() {
   const { showToast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [showPw, setShowPw] = useState(false)
-
+  const { t } = useTranslation()
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     // Hiện lỗi ngay khi người dùng rời ô (blur) và tiếp tục cập nhật khi gõ,
@@ -93,36 +94,36 @@ export default function RegisterPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-bold text-white">Tạo Tài Khoản</h1>
-      <p className="mb-7 text-sm text-slate-400">Tham gia cộng đồng Print Hub 3D ngay hôm nay</p>
+      <h1 className="mb-1 text-2xl font-bold text-white">{t("auth.register.title")}</h1>
+      <p className="mb-7 text-sm text-slate-400">{t("auth.register.subtitle")}</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {field('Họ Và Tên', 'fullName', 'text', 'Nguyễn Văn A', User)}
-        {field('Email', 'email', 'email', 'name@email.com', Mail)}
-        {field('Mật Khẩu', 'password', 'password', '••••••••', Lock)}
-        {field('Xác Nhận Mật Khẩu', 'confirmPassword', 'password', '••••••••', Lock)}
+        {field(t("auth.fullName"), 'fullName', 'text', t("auth.namePlaceholder"), User)}
+        {field(t("auth.email"), 'email', 'email', t("auth.emailPlaceholder"), Mail)}
+        {field(t("auth.password"), 'password', 'password', '••••••••', Lock)}
+        {field(t("auth.confirmPassword"), 'confirmPassword', 'password', '••••••••', Lock)}
 
         <button
           type="submit"
           disabled={isLoading}
           className="w-full rounded-xl bg-brand-600 py-3 text-sm font-semibold text-white shadow-glow transition hover:bg-brand-500 disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
         >
-          {isLoading ? <><Loader2 size={16} className="animate-spin" /> Đang tạo…</> : 'Đăng Ký'}
+          {isLoading ? <><Loader2 size={16} className="animate-spin" /> {t("auth.register.loading")}</> : t("auth.register.submit")}
         </button>
       </form>
 
       <p className="mt-6 text-center text-sm text-slate-400">
-        Đã có tài khoản?{' '}
+        {t("auth.register.haveAccount")}{' '}
         <Link to="/auth/login" className="font-semibold text-brand-400 hover:text-brand-300">
-          Đăng Nhập
+          {t("auth.register.loginCta")}
         </Link>
       </p>
 
       <p className="mt-4 text-center text-xs text-slate-500">
-        Bằng cách đăng ký, bạn đồng ý với{' '}
-        <a href="#" className="text-slate-400 hover:text-slate-300">Điều khoản sử dụng</a>
-        {' '}và{' '}
-        <a href="#" className="text-slate-400 hover:text-slate-300">Chính sách bảo mật</a>
+        {t("auth.register.terms1")}{' '}
+        <a href="#" className="text-slate-400 hover:text-slate-300">{t("auth.register.termsLink")}</a>
+        {' '}{t("auth.register.and")}{' '}
+        <a href="#" className="text-slate-400 hover:text-slate-300">{t("auth.register.privacyLink")}</a>
       </p>
     </div>
   )
