@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -rn \"Stripe.apiKey\\\\|apiKey\\\\|StripeConfig\\\\|@Value\\(\\\\\"\\\\${stripe\" src/main/java)",
+      "Bash(./mvnw -q compile)",
+      "Bash(./mvnw compile *)",
+      "Bash(xargs cat)",
+      "Read(//c/Users/tanh2/.claude/projects/d--LEARN-print-hub-3d/memory/**)",
+      "Bash(ls MEMORY.md)",
+      "Bash(grep -n \"Related\\\\|relatedProducts\\\\|return \\(\\\\|</main>\\\\|</div>\\\\s*$\\\\|export default\\\\|<div className=\\\\\"container\" src/features/products/ProductDetailPage.tsx)",
+      "Bash(grep -vE \"^\\\\S+:\\\\s*//|formatPrice|vi-VN|placeholder=\\\\{t\")",
+      "Bash(xargs -I{} echo \"Tong so loi tsc toan project: {}\")",
+      "Bash(xargs -I{} echo \"Tong loi tsc: {}\")",
+      "Bash(cd d:/LEARN/print_hub_3d/frontend && echo \"=== public img ===\"; ls public 2>/dev/null; ls public/img 2>/dev/null; echo \"=== find images ===\"; find . -path ./node_modules -prune -o \\\\\\( -iname \"momo*\" -o -iname \"chuyen_khoan*\" \\\\\\) -print 2>/dev/null | head; echo \"=== CreateOrderRequest ===\"; cat ../backend/src/main/java/com/printhub3/backend/dto/request/CreateOrderRequest.java)",
+      "Read(//d/LEARN/backend/src/main/java/com/printhub3/backend/dto/request/**)",
+      "Bash(ls node_modules/three/examples/jsm/loaders/STLLoader.js)",
+      "Bash(ls node_modules/@types/three/examples/jsm/loaders/STLLoader.d.ts)",
+      "Bash(ls node_modules/three-stdlib/loaders/STLLoader.js)",
+      "Bash(cd d:/LEARN/print_hub_3d && mkdir -p docs && echo \"docs ready\")",
+      "Bash(grep -nE \"setAllowedOrigin|allowedOrigins|allow-credentials|\\\\\\\\*\" src/main/resources/application.properties src/main/java/com/printhub3/backend/config/WebSecurityConfig.java)",
+      "Bash(python -)",
+      "Bash(./mvnw clean *)",
+      "Bash(dir)",
+      "Bash(xargs basename -a)",
+      "Bash(grep -v '//')",
+      "Bash(./mvnw.cmd -q compile)",
+      "Bash(./mvnw.cmd compile *)"
+    ],
+    "additionalDirectories": [
+      "d:\\LEARN\\print_hub_3d"
+    ]
+  }
+}

@@ -1,0 +1,354 @@
+// Print Hub 3D - Database Diagram
+// dbdiagram.io code - Copy this to https://dbdiagram.io/d
+// This represents the complete ERD for the Print Hub 3D marketplace
+//
+// Cập nhật: thêm hệ Shop/Sạp (shops, seller_applications, shop_follows,
+//   shop_reviews, shop_payouts), product_stl_files (nhiều file STL/sản phẩm),
+//   và các cột mới: products.shop_id, products.stl_file_url,
+//   orders.payment_method, order_items.seller_confirmed.
+
+Table roles {
+  role_id BIGINT [pk, increment]
+  name VARCHAR(50) [unique, not null]
+  description TEXT
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table users {
+  user_id BIGINT [pk, increment]
+  email VARCHAR(255) [unique, not null]
+  password_hash VARCHAR(255) [not null]
+  full_name VARCHAR(255) [not null]
+  phone VARCHAR(20)
+  profile_image_url TEXT
+  address VARCHAR(255)
+  city VARCHAR(100)
+  state_province VARCHAR(100)
+  postal_code VARCHAR(20)
+  country VARCHAR(100)
+  role_id BIGINT [not null, ref: > roles.role_id]
+  is_verified BOOLEAN [default: false]
+  email_verified_at TIMESTAMP
+  phone_verified_at TIMESTAMP
+  last_login_at TIMESTAMP
+  is_active BOOLEAN [default: true]
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  deleted_at TIMESTAMP
+}
+
+Table refresh_tokens {
+  token_id BIGINT [pk, increment]
+  user_id BIGINT [not null, ref: > users.user_id]
+  token_hash VARCHAR(255) [unique, not null]
+  expires_at TIMESTAMP [not null]
+  revoked_at TIMESTAMP
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table user_activities {
+  activity_id BIGINT [pk, increment]
+  user_id BIGINT [not null, ref: > users.user_id]
+  activity_type VARCHAR(50) [not null]
+  description TEXT
+  ip_address VARCHAR(45)
+  user_agent TEXT
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table categories {
+  category_id BIGINT [pk, increment]
+  name VARCHAR(100) [unique, not null]
+  description TEXT
+  icon_url TEXT
+  parent_category_id BIGINT [ref: > categories.category_id]
+  display_order INTEGER [default: 0]
+  is_active BOOLEAN [default: true]
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  deleted_at TIMESTAMP
+}
+
+Table products {
+  product_id BIGINT [pk, increment]
+  name VARCHAR(255) [not null]
+  description TEXT
+  price DECIMAL(12, 2) [not null]
+  category_id BIGINT [not null, ref: > categories.category_id]
+  seller_id BIGINT [not null, ref: > users.user_id]
+  shop_id BIGINT [ref: > shops.shop_id, note: 'sạp chứa sản phẩm']
+  stock_quantity INTEGER [not null, default: 0]
+  stl_file_url TEXT [note: 'file STL chính (tương thích ngược)']
+  rating DECIMAL(3, 2) [default: 0]
+  total_reviews INTEGER [default: 0]
+  total_sold INTEGER [default: 0]
+  is_active BOOLEAN [default: true]
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  deleted_at TIMESTAMP
+}
+
+Table product_images {
+  image_id BIGINT [pk, increment]
+  product_id BIGINT [not null, ref: > products.product_id]
+  image_url TEXT [not null]
+  alt_text VARCHAR(255)
+  display_order INTEGER [default: 0]
+  is_primary BOOLEAN [default: false]
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  deleted_at TIMESTAMP
+}
+
+Table product_stl_files {
+  product_stl_file_id BIGINT [pk, increment]
+  product_id BIGINT [not null, ref: > products.product_id]
+  file_url TEXT [not null]
+  file_name VARCHAR(255)
+  display_order INTEGER [default: 0]
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  Note: 'Mô hình nhiều bộ phận = nhiều file STL; tải về gom thành ZIP'
+}
+
+Table product_reviews {
+  review_id BIGINT [pk, increment]
+  product_id BIGINT [not null, ref: > products.product_id]
+  user_id BIGINT [not null, ref: > users.user_id]
+  rating INTEGER [not null]
+  comment TEXT
+  is_verified_purchase BOOLEAN [default: false]
+  helpful_count INTEGER [default: 0]
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  deleted_at TIMESTAMP
+}
+
+// ── Shop / Seller (Marketplace "chợ/sạp") ──
+
+Table shops {
+  shop_id BIGINT [pk, increment]
+  owner_id BIGINT [unique, not null, ref: - users.user_id, note: '1 user = 1 sạp']
+  name VARCHAR(150) [not null]
+  slug VARCHAR(180) [unique, not null]
+  description TEXT
+  logo_url TEXT
+  banner_url TEXT
+  status VARCHAR(20) [not null, default: 'ACTIVE', note: 'ACTIVE/SUSPENDED/CLOSED']
+  rating DECIMAL(3, 2) [default: 0]
+  total_reviews INTEGER [default: 0]
+  total_products INTEGER [default: 0]
+  total_sales INTEGER [default: 0]
+  total_followers INTEGER [default: 0]
+  commission_rate DECIMAL(5, 4) [default: 0.15, note: 'hoa hồng nền tảng']
+  balance DECIMAL(14, 2) [default: 0, note: 'ví doanh thu sau hoa hồng']
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  deleted_at TIMESTAMP
+}
+
+Table seller_applications {
+  application_id BIGINT [pk, increment]
+  applicant_id BIGINT [not null, ref: > users.user_id]
+  shop_id BIGINT [ref: - shops.shop_id, note: 'sạp tạo ra khi duyệt']
+  shop_name VARCHAR(150) [not null]
+  description TEXT
+  status VARCHAR(20) [not null, default: 'PENDING', note: 'PENDING/APPROVED/REJECTED']
+  opening_fee DECIMAL(12, 2) [default: 0]
+  fee_paid BOOLEAN [default: false]
+  fee_payment_reference VARCHAR(120)
+  rejection_reason TEXT
+  reviewed_by BIGINT [ref: > users.user_id, note: 'admin duyệt']
+  reviewed_at TIMESTAMP
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table shop_follows {
+  shop_follow_id BIGINT [pk, increment]
+  shop_id BIGINT [not null, ref: > shops.shop_id]
+  user_id BIGINT [not null, ref: > users.user_id]
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  indexes {
+    (shop_id, user_id) [unique]
+  }
+}
+
+Table shop_reviews {
+  shop_review_id BIGINT [pk, increment]
+  shop_id BIGINT [not null, ref: > shops.shop_id]
+  user_id BIGINT [not null, ref: > users.user_id]
+  rating INTEGER [not null]
+  comment TEXT
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  deleted_at TIMESTAMP
+  indexes {
+    (shop_id, user_id) [unique]
+  }
+}
+
+Table shop_payouts {
+  payout_id BIGINT [pk, increment]
+  shop_id BIGINT [not null, ref: > shops.shop_id]
+  order_id BIGINT [not null, ref: > orders.order_id]
+  gross_amount DECIMAL(14, 2) [not null]
+  commission_rate DECIMAL(5, 4) [not null]
+  commission_amount DECIMAL(14, 2) [not null]
+  net_amount DECIMAL(14, 2) [not null]
+  status VARCHAR(20) [not null, default: 'PAID', note: 'PENDING/PAID']
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  indexes {
+    (shop_id, order_id) [unique]
+  }
+}
+
+Table printing_requests {
+  request_id BIGINT [pk, increment]
+  user_id BIGINT [not null, ref: > users.user_id]
+  title VARCHAR(255) [not null]
+  description TEXT
+  desired_delivery_date TIMESTAMP
+  budget DECIMAL(12, 2)
+  status VARCHAR(50) [not null, default: 'REVIEWING']
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  deleted_at TIMESTAMP
+}
+
+Table printing_request_files {
+  file_id BIGINT [pk, increment]
+  request_id BIGINT [not null, ref: > printing_requests.request_id]
+  file_url TEXT [not null]
+  file_size BIGINT
+  file_type VARCHAR(50)
+  uploaded_at TIMESTAMP
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table printing_request_quotes {
+  quote_id BIGINT [pk, increment]
+  request_id BIGINT [not null, ref: > printing_requests.request_id]
+  seller_id BIGINT [not null, ref: > users.user_id]
+  quoted_price DECIMAL(12, 2) [not null]
+  delivery_date TIMESTAMP
+  description TEXT
+  status VARCHAR(50) [not null, default: 'PENDING']
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  deleted_at TIMESTAMP
+}
+
+Table carts {
+  cart_id BIGINT [pk, increment]
+  user_id BIGINT [unique, not null, ref: > users.user_id]
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table cart_items {
+  item_id BIGINT [pk, increment]
+  cart_id BIGINT [not null, ref: > carts.cart_id]
+  product_id BIGINT [not null, ref: > products.product_id]
+  quantity INTEGER [not null]
+  added_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table orders {
+  order_id BIGINT [pk, increment]
+  user_id BIGINT [not null, ref: > users.user_id]
+  order_number VARCHAR(50) [unique, not null]
+  total_amount DECIMAL(12, 2) [not null]
+  status VARCHAR(50) [not null, default: 'PENDING', note: 'PENDING/PROCESSING/CONFIRMED/.../COMPLETED/CANCELLED']
+  shipping_fee DECIMAL(12, 2) [note: 'phi van chuyen theo phuong thuc']
+  tax DECIMAL(12, 2) [note: 'thue 10% tren tam tinh']
+  payment_method VARCHAR(30) [note: 'BANK_TRANSFER/MOMO/CASH']
+  shipping_address TEXT
+  shipping_date TIMESTAMP
+  estimated_delivery_date TIMESTAMP
+  actual_delivery_date TIMESTAMP
+  notes TEXT
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  deleted_at TIMESTAMP
+}
+
+Table order_items {
+  order_item_id BIGINT [pk, increment]
+  order_id BIGINT [not null, ref: > orders.order_id]
+  product_id BIGINT [not null, ref: > products.product_id]
+  quantity INTEGER [not null]
+  unit_price DECIMAL(12, 2) [not null]
+  subtotal DECIMAL(12, 2) [not null]
+  seller_confirmed BOOLEAN [default: false, note: 'người bán đã xác nhận xử lý']
+  seller_confirmed_at TIMESTAMP
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table payments {
+  payment_id BIGINT [pk, increment]
+  order_id BIGINT [not null, ref: > orders.order_id]
+  amount DECIMAL(12, 2) [not null]
+  status VARCHAR(50) [not null, default: 'PENDING']
+  method VARCHAR(50) [not null]
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table payment_transactions {
+  transaction_id BIGINT [pk, increment]
+  payment_id BIGINT [not null, ref: > payments.payment_id]
+  transaction_reference VARCHAR(255) [not null]
+  amount DECIMAL(12, 2) [not null]
+  status VARCHAR(50) [not null]
+  gateway_response TEXT
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table chats {
+  chat_id BIGINT [pk, increment]
+  name VARCHAR(255)
+  status VARCHAR(50) [not null, default: 'ACTIVE']
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  updated_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+  deleted_at TIMESTAMP
+}
+
+Table chat_users {
+  chat_id BIGINT [not null, ref: > chats.chat_id]
+  user_id BIGINT [not null, ref: > users.user_id]
+}
+
+Table messages {
+  message_id BIGINT [pk, increment]
+  chat_id BIGINT [not null, ref: > chats.chat_id]
+  sender_id BIGINT [not null, ref: > users.user_id]
+  content TEXT [not null]
+  is_edited BOOLEAN [default: false]
+  edited_at TIMESTAMP
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table notifications {
+  notification_id BIGINT [pk, increment]
+  user_id BIGINT [not null, ref: > users.user_id]
+  type VARCHAR(50) [not null]
+  title VARCHAR(255) [not null]
+  message TEXT
+  reference_id BIGINT
+  is_read BOOLEAN [default: false]
+  read_at TIMESTAMP
+  created_at TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
+
+Table audit_logs {
+  log_id BIGINT [pk, increment]
+  user_id BIGINT [ref: > users.user_id]
+  entity_name VARCHAR(255) [not null]
+  entity_id BIGINT [not null]
+  action VARCHAR(50) [not null]
+  changes TEXT
+  timestamp TIMESTAMP [default: `CURRENT_TIMESTAMP`]
+}
