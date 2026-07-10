@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
-  Star, Package, Download, Users, Store, Loader2, ShoppingBag,
-  MessageSquare, UserPlus, UserCheck, Search, ChevronDown, MessageCircle,
+  Star, Package, Users, Store, Loader2, ShoppingBag,
+  MessageSquare, UserPlus, UserCheck, Search, ChevronDown, MessageCircle, Calendar, ShoppingCart,
 } from 'lucide-react'
 import shopService from './shopService'
 import type { Shop, ShopProduct, ShopReview } from './shopService'
@@ -12,9 +12,18 @@ import useAuthStore from '../../store/authStore'
 import { useChatStore } from '../../store/chatStore'
 
 const PLACEHOLDER = 'https://placehold.co/400x400/1e293b/64748b?text=3D'
+const PAGE_SIZE = 12
 
 const formatPrice = (p: number) =>
   (p ?? 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+
+const formatJoined = (dateStr: string | undefined, lang: string) => {
+  if (!dateStr) return null
+  return new Date(dateStr).toLocaleDateString(
+    lang === 'vi' ? 'vi-VN' : 'en-US',
+    {month: 'long', year: 'numeric'},
+  )
+}
 
 const SORT_OPTIONS = [
   { value: 'newest', key: 'market.sort.newest' },
@@ -65,7 +74,7 @@ function ProductCard({ p, idx }: { p: ShopProduct; idx: number }) {
 
 export default function ShopPage() {
   const { slug } = useParams<{ slug: string }>()
-  const { t } = useTranslation()
+  const { t, lang } = useTranslation()
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const currentUser = useAuthStore((s) => s.user)
   const openChat = useChatStore((s) => s.openChat)
@@ -86,6 +95,9 @@ export default function ShopPage() {
   const [prodSearch, setProdSearch] = useState('')
   const [prodLoading, setProdLoading] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string>('all')
+  const [prodPage, setProdPage] = useState(0)
+  const [prodHasMore, setProdHasMore] = useState(false)
+  const [loadingMore, setLoadingMore] = useState(false)
 
   const [reviews, setReviews] = useState<ShopReview[] | null>(null)
   // null = not yet loaded → derive loading from this
@@ -109,13 +121,14 @@ export default function ShopPage() {
     let active = true
     Promise.all([
       shopService.getShop(slug),
-      shopService.getShopProducts(slug, 0, 48),
+      shopService.getShopProducts(slug, 0, PAGE_SIZE),
       shopService.getFeaturedProducts(slug),
     ])
       .then(([s, p, feat]) => {
         if (!active) return
         setShop(s)
         setProducts(p.content)
+        setProdHasMore(p.number + 1 < p.totalPages)
         setFeaturedProducts(feat)
         setFollowing(!!s.isFollowing)
         setFollowers(s.totalFollowers ?? 0)
@@ -136,10 +149,12 @@ export default function ShopPage() {
     let active = true
     const handle = setTimeout(() => {
       setProdLoading(true)
-      shopService.getShopProducts(slug, 0, 48, prodSort, prodSearch.trim() || undefined)
+      shopService.getShopProducts(slug, 0, PAGE_SIZE, prodSort, prodSearch.trim() || undefined)
         .then((p) => {
           if (active) {
             setProducts(p.content)
+            setProdPage(0)
+            setProdHasMore(p.number + 1 < p.totalPages)
             setActiveCategory('all')
           }
         })
@@ -158,6 +173,22 @@ export default function ShopPage() {
       .catch(() => { if (active) setReviews([]) })
     return () => { active = false }
   }, [activeTab, slug, reviews])
+
+  const handleLoadMore = async () => {
+    if(!slug) return 
+    setLoadingMore(true)
+    try{
+      const next = prodPage + 1
+      const p = await shopService.getShopProducts(
+        slug, next, PAGE_SIZE, prodSort, prodSearch.trim() || undefined,
+      )
+      setProducts((prev) => [...prev, ...p.content])
+      setProdPage(next)
+      setProdHasMore(p.number + 1 < p.totalPages)
+    } finally{
+      setLoadingMore(false)
+    }
+  }
 
   const handleFollow = async () => {
     if (!slug) return
@@ -212,7 +243,7 @@ export default function ShopPage() {
   const stats = [
     { icon: Star, value: shop.rating?.toFixed(1) ?? '0.0', label: t('shop.statRating') },
     { icon: Package, value: shop.totalProducts ?? 0, label: t('shop.statProducts') },
-    { icon: Download, value: shop.totalSales ?? 0, label: t('shop.statSold') },
+    { icon: ShoppingCart, value: shop.totalSales ?? 0, label: t('shop.statSold') },
     { icon: Users, value: followers, label: t('shop.statFollowers') },
   ]
 
@@ -237,6 +268,12 @@ export default function ShopPage() {
 
               <h1 className="mt-3 text-xl font-bold text-slate-900 dark:text-white">{shop.name}</h1>
               <p className="text-sm text-slate-400">@{shop.slug}</p>
+
+              {shop.createdAt && (
+                <p className="mt-1.5 flex items-center gap-1 text-xs text-slate-400">
+                  <Calendar size={12} /> {t('shop.joined')} {formatJoined(shop.createdAt, lang)}
+                </p>
+              )}
 
               {/* Follow + Chat */}
               {isAuthenticated && !isOwner && (
@@ -427,8 +464,24 @@ export default function ShopPage() {
                     {products.map((p, idx) => <ProductCard key={p.id} p={p} idx={idx} />)}
                   </div>
                 )}
+                {prodHasMore && !prodLoading && products.length > 0 && (
+                  <div className="mt-8 flex justify-center">
+                    <button
+                      type="button"
+                      onClick={handleLoadMore}
+                      disabled={loadingMore}
+                      className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-6 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-brand-300 hover:text-brand-600 disabled:opacity-60 dark:border-slate-700 dark:text-slate-200"
+                    >
+                      {loadingMore
+                        ? <><Loader2 size={16} className="animate-spin" /> {t('shop.loadMore')}</>
+                        : t('shop.loadMore')}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
+
+            
 
             {/* ── Tab: Đánh giá ── */}
             {activeTab === 'reviews' && (

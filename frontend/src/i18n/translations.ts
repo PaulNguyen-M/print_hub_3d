@@ -710,6 +710,8 @@ export const translations: Dict = {
   'shop.statFollowers': { vi: 'Người theo dõi', en: 'Followers' },
   'shop.about':         { vi: 'Giới thiệu', en: 'About' },
   'shop.owner':         { vi: 'Chủ sạp', en: 'Owner' },
+  'shop.joined':        { vi: 'Tham gia', en: 'Joined' },
+  'shop.loadMore':        { vi: 'Xem thêm sản phẩm', en: 'Load more products' },
   'shop.productsTitle': { vi: 'Sản phẩm', en: 'Products' },
   'shop.empty':         { vi: 'Sạp chưa có sản phẩm nào', en: 'This shop has no products yet' },
   'shop.tabProducts':   { vi: 'Sản phẩm', en: 'Products' },
