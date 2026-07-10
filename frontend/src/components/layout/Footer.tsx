@@ -94,7 +94,7 @@ export default function Footer() {
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-100 pt-6 sm:flex-row dark:border-slate-800">
           <p className="text-xs text-slate-400">
-            © {new Date().getFullYear()} Print Hub 3D. Luận văn tốt nghiệp — Xây dựng bởi sinh viên.
+            © {new Date().getFullYear()} Print Hub 3D
           </p>
           <div className="flex gap-4 text-xs text-slate-400">
             <a href="#" className="hover:text-slate-600 dark:hover:text-slate-300">Điều Khoản</a>

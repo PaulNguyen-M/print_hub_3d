@@ -33,6 +33,7 @@ public class AdminController {
     private final AdminService adminService;
     private final SellerService sellerService;
     private final OrderWorkflowService orderWorkflowService;
+    private final com.printhub3.backend.service.SellerWalletService sellerWalletService;
 
     @GetMapping("/dashboard")
     public ResponseEntity<ApiResponse<AdminDashboardDto>> getDashboardOverview() {
@@ -181,6 +182,36 @@ public class AdminController {
         String reason = request != null ? request.getRejectionReason() : null;
         SellerApplicationDto dto = sellerService.rejectApplication(applicationId, getCurrentUserId(), reason);
         return ResponseEntity.ok(ApiResponse.success(dto, "Đã từ chối đơn mở sạp"));
+    }
+
+    // ── Seller wallet withdrawals ───────────────────────────────────────
+
+    @GetMapping("/withdrawals")
+    public ResponseEntity<ApiResponse<Page<com.printhub3.backend.dto.response.WithdrawalDto>>> getWithdrawals(
+            @RequestParam(required = false) com.printhub3.backend.entity.Withdrawal.WithdrawalStatus status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<com.printhub3.backend.dto.response.WithdrawalDto> list =
+                sellerWalletService.listWithdrawals(status, PageRequest.of(page, size));
+        return ResponseEntity.ok(ApiResponse.success(list, "Withdrawals retrieved successfully"));
+    }
+
+    @PostMapping("/withdrawals/{withdrawalId}/approve")
+    public ResponseEntity<ApiResponse<com.printhub3.backend.dto.response.WithdrawalDto>> approveWithdrawal(
+            @PathVariable Long withdrawalId) {
+        return ResponseEntity.ok(ApiResponse.success(
+                sellerWalletService.approveWithdrawal(withdrawalId, getCurrentUserId()),
+                "Đã duyệt & chuyển tiền"));
+    }
+
+    @PostMapping("/withdrawals/{withdrawalId}/reject")
+    public ResponseEntity<ApiResponse<com.printhub3.backend.dto.response.WithdrawalDto>> rejectWithdrawal(
+            @PathVariable Long withdrawalId,
+            @RequestBody(required = false) ReviewApplicationRequest request) {
+        String reason = request != null ? request.getRejectionReason() : null;
+        return ResponseEntity.ok(ApiResponse.success(
+                sellerWalletService.rejectWithdrawal(withdrawalId, getCurrentUserId(), reason),
+                "Đã từ chối yêu cầu rút tiền"));
     }
 
     private Long getCurrentUserId() {

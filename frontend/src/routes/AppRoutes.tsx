@@ -24,6 +24,7 @@ import AdminOrdersPage from '../features/admin/AdminOrdersPage'
 import AdminUsersPage from '../features/admin/AdminUsersPage'
 import AdminStlRequestsPage from '../features/admin/AdminStlRequestsPage'
 import AdminSellerApplicationsPage from '../features/admin/AdminSellerApplicationsPage'
+import AdminWithdrawalsPage from '../features/admin/AdminWithdrawalsPage'
 import OpenShopPage from '../features/seller/OpenShopPage'
 import ShopCustomizePage from '../features/seller/ShopCustomizePage'
 import ShopPage from '../features/shop/ShopPage'
@@ -117,6 +118,7 @@ export default function AppRoutes() {
         <Route path="orders" element={<AdminOrdersPage />} />
         <Route path="users" element={<AdminUsersPage />} />
         <Route path="seller-applications" element={<AdminSellerApplicationsPage />} />
+        <Route path="withdrawals" element={<AdminWithdrawalsPage />} />
         <Route path="stl-requests" element={<AdminStlRequestsPage />} />
       </Route>
     </Routes>

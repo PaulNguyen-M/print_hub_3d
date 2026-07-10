@@ -16,7 +16,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     @Query("SELECT n FROM Notification n WHERE n.user.userId = ?1 AND n.deletedAt IS NULL ORDER BY n.createdAt DESC")
     Page<Notification> findNotificationsByUserId(Long userId, Pageable pageable);
     
-    @Query("SELECT n FROM Notification n WHERE n.user.userId = ?1 AND n.isRead = false AND n.deletedAt IS NULL")
+    @Query("SELECT COUNT(n) FROM Notification n WHERE n.user.userId = ?1 AND n.isRead = false AND n.deletedAt IS NULL")
     long countUnreadNotifications(Long userId);
     
     @Query("SELECT n FROM Notification n WHERE n.user.userId = ?1 AND n.notificationType = ?2 AND n.deletedAt IS NULL ORDER BY n.createdAt DESC")

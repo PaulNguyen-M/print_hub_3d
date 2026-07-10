@@ -85,6 +85,23 @@ export interface AdminSellerApplication {
   createdAt: string
 }
 
+export interface AdminWithdrawal {
+  withdrawalId: number
+  amount: number
+  bankName?: string
+  bankAccountNumber?: string
+  bankAccountName?: string
+  note?: string
+  status: 'PENDING' | 'PAID' | 'REJECTED'
+  rejectionReason?: string
+  shopId?: number
+  shopName?: string
+  shopSlug?: string
+  ownerName?: string
+  processedAt?: string
+  createdAt: string
+}
+
 export interface PagedResponse<T> {
   content: T[]
   totalElements: number
@@ -199,6 +216,25 @@ const adminService = {
       rejectionReason
     })
     return response.data.data as AdminSellerApplication
+  },
+
+  getWithdrawals: async (page: number, size: number, status?: string) => {
+    const response = await apiClient.get('/admin/withdrawals', {
+      params: { page, size, ...(status ? { status } : {}) }
+    })
+    return response.data.data as PagedResponse<AdminWithdrawal>
+  },
+
+  approveWithdrawal: async (withdrawalId: number) => {
+    const response = await apiClient.post(`/admin/withdrawals/${withdrawalId}/approve`)
+    return response.data.data as AdminWithdrawal
+  },
+
+  rejectWithdrawal: async (withdrawalId: number, rejectionReason: string) => {
+    const response = await apiClient.post(`/admin/withdrawals/${withdrawalId}/reject`, {
+      rejectionReason
+    })
+    return response.data.data as AdminWithdrawal
   }
 }
 

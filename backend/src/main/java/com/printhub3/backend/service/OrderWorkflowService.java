@@ -36,6 +36,7 @@ public class OrderWorkflowService {
     private final ShopRepository shopRepository;
     private final ShopPayoutRepository payoutRepository;
     private final NotificationRepository notificationRepository;
+    private final ProductRepository productRepository;
 
     // ── Admin ───────────────────────────────────────────────────────────
 
@@ -54,6 +55,9 @@ public class OrderWorkflowService {
                         "Đơn #" + order.getOrderNumber() + " có sản phẩm của sạp \"" + shop.getName()
                                 + "\". Vui lòng xác nhận để xử lý.", orderId));
         }
+        // Báo cho người mua biết đơn đã được xác nhận và đang xử lý.
+        notify(order.getUser(), "Đơn hàng đã được xác nhận",
+                "Đơn hàng #" + order.getOrderNumber() + " đã được xác nhận và đang được xử lý.", orderId);
         log.info("Order {} confirmed by admin", orderId);
     }
 
@@ -81,6 +85,9 @@ public class OrderWorkflowService {
 
         order.setOrderStatus(OrderStatus.COMPLETED);
         orderRepository.save(order);
+        // Báo cho người mua biết đơn đã hoàn tất.
+        notify(order.getUser(), "Đơn hàng đã hoàn tất",
+                "Đơn hàng #" + order.getOrderNumber() + " đã hoàn tất. Cảm ơn bạn đã mua sắm!", orderId);
         log.info("Order {} completed and shops paid out", orderId);
     }
 
@@ -116,6 +123,15 @@ public class OrderWorkflowService {
         int soldQty = shopItems.stream().mapToInt(it -> it.getQuantity() != null ? it.getQuantity() : 0).sum();
         shop.setTotalSales((shop.getTotalSales() != null ? shop.getTotalSales() : 0) + soldQty);
         shopRepository.save(shop);
+
+        // Cộng số lượng đã bán cho từng sản phẩm để thống kê "đã bán" phản ánh đúng.
+        for (OrderItem it : shopItems) {
+            Product product = it.getProduct();
+            if (product == null) continue;
+            int qty = it.getQuantity() != null ? it.getQuantity() : 0;
+            product.setTotalSold((product.getTotalSold() != null ? product.getTotalSold() : 0) + qty);
+            productRepository.save(product);
+        }
 
         notify(shop.getOwner(), "Đã nhận thanh toán đơn hàng",
                 "Đơn #" + order.getOrderNumber() + " hoàn tất. Bạn nhận được "
@@ -167,6 +183,9 @@ public class OrderWorkflowService {
         });
         orderItemRepository.saveAll(shopItems);
 
+        // Báo cho người mua biết người bán đã xác nhận chuẩn bị hàng.
+        notify(order.getUser(), "Người bán đã xác nhận đơn",
+                "Sạp \"" + shop.getName() + "\" đã xác nhận và đang chuẩn bị đơn #" + order.getOrderNumber() + ".", orderId);
         log.info("Seller {} confirmed items of order {}", userId, orderId);
         return buildSellerOrderDto(order, shop);
     }

@@ -32,6 +32,7 @@ public class SellerController {
     private final SellerService sellerService;
     private final ShopService shopService;
     private final OrderWorkflowService orderWorkflowService;
+    private final com.printhub3.backend.service.SellerWalletService sellerWalletService;
 
     /** Submit an application to open a shop. */
     @PostMapping("/apply")
@@ -87,6 +88,36 @@ public class SellerController {
     public ResponseEntity<ApiResponse<SellerOrderDto>> confirmOrder(@PathVariable Long orderId) {
         SellerOrderDto dto = orderWorkflowService.sellerConfirmItems(orderId, getCurrentUserId());
         return ResponseEntity.ok(ApiResponse.success(dto, "Đã xác nhận đơn hàng"));
+    }
+
+    // ── Wallet: stats & withdrawals ─────────────────────────────────────
+
+    /** Dashboard statistics for the current seller's wallet & sales. */
+    @GetMapping("/stats")
+    public ResponseEntity<ApiResponse<com.printhub3.backend.dto.response.SellerStatsDto>> stats() {
+        return ResponseEntity.ok(ApiResponse.success(
+                sellerWalletService.getStats(getCurrentUserId()), "Lấy thống kê thành công"));
+    }
+
+    /** The current seller's withdrawal requests (paginated). */
+    @GetMapping("/withdrawals")
+    public ResponseEntity<ApiResponse<org.springframework.data.domain.Page<com.printhub3.backend.dto.response.WithdrawalDto>>> myWithdrawals(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(ApiResponse.success(
+                sellerWalletService.getMyWithdrawals(getCurrentUserId(),
+                        org.springframework.data.domain.PageRequest.of(page, size)),
+                "Lấy danh sách rút tiền thành công"));
+    }
+
+    /** Request a withdrawal from the wallet balance. */
+    @PostMapping("/withdrawals")
+    public ResponseEntity<ApiResponse<com.printhub3.backend.dto.response.WithdrawalDto>> requestWithdrawal(
+            @Valid @RequestBody com.printhub3.backend.dto.request.WithdrawalRequest request) {
+        com.printhub3.backend.dto.response.WithdrawalDto dto =
+                sellerWalletService.requestWithdrawal(getCurrentUserId(), request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.created(dto, "Đã gửi yêu cầu rút tiền, vui lòng chờ admin duyệt"));
     }
 
     private Long getCurrentUserId() {

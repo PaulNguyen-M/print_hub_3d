@@ -79,6 +79,10 @@ public class SellerService {
         application = applicationRepository.save(application);
         log.info("Seller application {} submitted by user {}", application.getApplicationId(), userId);
 
+        notifyAdmins("Đơn mở sạp mới",
+                "Người dùng " + user.getFullName() + " xin mở sạp \"" + request.getShopName() + "\". Vui lòng duyệt.",
+                "SELLER_APPLICATION", application.getApplicationId());
+
         return toDto(application);
     }
 
@@ -200,6 +204,20 @@ public class SellerService {
                 .relatedEntityId(relatedId)
                 .isRead(false)
                 .build());
+    }
+
+    /** Notify every active admin (e.g. a new application that needs review). */
+    private void notifyAdmins(String title, String message, String relatedType, Long relatedId) {
+        userRepository.findUsersByRole("ADMIN", org.springframework.data.domain.Pageable.unpaged())
+                .forEach(admin -> notificationRepository.save(Notification.builder()
+                        .user(admin)
+                        .title(title)
+                        .message(message)
+                        .notificationType(Notification.NotificationType.SYSTEM_ALERT)
+                        .relatedEntityType(relatedType)
+                        .relatedEntityId(relatedId)
+                        .isRead(false)
+                        .build()));
     }
 
     private String uniqueSlug(String base) {

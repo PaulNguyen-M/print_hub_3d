@@ -13,11 +13,29 @@ import apiClient from '../../api/axios'
 import { useTranslation } from '../../i18n/useTranslation'
 
 interface CreatorStats {
-  totalRevenue: number
+  availableBalance: number
+  totalEarned: number
+  totalGross: number
+  totalCommission: number
+  totalWithdrawn: number
+  pendingWithdraw: number
   totalOrders: number
-  totalDownloads: number
+  totalProductsSold: number
   totalProducts: number
   monthlyRevenue: { month: string; revenue: number }[]
+}
+
+interface Withdrawal {
+  withdrawalId: number
+  amount: number
+  bankName?: string
+  bankAccountNumber?: string
+  bankAccountName?: string
+  note?: string
+  status: 'PENDING' | 'PAID' | 'REJECTED'
+  rejectionReason?: string
+  processedAt?: string
+  createdAt: string
 }
 
 interface MyProduct {
@@ -37,9 +55,9 @@ const NAV = [
   { id: 'overview', key: 'creator.nav.overview', icon: BarChart2 },
   { id: 'shop', key: 'creator.nav.shop', icon: Store },
   { id: 'orders', key: 'creator.nav.orders', icon: ShoppingBag },
+  { id: 'wallet', key: 'creator.nav.wallet', icon: Wallet },
   { id: 'products', key: 'creator.nav.products', icon: Package },
   { id: 'sales', key: 'creator.nav.sales', icon: DollarSign },
-  { id: 'uploads', key: 'creator.nav.upload', icon: Upload },
 ]
 
 interface SellerOrderItem {
@@ -104,21 +122,34 @@ function StatCard({ icon: Icon, label, value, sub, color }: {
 }
 
 function SimpleBarChart({ data }: { data: { month: string; revenue: number }[] }) {
-  const max = Math.max(...data.map(d => d.revenue), 1)
+  const CHART_H = 140          // vùng vẽ cột (px)
+  const BAR_MAX = CHART_H - 22 // chừa chỗ cho nhãn số ở trên
+  const values = data.map(d => Number(d.revenue) || 0)
+  const max = Math.max(...values, 1)
+  const fmtShort = (n: number) =>
+    n >= 1_000_000 ? (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'tr'
+      : n >= 1_000 ? Math.round(n / 1_000) + 'k'
+      : String(n)
   return (
-    <div className="flex items-end gap-2 h-32">
-      {data.map(({ month, revenue }) => (
-        <div key={month} className="flex flex-1 flex-col items-center gap-1">
-          <motion.div
-            initial={{ height: 0 }}
-            animate={{ height: `${(revenue / max) * 100}%` }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-            className="w-full rounded-t-lg bg-brand-500 dark:bg-brand-400 min-h-[4px]"
-            title={`${revenue.toLocaleString('vi-VN')}đ`}
-          />
-          <span className="text-[10px] text-slate-400">{month}</span>
-        </div>
-      ))}
+    // Chiều cao cột tính bằng PIXEL (không dùng % của cha auto-height → không bị co về 0)
+    <div className="flex items-end gap-2" style={{ height: CHART_H }}>
+      {data.map(({ month }, i) => {
+        const val = values[i]
+        const h = val > 0 ? Math.max(6, Math.round((val / max) * BAR_MAX)) : 2
+        return (
+          <div key={month} className="flex flex-1 flex-col items-center justify-end gap-1">
+            {val > 0 && <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">{fmtShort(val)}</span>}
+            <motion.div
+              initial={{ height: 0 }}
+              animate={{ height: h }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              className={`w-full rounded-t-lg ${val > 0 ? 'bg-brand-500 dark:bg-brand-400' : 'bg-slate-200 dark:bg-slate-700'}`}
+              title={`${val.toLocaleString('vi-VN')}đ`}
+            />
+            <span className="text-[10px] text-slate-400">{month}</span>
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -216,11 +247,12 @@ export default function CreatorDashboardPage() {
   }
 
   const { data: stats } = useQuery<CreatorStats>({
-    queryKey: ['creator-stats'],
+    queryKey: ['seller-stats'],
     queryFn: async () => {
-      const res = await apiClient.get('/users/creator/stats')
+      const res = await apiClient.get('/seller/stats')
       return res.data.data
     },
+    retry: false,
   })
 
   const { data: products } = useQuery<MyProduct[]>({
@@ -363,16 +395,58 @@ export default function CreatorDashboardPage() {
     CANCELLED:  { label: t('creatorOrders.statusCancelled'), cls: 'badge-red' },
   }
 
-  const MOCK_MONTHLY = [
-    { month: 'T1', revenue: 1200000 },
-    { month: 'T2', revenue: 1800000 },
-    { month: 'T3', revenue: 1400000 },
-    { month: 'T4', revenue: 2200000 },
-    { month: 'T5', revenue: 2900000 },
-    { month: 'T6', revenue: 2600000 },
-  ]
+  const monthlyData = stats?.monthlyRevenue ?? []
 
-  const monthlyData = stats?.monthlyRevenue?.length ? stats.monthlyRevenue : MOCK_MONTHLY
+  // ── Ví & rút tiền ──
+  const [showWithdraw, setShowWithdraw] = useState(false)
+  const [wdForm, setWdForm] = useState({ amount: '', bankName: '', bankAccountNumber: '', bankAccountName: '', note: '' })
+  const [wdSubmitting, setWdSubmitting] = useState(false)
+  const [wdMsg, setWdMsg] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
+
+  const { data: withdrawalsPage } = useQuery<{ content: Withdrawal[]; totalPages: number }>({
+    queryKey: ['my-withdrawals'],
+    queryFn: async () => {
+      const res = await apiClient.get('/seller/withdrawals', { params: { page: 0, size: 20 } })
+      return res.data.data
+    },
+    enabled: tab === 'wallet',
+  })
+  const withdrawals = withdrawalsPage?.content ?? []
+  const available = stats?.availableBalance ?? shop?.balance ?? 0
+
+  const handleWithdraw = async () => {
+    setWdMsg(null)
+    const amt = Number(wdForm.amount)
+    if (!amt || amt < 50000) { setWdMsg({ type: 'err', text: t('creatorWallet.minError') }); return }
+    if (amt > available) { setWdMsg({ type: 'err', text: t('creatorWallet.notEnough') }); return }
+    setWdSubmitting(true)
+    try {
+      await apiClient.post('/seller/withdrawals', {
+        amount: amt,
+        bankName: wdForm.bankName,
+        bankAccountNumber: wdForm.bankAccountNumber,
+        bankAccountName: wdForm.bankAccountName,
+        note: wdForm.note,
+      })
+      setWdMsg({ type: 'ok', text: t('creatorWallet.requested') })
+      setWdForm({ amount: '', bankName: '', bankAccountNumber: '', bankAccountName: '', note: '' })
+      qc.invalidateQueries({ queryKey: ['my-withdrawals'] })
+      qc.invalidateQueries({ queryKey: ['seller-stats'] })
+      qc.invalidateQueries({ queryKey: ['my-shop'] })
+      setTimeout(() => { setShowWithdraw(false); setWdMsg(null) }, 1200)
+    } catch (err) {
+      const msg = (err as { response?: { data?: { message?: string } } }).response?.data?.message
+      setWdMsg({ type: 'err', text: msg ?? t('creatorWallet.failed') })
+    } finally {
+      setWdSubmitting(false)
+    }
+  }
+
+  const WD_STATUS: Record<string, { label: string; cls: string }> = {
+    PENDING: { label: t('creatorWallet.stPending'), cls: 'badge-amber' },
+    PAID: { label: t('creatorWallet.stPaid'), cls: 'badge-green' },
+    REJECTED: { label: t('creatorWallet.stRejected'), cls: 'badge-red' },
+  }
 
   // ── Sửa / Xóa sản phẩm ──
   const [editProduct, setEditProduct] = useState<MyProduct | null>(null)
@@ -468,23 +542,23 @@ export default function CreatorDashboardPage() {
                     {/* Stats */}
                     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                       <StatCard
-                        icon={DollarSign} label={t('creator.stat.revenue')} color="text-green-600 bg-green-50 dark:bg-green-900/30"
-                        value={formatPrice(stats?.totalRevenue ?? 8900000)}
-                        sub={t('creator.stat.revenueSub')}
+                        icon={Wallet} label={t('creator.stat.balance')} color="text-green-600 bg-green-50 dark:bg-green-900/30"
+                        value={formatPrice(stats?.availableBalance ?? 0)}
+                        sub={t('creator.stat.balanceSub')}
                       />
                       <StatCard
-                        icon={Package} label={t('creator.stat.products')} color="text-brand-600 bg-brand-50 dark:bg-brand-900/30"
-                        value={String(stats?.totalProducts ?? products?.length ?? 0)}
-                        sub={t('creator.stat.productsSub')}
+                        icon={DollarSign} label={t('creator.stat.earned')} color="text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30"
+                        value={formatPrice(stats?.totalEarned ?? 0)}
+                        sub={t('creator.stat.earnedSub')}
                       />
                       <StatCard
-                        icon={Download} label={t('creator.stat.downloads')} color="text-purple-600 bg-purple-50 dark:bg-purple-900/30"
-                        value={String(stats?.totalDownloads ?? 124)}
-                        sub={t('creator.stat.downloadsSub')}
+                        icon={ShoppingBag} label={t('creator.stat.sold')} color="text-purple-600 bg-purple-50 dark:bg-purple-900/30"
+                        value={String(stats?.totalProductsSold ?? 0)}
+                        sub={t('creator.stat.soldSub')}
                       />
                       <StatCard
                         icon={Users} label={t('creator.stat.orders')} color="text-amber-600 bg-amber-50 dark:bg-amber-900/30"
-                        value={String(stats?.totalOrders ?? 37)}
+                        value={String(stats?.totalOrders ?? 0)}
                         sub={t('creator.stat.ordersSub')}
                       />
                     </div>
@@ -811,6 +885,86 @@ export default function CreatorDashboardPage() {
                   </div>
                 )}
 
+                {/* ── Wallet (Ví & rút tiền) ── */}
+                {tab === 'wallet' && (
+                  <div className="space-y-5">
+                    {/* Balance hero */}
+                    <div className="card overflow-hidden p-0">
+                      <div className="bg-gradient-to-br from-emerald-600 to-green-700 p-6 text-white">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <p className="flex items-center gap-2 text-sm font-medium text-white/80">
+                              <Wallet size={16} /> {t('creatorWallet.available')}
+                            </p>
+                            <p className="mt-2 text-4xl font-extrabold tracking-tight">{formatPrice(available)}</p>
+                            <p className="mt-1 text-xs text-white/70">{t('creatorWallet.availableHint')}</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => { setWdMsg(null); setShowWithdraw(true) }}
+                            disabled={available < 50000}
+                            className="rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-emerald-700 shadow transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-60"
+                          >
+                            {t('creatorWallet.withdraw')}
+                          </button>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-3 divide-x divide-slate-100 dark:divide-slate-800">
+                        <div className="p-4 text-center">
+                          <p className="text-lg font-bold text-amber-600">{formatPrice(stats?.pendingWithdraw ?? 0)}</p>
+                          <p className="mt-0.5 text-xs text-slate-400">{t('creatorWallet.pending')}</p>
+                        </div>
+                        <div className="p-4 text-center">
+                          <p className="text-lg font-bold text-emerald-600">{formatPrice(stats?.totalEarned ?? 0)}</p>
+                          <p className="mt-0.5 text-xs text-slate-400">{t('creatorWallet.totalEarned')}</p>
+                        </div>
+                        <div className="p-4 text-center">
+                          <p className="text-lg font-bold text-slate-600 dark:text-slate-300">{formatPrice(stats?.totalWithdrawn ?? 0)}</p>
+                          <p className="mt-0.5 text-xs text-slate-400">{t('creatorWallet.totalWithdrawn')}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Explainer */}
+                    <div className="card flex items-start gap-3 p-4 text-sm text-slate-500 dark:text-slate-400">
+                      <DollarSign size={18} className="mt-0.5 shrink-0 text-brand-500" />
+                      <p>{t('creatorWallet.explain')}</p>
+                    </div>
+
+                    {/* History */}
+                    <div className="card p-6">
+                      <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">{t('creatorWallet.history')}</h2>
+                      {withdrawals.length === 0 ? (
+                        <div className="flex flex-col items-center py-10 text-center">
+                          <Wallet size={36} className="mb-3 text-slate-300" />
+                          <p className="font-semibold text-slate-500">{t('creatorWallet.noHistory')}</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          {withdrawals.map((w) => {
+                            const st = WD_STATUS[w.status] ?? { label: w.status, cls: 'badge-slate' }
+                            return (
+                              <div key={w.withdrawalId} className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-100 p-4 dark:border-slate-800">
+                                <div>
+                                  <p className="text-lg font-bold text-slate-900 dark:text-white">{formatPrice(w.amount)}</p>
+                                  <p className="text-xs text-slate-400">
+                                    {new Date(w.createdAt).toLocaleString('vi-VN')}
+                                    {w.bankName ? ` · ${w.bankName}` : ''}
+                                  </p>
+                                  {w.status === 'REJECTED' && w.rejectionReason && (
+                                    <p className="mt-1 text-xs text-rose-500">{w.rejectionReason}</p>
+                                  )}
+                                </div>
+                                <span className={`badge ${st.cls}`}>{st.label}</span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* ── Products ── */}
                 {tab === 'products' && (
                   <div className="card p-6">
@@ -915,15 +1069,15 @@ export default function CreatorDashboardPage() {
                     </div>
                     <div className="grid gap-4 sm:grid-cols-3">
                       <div className="rounded-2xl bg-slate-50 p-4 text-center dark:bg-slate-800/50">
-                        <p className="text-2xl font-extrabold text-brand-600">{formatPrice(stats?.totalRevenue ?? 8900000)}</p>
+                        <p className="text-2xl font-extrabold text-brand-600">{formatPrice(stats?.totalGross ?? 0)}</p>
                         <p className="mt-1 text-xs text-slate-400">{t('creator.grossRev')}</p>
                       </div>
                       <div className="rounded-2xl bg-slate-50 p-4 text-center dark:bg-slate-800/50">
-                        <p className="text-2xl font-extrabold text-green-600">{formatPrice(Math.round((stats?.totalRevenue ?? 8900000) * 0.85))}</p>
+                        <p className="text-2xl font-extrabold text-green-600">{formatPrice(stats?.totalEarned ?? 0)}</p>
                         <p className="mt-1 text-xs text-slate-400">{t('creator.netRev')}</p>
                       </div>
                       <div className="rounded-2xl bg-slate-50 p-4 text-center dark:bg-slate-800/50">
-                        <p className="text-2xl font-extrabold text-amber-600">{stats?.totalOrders ?? 37}</p>
+                        <p className="text-2xl font-extrabold text-amber-600">{stats?.totalOrders ?? 0}</p>
                         <p className="mt-1 text-xs text-slate-400">{t('creator.totalOrders')}</p>
                       </div>
                     </div>
@@ -1176,6 +1330,94 @@ export default function CreatorDashboardPage() {
                 <button type="button" onClick={() => void handleSaveEdit()} disabled={savingEdit} className="btn-primary gap-2">
                   {savingEdit ? <Loader2 size={15} className="animate-spin" /> : <CheckCircle2 size={15} />}
                   {t('account.save')}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Modal Rút tiền ── */}
+      <AnimatePresence>
+        {showWithdraw && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+            onClick={() => setShowWithdraw(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-md rounded-3xl bg-white p-6 shadow-soft dark:bg-slate-900"
+            >
+              <div className="mb-5 flex items-center justify-between">
+                <h3 className="flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-white">
+                  <Wallet size={18} className="text-emerald-600" /> {t('creatorWallet.withdrawTitle')}
+                </h3>
+                <button type="button" onClick={() => setShowWithdraw(false)} className="btn-ghost h-8 w-8 p-0 flex items-center justify-center">
+                  <X size={16} />
+                </button>
+              </div>
+
+              <div className="mb-4 rounded-2xl bg-emerald-50 px-4 py-3 text-sm dark:bg-emerald-900/20">
+                <span className="text-slate-500 dark:text-slate-400">{t('creatorWallet.available')}: </span>
+                <span className="font-bold text-emerald-700 dark:text-emerald-300">{formatPrice(available)}</span>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">{t('creatorWallet.amount')} *</label>
+                  <input
+                    type="number"
+                    value={wdForm.amount}
+                    onChange={(e) => setWdForm((f) => ({ ...f, amount: e.target.value }))}
+                    placeholder="50000"
+                    className="input"
+                  />
+                  <p className="mt-1 text-[11px] text-slate-400">{t('creatorWallet.minHint')}</p>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">{t('creatorWallet.bankName')}</label>
+                    <input value={wdForm.bankName} onChange={(e) => setWdForm((f) => ({ ...f, bankName: e.target.value }))} placeholder="Vietcombank" className="input" />
+                  </div>
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">{t('creatorWallet.bankNumber')}</label>
+                    <input value={wdForm.bankAccountNumber} onChange={(e) => setWdForm((f) => ({ ...f, bankAccountNumber: e.target.value }))} className="input" />
+                  </div>
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">{t('creatorWallet.bankHolder')}</label>
+                  <input value={wdForm.bankAccountName} onChange={(e) => setWdForm((f) => ({ ...f, bankAccountName: e.target.value }))} className="input" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">{t('creatorWallet.note')}</label>
+                  <textarea value={wdForm.note} onChange={(e) => setWdForm((f) => ({ ...f, note: e.target.value }))} rows={2} className="input resize-none" />
+                </div>
+
+                {wdMsg && (
+                  <div className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm ${
+                    wdMsg.type === 'ok'
+                      ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300'
+                      : 'bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-300'
+                  }`}>
+                    {wdMsg.type === 'ok' ? <CheckCircle2 size={15} /> : <X size={15} />}
+                    {wdMsg.text}
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6 flex justify-end gap-3">
+                <button type="button" onClick={() => setShowWithdraw(false)} className="btn-secondary" disabled={wdSubmitting}>
+                  {t('creator.form.cancel')}
+                </button>
+                <button type="button" onClick={() => void handleWithdraw()} disabled={wdSubmitting} className="btn-primary gap-2">
+                  {wdSubmitting ? <Loader2 size={15} className="animate-spin" /> : <Wallet size={15} />}
+                  {t('creatorWallet.submit')}
                 </button>
               </div>
             </motion.div>

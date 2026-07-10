@@ -261,7 +261,8 @@ public class OrderService {
                     .status("DELIVERED")
                     .title("Delivered")
                     .description("Your order has been delivered")
-                    .timestamp(order.getDeliveredAt())
+                    // deliveredAt có thể null với đơn cũ → fallback về updatedAt để tránh timestamp null
+                    .timestamp(order.getDeliveredAt() != null ? order.getDeliveredAt() : order.getUpdatedAt())
                     .build());
         }
 

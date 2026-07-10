@@ -3,8 +3,6 @@ import adminService from './adminService'
 import type { AdminOrder } from './adminService'
 import { useTranslation } from '../../i18n/useTranslation'
 
-const orderWorkflow = ['PENDING', 'PROCESSING', 'PRINTING', 'FINISHING', 'SHIPPING', 'DELIVERED']
-
 export default function AdminOrdersPage() {
   const { t } = useTranslation()
   const [orders, setOrders] = useState<AdminOrder[]>([])
@@ -28,17 +26,6 @@ export default function AdminOrdersPage() {
 
     void loadInitialOrders()
   }, [])
-
-  const advanceOrder = async (order: AdminOrder) => {
-    const currentIndex = orderWorkflow.indexOf(order.orderStatus)
-    if (currentIndex === -1 || currentIndex >= orderWorkflow.length - 1) {
-      return
-    }
-
-    const nextStatus = orderWorkflow[currentIndex + 1]
-    await adminService.advanceOrderStatus(order.orderId, nextStatus)
-    void fetchOrders(page)
-  }
 
   const [busyId, setBusyId] = useState<number | null>(null)
 
@@ -131,14 +118,12 @@ export default function AdminOrdersPage() {
                             {t('admin.order.complete')}
                           </button>
                         )}
-                        <button
-                          type="button"
-                          className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:opacity-50"
-                          onClick={() => void advanceOrder(order)}
-                          disabled={order.orderStatus === 'DELIVERED' || order.orderStatus === 'COMPLETED'}
-                        >
-                          {t('admin.order.advance')}
-                        </button>
+                        {order.orderStatus === 'COMPLETED' && (
+                          <span className="text-xs font-medium text-emerald-600">{t('admin.order.doneNote')}</span>
+                        )}
+                        {(order.orderStatus === 'CANCELLED') && (
+                          <span className="text-xs text-slate-400">—</span>
+                        )}
                       </div>
                     </td>
                   </tr>

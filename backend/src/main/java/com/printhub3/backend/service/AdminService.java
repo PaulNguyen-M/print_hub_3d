@@ -168,7 +168,13 @@ public class AdminService {
     public void updateOrderStatus(Long orderId, String status) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
-        order.setOrderStatus(Order.OrderStatus.valueOf(status));
+        Order.OrderStatus newStatus = Order.OrderStatus.valueOf(status);
+        order.setOrderStatus(newStatus);
+        // Ghi mốc thời gian giao hàng khi chuyển sang DELIVERED (nếu chưa có),
+        // để timeline có timestamp hợp lệ thay vì null.
+        if (newStatus == Order.OrderStatus.DELIVERED && order.getDeliveredAt() == null) {
+            order.setDeliveredAt(java.time.LocalDateTime.now());
+        }
         orderRepository.save(order);
     }
 

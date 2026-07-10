@@ -17,6 +17,14 @@ const statusColors: { [key: string]: string } = {
   CANCELLED: 'bg-red-200 text-red-800',
 };
 
+/** Định dạng ngày an toàn: nếu timestamp thiếu/không hợp lệ thì trả chuỗi rỗng
+ *  thay vì để date-fns ném lỗi làm sập cả trang. */
+const formatTimestamp = (value?: string): string => {
+  if (!value) return '';
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? '' : format(date, 'MMM dd, yyyy • h:mm a');
+};
+
 export const OrderTimeline: React.FC<TimelineProps> = ({ timeline }) => {
   const { t } = useTranslation();
   return (
@@ -47,12 +55,11 @@ export const OrderTimeline: React.FC<TimelineProps> = ({ timeline }) => {
                   >
                     {t(`status.${event.status}`)}
                   </span>
-                  <span className="text-sm text-gray-600">
-                    {format(
-                      new Date(event.timestamp),
-                      'MMM dd, yyyy • h:mm a'
-                    )}
-                  </span>
+                  {formatTimestamp(event.timestamp) && (
+                    <span className="text-sm text-gray-600">
+                      {formatTimestamp(event.timestamp)}
+                    </span>
+                  )}
                 </div>
                 <h3 className="font-medium text-gray-900">{event.title}</h3>
                 {event.description && (

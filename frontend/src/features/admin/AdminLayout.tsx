@@ -9,6 +9,7 @@ const menuItems = [
   { key: 'admin.menu.orders', path: '/admin/orders' },
   { key: 'admin.menu.users', path: '/admin/users' },
   { key: 'admin.menu.sellerApps', path: '/admin/seller-applications' },
+  { key: 'admin.menu.withdrawals', path: '/admin/withdrawals' },
   { key: 'admin.menu.stl', path: '/admin/stl-requests' }
 ]
 
