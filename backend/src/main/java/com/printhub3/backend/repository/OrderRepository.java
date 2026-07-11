@@ -36,4 +36,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     
     @Query("SELECT COUNT(o) FROM Order o WHERE o.orderStatus = 'PENDING' AND o.deletedAt IS NULL")
     long countPendingOrders();
+
+    @Query("SELECT COUNT(oi) > 0 FROM OrderItem oi " +
+            "WHERE oi.order.user.userId = ?1 " +
+            "AND oi.product.shop.shopId = ?2 " +
+            "AND oi.order.orderStatus <> 'CANCELLED' " +
+            "AND oi.order.orderStatus <> 'PENDING' " +
+            "AND oi.order.deletedAt IS NULL")
+    boolean existsPurchaseFromShop(Long userId, Long shopId);
 }

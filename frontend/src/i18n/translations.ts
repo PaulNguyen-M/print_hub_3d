@@ -740,6 +740,8 @@ export const translations: Dict = {
   'shop.categories':     { vi: 'Danh mục', en: 'Categories' },
   'shop.catAll':         { vi: 'Tất cả', en: 'All' },
   'shop.customize':      { vi: 'Tùy chỉnh sạp', en: 'Customize Shop' },
+  'shop.verifiedPurchase': {vi: 'Đã mua hàng', en: 'Verified Purchase' },
+  'shop.mustBuyToReview': {vi: 'Chỉ khách mua hàng tại shop mới có thể đánh giá', en: 'Only customers who purchased from this shop can review' },
 
   // ── Shop Customize Page ──
   'cus.title':           { vi: 'Tùy chỉnh sạp', en: 'Customize Your Shop' },

@@ -16,6 +16,7 @@ import com.printhub3.backend.repository.ShopFollowRepository;
 import com.printhub3.backend.repository.ShopRepository;
 import com.printhub3.backend.repository.ShopReviewRepository;
 import com.printhub3.backend.repository.ShopReviewRepository.ShopRatingAggregate;
+import com.printhub3.backend.repository.OrderRepository;
 import com.printhub3.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,7 @@ public class ShopService {
     private final ShopFollowRepository followRepository;
     private final ShopReviewRepository shopReviewRepository;
     private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
 
     public ShopDto getShopBySlug(String slug, Long viewerId) {
         Shop shop = shopRepository.findBySlug(slug)
@@ -120,6 +122,11 @@ public class ShopService {
         if (shop.getOwner() != null && shop.getOwner().getUserId().equals(userId)) {
             throw new BusinessException("Bạn không thể đánh giá sạp của chính mình");
         }
+
+        if (!orderRepository.existsPurchaseFromShop(userId, shop.getShopId())) {
+            throw new BusinessException("Bạn chỉ có thể đánh giá sạp mà bạn đã mua hàng");
+        }
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
@@ -153,6 +160,8 @@ public class ShopService {
 
     private ShopReviewDto toReviewDto(ShopReview r) {
         User u = r.getUser();
+        boolean verified = u != null
+                && orderRepository.existsPurchaseFromShop(u.getUserId(), r.getShop().getShopId());
         return ShopReviewDto.builder()
                 .shopReviewId(r.getShopReviewId())
                 .userId(u != null ? u.getUserId() : null)
@@ -161,6 +170,7 @@ public class ShopService {
                 .rating(r.getRating())
                 .comment(r.getComment())
                 .createdAt(r.getCreatedAt())
+                .verifiedPurchase(verified)
                 .build();
     }
 
@@ -169,6 +179,8 @@ public class ShopService {
         int liveProductCount = (int) productRepository.countActiveByShop(shop.getShopId());
         Boolean isFollowing = (viewerId == null) ? null
                 : followRepository.existsByShop_ShopIdAndUser_UserId(shop.getShopId(), viewerId);
+        Boolean canReview = (viewerId == null) ? Boolean.FALSE
+                : orderRepository.existsPurchaseFromShop(viewerId, shop.getShopId());
         return ShopDto.builder()
                 .shopId(shop.getShopId())
                 .name(shop.getName())
@@ -186,6 +198,7 @@ public class ShopService {
                 .ownerName(owner != null ? owner.getFullName() : null)
                 .ownerAvatarUrl(owner != null ? owner.getProfileImageUrl() : null)
                 .isFollowing(isFollowing)
+                .canReview(canReview)
                 .createdAt(shop.getCreatedAt())
                 .featuredProductIds(shop.getFeaturedProductIds())
                 .build();

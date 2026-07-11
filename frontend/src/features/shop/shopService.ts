@@ -17,6 +17,7 @@ export interface Shop {
   ownerName?: string
   ownerAvatarUrl?: string
   isFollowing?: boolean | null
+  canReview?: boolean
   createdAt?: string
   featuredProductIds?: number[]
 }
@@ -41,6 +42,7 @@ export interface ShopReview {
   rating: number
   comment?: string
   createdAt: string
+  verifiedPurchase?: boolean
 }
 
 export interface Paged<T> {

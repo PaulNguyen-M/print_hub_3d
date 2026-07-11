@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   Star, Package, Users, Store, Loader2, ShoppingBag,
-  MessageSquare, UserPlus, UserCheck, Search, ChevronDown, MessageCircle, Calendar, ShoppingCart,
+  MessageSquare, UserPlus, UserCheck, Search, ChevronDown, MessageCircle, Calendar, ShoppingCart, BadgeCheck,
 } from 'lucide-react'
 import shopService from './shopService'
 import type { Shop, ShopProduct, ShopReview } from './shopService'
@@ -486,7 +486,7 @@ export default function ShopPage() {
             {/* ── Tab: Đánh giá ── */}
             {activeTab === 'reviews' && (
               <div>
-                {isAuthenticated && !isOwner ? (
+                {isAuthenticated && !isOwner && shop.canReview ? (
                   <form onSubmit={handleSubmitReview} className="card mb-6 p-5">
                     <p className="mb-2 text-sm font-semibold text-slate-700 dark:text-slate-200">{t('shop.writeReview')}</p>
                     <div className="mb-3 flex items-center gap-1">
@@ -509,9 +509,12 @@ export default function ShopPage() {
                       {t('shop.submitReview')}
                     </button>
                   </form>
+                ) : isAuthenticated && !isOwner && !shop.canReview ? (
+                  <p className="card mb-6 p-4 text-sm text-slate-500">{t('shop.mustBuyToReview')}</p>
                 ) : !isAuthenticated ? (
                   <p className="card mb-6 p-4 text-sm text-slate-500">{t('shop.loginToReview')}</p>
                 ) : null}
+
 
                 {reviewsLoading ? (
                   <div className="flex justify-center py-16 text-slate-400"><Loader2 className="animate-spin" /></div>
@@ -530,8 +533,16 @@ export default function ShopPage() {
                               ? <img src={r.userAvatarUrl} alt={r.userName} className="h-full w-full object-cover" />
                               : r.userName?.[0]?.toUpperCase() ?? 'U'}
                           </div>
+                          
                           <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{r.userName}</p>
+                            <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">
+                              {r.userName}
+                              {r.verifiedPurchase && (
+                                <span className="inline-flex shrink-0 items-center gap-0.5 rounded-full bg-green-50 px-1.5 py-0.5 text-[10px] font-semibold text-green-600 dark:bg-green-900/30 dark:text-green-400">
+                                  <BadgeCheck size={11} /> {t('shop.verifiedPurchase')}
+                                </span>
+                              )}
+                            </p>
                             <div className="flex items-center gap-2">
                               <Stars value={r.rating} />
                               <span className="text-xs text-slate-400">{new Date(r.createdAt).toLocaleDateString('vi-VN')}</span>

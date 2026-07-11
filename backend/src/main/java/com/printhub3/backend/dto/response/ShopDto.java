@@ -40,6 +40,9 @@ public class ShopDto {
     /** Whether the current viewer follows this shop (null if not authenticated). */
     private Boolean isFollowing;
 
+    /** Người xem hiện tại có đủ điều kiện đánh giá sạp không (đã mua hàng). */
+    private Boolean canReview;
+
     private LocalDateTime createdAt;
 
     /** Product IDs pinned as "Nổi bật" by the seller. */

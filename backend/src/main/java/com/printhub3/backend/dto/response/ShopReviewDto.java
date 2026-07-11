@@ -20,4 +20,6 @@ public class ShopReviewDto {
     private Integer rating;
     private String comment;
     private LocalDateTime createdAt;
+    /** Người đánh giá đã thực sự mua hàng tại sạp (tính động, không lưu DB). */
+    private Boolean verifiedPurchase;
 }
