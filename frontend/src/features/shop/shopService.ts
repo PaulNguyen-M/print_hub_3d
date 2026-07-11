@@ -18,6 +18,7 @@ export interface Shop {
   ownerAvatarUrl?: string
   isFollowing?: boolean | null
   canReview?: boolean
+  ratingDistribution?: Record<number, number>
   createdAt?: string
   featuredProductIds?: number[]
 }

@@ -77,6 +77,7 @@ export const translations: Dict = {
   'common.status':     { vi: 'Trạng thái',       en: 'Status' },
   'common.price':      { vi: 'Giá',              en: 'Price' },
   'common.search':     { vi: 'Tìm kiếm…',        en: 'Search…' },
+  'common.cancel':     { vi: 'Hủy',              en: 'Cancel' },
 
   // ── Auth (login / register) ──
   'auth.email':              { vi: 'Email',            en: 'Email' },
@@ -374,7 +375,7 @@ export const translations: Dict = {
   'product.ageRating': { vi: 'Độ tuổi',          en: 'Age rating' },
   'product.notMature': { vi: 'Mọi lứa tuổi',     en: 'Not Mature' },
   'product.inStock':   { vi: 'Còn hàng',         en: 'In stock' },
-  'product.sold':      { vi: 'Đã bán',           en: 'sold' },
+  'product.sold':      { vi: 'Đã bán',           en: 'Sold' },
   'product.overview':  { vi: 'Tổng Quan',        en: 'Overview' },
   'product.reviews':   { vi: 'Đánh Giá',         en: 'Reviews' },
   'product.faqs':      { vi: 'Câu Hỏi',          en: 'FAQs' },
@@ -742,6 +743,9 @@ export const translations: Dict = {
   'shop.customize':      { vi: 'Tùy chỉnh sạp', en: 'Customize Shop' },
   'shop.verifiedPurchase': {vi: 'Đã mua hàng', en: 'Verified Purchase' },
   'shop.mustBuyToReview': {vi: 'Chỉ khách mua hàng tại shop mới có thể đánh giá', en: 'Only customers who purchased from this shop can review' },
+  'shop.reviewCount': {vi:'Đánh giá', en:'Reviews' },
+  'shop.clearFilter': {vi: 'Bỏ lọc', en: 'Clear filters' },
+  'shop.noStarReviews': {vi: 'Chưa có đánh giá mức sao này', en: 'No review at this star level' },
 
   // ── Shop Customize Page ──
   'cus.title':           { vi: 'Tùy chỉnh sạp', en: 'Customize Your Shop' },

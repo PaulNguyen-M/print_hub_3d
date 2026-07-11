@@ -39,6 +39,17 @@ async function fetchProducts(params: Record<string, string>): Promise<PageRespon
   return res.data.data
 }
 
+interface Category{
+  categoryId: number
+  name: string
+  iconUrl?: string
+}
+
+async function fetchCategories(): Promise<Category[]> {
+  const res = await apiClient.get<{ data: Category[] }>('/categories')
+  return res.data.data
+}
+
 // Các tùy chọn sắp xếp, danh mục và khoảng giá được định nghĩa để sử dụng trong giao diện người dùng
 const SORT_OPTIONS = [
   { value: 'newest', key: 'market.sort.newest' },
@@ -48,11 +59,6 @@ const SORT_OPTIONS = [
   { value: 'rating', key: 'market.sort.rating' },
 ]
 
-// 'all' là giá trị đặc biệt; còn lại là tên danh mục (không dịch tên riêng)
-const CATEGORIES = [
-  'all', 'Anime & Figures', 'Miniatures', 'Mechanical',
-  'Architecture', 'Collectibles', 'Jewelry', 'Vehicles'
-]
 
 const PRICE_RANGES = [
   { key: 'market.price.under100', min: 0, max: 100000 },
@@ -180,15 +186,26 @@ export default function MarketplacePage() {
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
   const [search, setSearch] = useState(searchParams.get('q') ?? '')
+  const [debouncedSearch, setDebouncedSearch] = useState(search)
   const [sort, setSort] = useState('newest')
   const [category, setCategory] = useState(searchParams.get('category') ?? 'all')
   const [priceRange, setPriceRange] = useState<{ min: number; max: number } | null>(null)
   const [filterOpen, setFilterOpen] = useState(false)
   const [page, setPage] = useState(0)
 
+  // Debounce: chỉ cập nhật từ khóa dùng để gọi API sau khi ngừng gõ 300ms
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search)
+      setPage(0) // Khi thay đổi từ khóa tìm kiếm, reset về trang đầu tiên
+    }, 300)
+
+    return () => clearTimeout(handler)
+  }, [search])
+
   // Khi đang tìm kiếm hoặc lọc → mặc định sắp theo rating cao nhất.
   // Khi không tìm/lọc → mặc định sản phẩm mới nhất. Người dùng vẫn đổi được qua dropdown.
-  const isFilterMode = search.trim() !== '' || category !== 'all' || priceRange !== null
+  const isFilterMode = debouncedSearch.trim() !== '' || category !== 'all' || priceRange !== null
   const prevFilterMode = useRef(isFilterMode)
   useEffect(() => {
     if (isFilterMode !== prevFilterMode.current) {
@@ -203,16 +220,22 @@ export default function MarketplacePage() {
     page: String(page),
     size: '12',
     sort,
-    ...(search && { search }),
+    ...(debouncedSearch && { search: debouncedSearch }),
     ...(category !== 'all' && { category }),
     ...(priceRange && { minPrice: String(priceRange.min), maxPrice: String(priceRange.max) }),
-  }), [page, sort, search, category, priceRange])
+  }), [page, sort, debouncedSearch, category, priceRange])
 
 
   //Render giao diện dựa trên dữ liệu từ API, sử dụng useQuery để quản lý trạng thái tải dữ liệu
   const { data, isLoading, isError } = useQuery({
     queryKey: ['products', params],
     queryFn: () => fetchProducts(params),
+  })
+
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: fetchCategories,
+    staleTime: Infinity, // Danh mục hiếm khi thay đổi, nên cache lâu
   })
 
   const priceRangeKey = priceRange && PRICE_RANGES.find(r => r.min === priceRange.min)?.key
@@ -245,7 +268,7 @@ export default function MarketplacePage() {
               type="text"
               placeholder={t('market.searchPlaceholder')}
               value={search}
-              onChange={(e) => { setSearch(e.target.value); setPage(0) }}
+              onChange={(e) => { setSearch(e.target.value) }}
               className="input pl-10"
             />
           </div>
@@ -324,22 +347,34 @@ export default function MarketplacePage() {
                   <div>
                     <h4 className="mb-2.5 text-sm font-semibold text-slate-900 dark:text-white">{t('market.category')}</h4>
                     <div className="space-y-1">
-                      {CATEGORIES.map(cat => (
+                      <button
+                        type="button"
+                        onClick={() => { setCategory('all'); setPage(0) }}
+                        className={`w-full rounded-lg px-3 py-1.5 text-left text-sm transition ${
+                          category === 'all'
+                            ? 'bg-brand-50 font-semibold text-brand-700 dark:bg-brand-900/30 dark:text-brand-300'
+                            : 'text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        {t('market.cat.all')}
+                      </button>
+                      {categories?.map((c) => (
                         <button
-                          key={cat}
+                          key={c.categoryId}
                           type="button"
-                          onClick={() => { setCategory(cat); setPage(0) }}
+                          onClick={() => { setCategory(c.name); setPage(0) }}
                           className={`w-full rounded-lg px-3 py-1.5 text-left text-sm transition ${
-                            category === cat
+                            category === c.name
                               ? 'bg-brand-50 font-semibold text-brand-700 dark:bg-brand-900/30 dark:text-brand-300'
                               : 'text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800'
                           }`}
                         >
-                          {cat === 'all' ? t('market.cat.all') : cat}
+                          {c.name}
                         </button>
                       ))}
                     </div>
                   </div>
+
 
                   {/* Price */}
                   <div>

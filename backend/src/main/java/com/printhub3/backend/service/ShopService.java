@@ -29,6 +29,9 @@ import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
 
+import java.util.Map;
+import java.util.HashMap;
+
 /**
  * ShopService - Public shop ("sạp") profiles, plus follow and shop-level reviews.
  */
@@ -181,6 +184,15 @@ public class ShopService {
                 : followRepository.existsByShop_ShopIdAndUser_UserId(shop.getShopId(), viewerId);
         Boolean canReview = (viewerId == null) ? Boolean.FALSE
                 : orderRepository.existsPurchaseFromShop(viewerId, shop.getShopId());
+        Map<Integer, Integer> ratingDistribution = new HashMap<>();
+        for (int star = 1; star <= 5; star++){
+            ratingDistribution.put(star, 0);
+        }
+        for (ShopReviewRepository.RatingCount rc : shopReviewRepository.countByRating(shop.getShopId())){
+            if (rc.getRating() != null){
+                ratingDistribution.put(rc.getRating(), rc.getCnt() != null ? rc.getCnt().intValue() : 0);
+            }
+        }
         return ShopDto.builder()
                 .shopId(shop.getShopId())
                 .name(shop.getName())
@@ -199,6 +211,7 @@ public class ShopService {
                 .ownerAvatarUrl(owner != null ? owner.getProfileImageUrl() : null)
                 .isFollowing(isFollowing)
                 .canReview(canReview)
+                .ratingDistribution(ratingDistribution)
                 .createdAt(shop.getCreatedAt())
                 .featuredProductIds(shop.getFeaturedProductIds())
                 .build();

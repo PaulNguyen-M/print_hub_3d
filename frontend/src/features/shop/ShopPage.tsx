@@ -107,6 +107,7 @@ export default function ShopPage() {
   const [comment, setComment] = useState('')
   const [reviewSubmitting, setReviewSubmitting] = useState(false)
   const [reviewError, setReviewError] = useState<string | null>(null)
+  const [starFilter, setStarFilter] = useState<number | null>(null)
 
   const isOwner = !!shop && !!currentUser && shop.ownerId === currentUser.id
 
@@ -114,6 +115,8 @@ export default function ShopPage() {
   const filteredProducts = activeCategory === 'all'
     ? products
     : products.filter((p) => p.category === activeCategory)
+
+    const filteredReviews = (reviews ?? []).filter((r) => starFilter === null || r.rating === starFilter)
 
   // Initial data load — component remounts when slug changes so no manual reset needed
   useEffect(() => {
@@ -486,6 +489,49 @@ export default function ShopPage() {
             {/* ── Tab: Đánh giá ── */}
             {activeTab === 'reviews' && (
               <div>
+                {shop.totalReviews ? (
+                  <div className="card mb-6 p-5">
+                    <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+                      {/* Điểm trung bình */}
+                      <div className="flex flex-col items-center justify-center sm:w-40">
+                        <span className="text-4xl font-bold text-slate-900 dark:text-white">{(shop.rating ?? 0).toFixed(1)}</span>
+                        <Stars value={shop.rating ?? 0} size={16} />
+                        <span className="mt-1 text-xs text-slate-400">{shop.totalReviews} {t('shop.reviewsCount')}</span>
+                      </div>
+                      {/* Thanh phân bố sao */}
+                      <div className="flex-1 space-y-1.5">
+                        {[5, 4, 3, 2, 1].map((star) => {
+                          const count = shop.ratingDistribution?.[star] ?? 0
+                          const pct = shop.totalReviews ? Math.round((count / shop.totalReviews) * 100) : 0
+                          const active = starFilter === star
+                          return (
+                            <button
+                              key={star}
+                              type="button"
+                              onClick={() => setStarFilter(active ? null : star)}
+                              className={`flex w-full items-center gap-2 rounded-lg px-2 py-1 text-xs transition ${
+                                active ? 'bg-brand-50 dark:bg-brand-900/30' : 'hover:bg-slate-50 dark:hover:bg-slate-800'
+                              }`}
+                            >
+                              <span className="flex w-8 shrink-0 items-center gap-0.5 text-slate-500">
+                                {star} <Star size={11} className="fill-amber-400 text-amber-400" />
+                              </span>
+                              <span className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                                <span className="block h-full rounded-full bg-amber-400" style={{ width: `${pct}%` }} />
+                              </span>
+                              <span className="w-8 shrink-0 text-right text-slate-400">{count}</span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+                    {starFilter !== null && (
+                      <button type="button" onClick={() => setStarFilter(null)} className="mt-3 text-xs font-semibold text-brand-600 hover:underline">
+                        {t('shop.clearFilter')}
+                      </button>
+                    )}
+                  </div>
+                ) : null}
                 {isAuthenticated && !isOwner && shop.canReview ? (
                   <form onSubmit={handleSubmitReview} className="card mb-6 p-5">
                     <p className="mb-2 text-sm font-semibold text-slate-700 dark:text-slate-200">{t('shop.writeReview')}</p>
@@ -521,11 +567,11 @@ export default function ShopPage() {
                 ) : !reviews?.length ? (
                   <div className="card flex flex-col items-center py-16 text-center">
                     <MessageSquare size={40} className="mb-3 text-slate-300" />
-                    <p className="font-semibold text-slate-500">{t('shop.reviewsEmpty')}</p>
+                    <p className="font-semibold text-slate-500">{starFilter !== null ? t('shop.noStarReviews') : t('shop.reviewsEmpty')}</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {reviews.map((r) => (
+                    {filteredReviews.map((r) => (
                       <div key={r.shopReviewId} className="card p-4">
                         <div className="flex items-center gap-3">
                           <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-brand-600 text-sm font-bold text-white">

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.List;
 
 /**
  * ShopReview Repository - Data access for shop-level reviews.
@@ -30,4 +31,15 @@ public interface ShopReviewRepository extends JpaRepository<ShopReview, Long> {
     @Query("SELECT AVG(sr.rating) AS avg, COUNT(sr) AS cnt FROM ShopReview sr " +
            "WHERE sr.shop.shopId = ?1 AND sr.deletedAt IS NULL")
     ShopRatingAggregate aggregateForShop(Long shopId);
+
+    /** Số lượng review theo từng mức sao (1..5) của một sạp. */
+    interface RatingCount{
+        Integer getRating();
+        Long getCnt();
+    }
+
+    @Query("SELECT sr.rating AS rating, COUNT(sr) AS cnt FROM ShopReview sr " +
+            "WHERE sr.shop.shopId = ?1 AND sr.deletedAt IS NULL " +
+            "GROUP BY sr.rating")
+    List<RatingCount> countByRating(Long shopId);
 }

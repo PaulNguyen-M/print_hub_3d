@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import java.util.Map;
+
 /**
  * Public-facing shop ("sạp") profile.
  */
@@ -42,6 +44,9 @@ public class ShopDto {
 
     /** Người xem hiện tại có đủ điều kiện đánh giá sạp không (đã mua hàng). */
     private Boolean canReview;
+
+    /** Số review theo mức sao: {5: n, 4: n, 3: n, 2: n, 1: n}. */
+    private Map<Integer, Integer> ratingDistribution;
 
     private LocalDateTime createdAt;
 
