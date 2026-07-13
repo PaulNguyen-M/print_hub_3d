@@ -32,18 +32,29 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState<AdminUser[]>([])
   const [page, setPage] = useState(0)
   const [totalPages, setTotalPages] = useState(1)
+  const [totalElements, setTotalElements] = useState(0)
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [savingId, setSavingId] = useState<number | null>(null)
 
-  const fetchUsers = async (pageNumber = 0) => {
+  const fetchUsers = async (pageNumber = 0, keyword = search) => {
     setLoading(true)
-    const data = await adminService.getUsers(pageNumber, 10)
-    setUsers(data.content)
-    setTotalPages(data.totalPages)
-    setPage(data.number)
-    setLoading(false)
+    try {
+      const data = await adminService.getUsers(pageNumber, 10, keyword.trim() || undefined)
+      setUsers(data.content)
+      setTotalPages(data.totalPages)
+      setTotalElements(data.totalElements)
+      setPage(data.number)
+    } finally {
+      setLoading(false)
+    }
   }
+
+  // Debounce: gõ xong 300ms mới gọi API, luôn reset page về 0 khi search
+  useEffect(() => {
+    const handler = setTimeout(() => { void fetchUsers(0, search) }, 300)
+    return () => clearTimeout(handler)
+  }, [search])
 
   useEffect(() => {
     void fetchUsers(0)
@@ -66,12 +77,6 @@ export default function AdminUsersPage() {
     setSavingId(null)
   }
 
-  const filtered = users.filter(
-    (u) =>
-      u.fullName?.toLowerCase().includes(search.toLowerCase()) ||
-      u.email?.toLowerCase().includes(search.toLowerCase())
-  )
-
   const initials = (name: string) =>
     name?.split(' ').map((w) => w[0]).slice(-2).join('').toUpperCase() || 'U'
 
@@ -90,7 +95,7 @@ export default function AdminUsersPage() {
                 {t('admin.user.title')}
               </h2>
               <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
-                {users.length} {t('admin.user.sub')}
+                {totalElements} {t('admin.user.sub')}
               </p>
             </div>
           </div>
@@ -115,14 +120,22 @@ export default function AdminUsersPage() {
           <div className="flex items-center justify-center gap-2 py-20 text-slate-400">
             <Loader2 size={20} className="animate-spin" /> {t('common.loading')}
           </div>
-        ) : filtered.length === 0 ? (
+        ) : users.length === 0 ? (
           <div className="flex flex-col items-center py-20 text-center">
             <Users size={40} className="mb-3 text-slate-300" />
             <p className="font-semibold text-slate-500">{t('admin.user.notFound')}</p>
           </div>
         ) : (
           <div className="space-y-2 p-2">
-            {filtered.map((user, idx) => {
+            {/* Header cột — chỉ hiện ở màn lớn, canh theo bề rộng cột của thẻ */}
+            <div className="hidden items-center gap-4 px-4 pb-1 text-xs font-semibold uppercase tracking-wide text-slate-400 lg:flex">
+              <div className="min-w-0 flex-1">{t('admin.user.colAccount')}</div>
+              <div className="lg:w-64">{t('admin.user.colRole')}</div>
+              <div className="lg:w-32">{t('admin.user.colStatus')}</div>
+              <div className="lg:w-36">{t('admin.user.colAction')}</div>
+            </div>
+
+            {users.map((user, idx) => {
               const meta = ROLE_META[user.role] ?? { label: user.role, badge: 'bg-slate-100 text-slate-600 border-slate-200', dot: 'bg-slate-400' }
               const saving = savingId === user.userId
               const isSelf = currentUser?.id === user.userId
@@ -139,7 +152,8 @@ export default function AdminUsersPage() {
                     <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white shadow-sm ${AVATAR_COLORS[idx % AVATAR_COLORS.length]}`}>
                       {initials(user.fullName)}
                     </div>
-                    <div className="flex items-center gap-1.5">
+                                        <div className="min-w-0">
+                      <div className="flex items-center gap-1.5">
                         <p className="truncate font-semibold text-slate-900 dark:text-white">{user.fullName}</p>
                         {user.verified && <BadgeCheck size={15} className="shrink-0 text-sky-500" />}
                         {isSelf && (
@@ -148,13 +162,9 @@ export default function AdminUsersPage() {
                           </span>
                         )}
                       </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1.5">
-                        <p className="truncate font-semibold text-slate-900 dark:text-white">{user.fullName}</p>
-                        {user.verified && <BadgeCheck size={15} className="shrink-0 text-sky-500" />}
-                      </div>
                       <p className="truncate text-sm text-slate-500 dark:text-slate-400">{user.email}</p>
                     </div>
+
                   </div>
 
                   {/* Role badge + selector */}

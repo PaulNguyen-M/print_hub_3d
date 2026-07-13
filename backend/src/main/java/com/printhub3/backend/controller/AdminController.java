@@ -89,8 +89,9 @@ public class AdminController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "DESC") Sort.Direction direction) {
-        Page<AdminUserDto> users = adminService.getUsers(page, size, sortBy, direction);
+            @RequestParam(defaultValue = "DESC") Sort.Direction direction,
+            @RequestParam(required = false) String search) {
+        Page<AdminUserDto> users = adminService.getUsers(page, size, sortBy, direction, search);
         return ResponseEntity.ok(ApiResponse.success(users, "Users retrieved successfully"));
     }
 

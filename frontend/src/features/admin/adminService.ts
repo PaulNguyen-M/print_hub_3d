@@ -167,9 +167,9 @@ const adminService = {
     await apiClient.post(`/admin/orders/${orderId}/complete`)
   },
 
-  getUsers: async (page: number, size: number) => {
+  getUsers: async (page: number, size: number, search?: string) => {
     const response = await apiClient.get('/admin/users', {
-      params: { page, size, sortBy: 'createdAt', direction: 'DESC' }
+      params: { page, size, sortBy: 'createdAt', direction: 'DESC', ...(search ? { search } : {}) }
     })
     return response.data.data as PagedResponse<AdminUser>
   },

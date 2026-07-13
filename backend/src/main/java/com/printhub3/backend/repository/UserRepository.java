@@ -23,4 +23,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     
     @Query("SELECT u FROM User u WHERE u.role.name = ?1 AND u.isActive = true AND u.deletedAt IS NULL")
     Page<User> findUsersByRole(String roleName, Pageable pageable);
+    
+    @Query("SELECT u FROM User u WHERE " +
+            "LOWER(u.fullName) LIKE LOWER(CONCAT('%', ?1, '%')) OR " +
+            "LOWER(u.email) LIKE LOWER(CONCAT('%', ?1, '%'))") 
+    Page<User> searchUsers(String searchTerm, Pageable pageable);
 }

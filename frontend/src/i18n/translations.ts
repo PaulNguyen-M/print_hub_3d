@@ -211,6 +211,11 @@ export const translations: Dict = {
   'admin.user.inactiveStatus': { vi: 'Vô hiệu',  en: 'Inactive' },
   'admin.user.you':      { vi: 'Bạn', en: 'You' },
   'admin.user.selfHint': { vi: 'Không thể thao tác trên tài khoản của chính bạn', en: "You can't modify your own account" },
+  'admin.user.colAccount': { vi: 'Tài khoản', en: 'Account' },
+  'admin.user.colRole':    { vi: 'Phân quyền', en: 'Role' },
+  'admin.user.colStatus':  { vi: 'Trạng thái', en: 'Status' },
+  'admin.user.colAction':  { vi: 'Hành động', en: 'Action' },
+
 
 
   // ── Creator dashboard ──

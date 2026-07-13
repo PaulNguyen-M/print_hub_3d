@@ -97,10 +97,12 @@ public class AdminService {
     }
 
     @Transactional(readOnly = true)
-    public Page<AdminUserDto> getUsers(int page, int size, String sortBy, Sort.Direction direction) {
+    public Page<AdminUserDto> getUsers(int page, int size, String sortBy, Sort.Direction direction, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-        return userRepository.findAll(pageable)
-                .map(this::mapToAdminUserDto);
+        Page<User> users = (search != null && !search.isBlank())
+                ? userRepository.searchUsers(search.trim(), pageable)
+                : userRepository.findAll(pageable);
+        return users.map(this::mapToAdminUserDto);
     }
 
     @Transactional(readOnly = true)
