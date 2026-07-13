@@ -209,6 +209,9 @@ export const translations: Dict = {
   'admin.user.notFound': { vi: 'Không tìm thấy người dùng', en: 'No users found' },
   'admin.user.activeStatus': { vi: 'Hoạt động',  en: 'Active' },
   'admin.user.inactiveStatus': { vi: 'Vô hiệu',  en: 'Inactive' },
+  'admin.user.you':      { vi: 'Bạn', en: 'You' },
+  'admin.user.selfHint': { vi: 'Không thể thao tác trên tài khoản của chính bạn', en: "You can't modify your own account" },
+
 
   // ── Creator dashboard ──
   'creator.hub':       { vi: 'Creator Hub',      en: 'Creator Hub' },

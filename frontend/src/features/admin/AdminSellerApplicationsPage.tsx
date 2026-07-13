@@ -126,7 +126,7 @@ export default function AdminSellerApplicationsPage() {
         ) : (
           <div className="space-y-2 p-2">
             {apps.map((app, idx) => {
-              const meta = STATUS_META[app.status]
+              const meta = STATUS_META[app.status] ?? { labelKey: 'adminApp.filterAll', badge: 'bg-slate-100 text-slate-600 border-slate-200', icon: Clock}
               const StatusIcon = meta.icon
               const saving = savingId === app.applicationId
               return (

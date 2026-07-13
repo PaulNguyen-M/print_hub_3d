@@ -7,6 +7,7 @@ import {
 import adminService from './adminService'
 import type { AdminUser } from './adminService'
 import { useTranslation } from '../../i18n/useTranslation'
+import useAuth from '../../hooks/useAuth'
 
 const ROLES = ['ADMIN', 'SELLER', 'BUYER', 'PRINTER_PARTNER']
 
@@ -27,6 +28,7 @@ const AVATAR_COLORS = [
 
 export default function AdminUsersPage() {
   const { t } = useTranslation()
+  const { user: currentUser } = useAuth()
   const [users, setUsers] = useState<AdminUser[]>([])
   const [page, setPage] = useState(0)
   const [totalPages, setTotalPages] = useState(1)
@@ -48,6 +50,7 @@ export default function AdminUsersPage() {
   }, [])
 
   const toggleActive = async (user: AdminUser) => {
+    if (currentUser?.id === user.userId) return
     setSavingId(user.userId)
     await adminService.updateUserStatus(user.userId, !user.active)
     await fetchUsers(page)
@@ -56,6 +59,7 @@ export default function AdminUsersPage() {
 
   const changeRole = async (user: AdminUser, role: string) => {
     if (role === user.role) return
+    if (currentUser?.id === user.userId) return
     setSavingId(user.userId)
     await adminService.updateUserRole(user.userId, role)
     await fetchUsers(page)
@@ -121,6 +125,7 @@ export default function AdminUsersPage() {
             {filtered.map((user, idx) => {
               const meta = ROLE_META[user.role] ?? { label: user.role, badge: 'bg-slate-100 text-slate-600 border-slate-200', dot: 'bg-slate-400' }
               const saving = savingId === user.userId
+              const isSelf = currentUser?.id === user.userId
               return (
                 <motion.div
                   key={user.userId}
@@ -134,6 +139,15 @@ export default function AdminUsersPage() {
                     <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white shadow-sm ${AVATAR_COLORS[idx % AVATAR_COLORS.length]}`}>
                       {initials(user.fullName)}
                     </div>
+                    <div className="flex items-center gap-1.5">
+                        <p className="truncate font-semibold text-slate-900 dark:text-white">{user.fullName}</p>
+                        {user.verified && <BadgeCheck size={15} className="shrink-0 text-sky-500" />}
+                        {isSelf && (
+                          <span className="shrink-0 rounded-full bg-sky-100 px-1.5 py-0.5 text-[10px] font-semibold text-sky-600 dark:bg-sky-900/40 dark:text-sky-300">
+                            {t('admin.user.you')}
+                          </span>
+                        )}
+                      </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5">
                         <p className="truncate font-semibold text-slate-900 dark:text-white">{user.fullName}</p>
@@ -153,7 +167,7 @@ export default function AdminUsersPage() {
                       <ShieldCheck size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <select
                         value={user.role}
-                        disabled={saving}
+                        disabled={saving || isSelf}
                         onChange={(e) => void changeRole(user, e.target.value)}
                         className="w-full cursor-pointer rounded-lg border border-slate-200 bg-white py-1.5 pl-7 pr-2 text-xs font-medium text-slate-700 outline-none transition hover:border-sky-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                       >
@@ -176,7 +190,8 @@ export default function AdminUsersPage() {
                   <div className="lg:w-36">
                     <button
                       type="button"
-                      disabled={saving}
+                      disabled={saving || isSelf}
+                      title={isSelf ? t('admin.user.selfHint') : undefined}
                       onClick={() => void toggleActive(user)}
                       className={`inline-flex w-full items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold transition disabled:opacity-50 ${
                         user.active

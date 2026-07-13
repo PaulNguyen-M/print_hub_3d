@@ -59,7 +59,8 @@ export default function AdminWithdrawalsPage() {
   }
 
   const reject = async (w: AdminWithdrawal) => {
-    const reason = window.prompt(t('admin.wd.rejectReason')) ?? ''
+    const reason = window.prompt(t('admin.wd.rejectReason'), '')
+    if (reason === null) return
     setBusyId(w.withdrawalId)
     try {
       await adminService.rejectWithdrawal(w.withdrawalId, reason)
