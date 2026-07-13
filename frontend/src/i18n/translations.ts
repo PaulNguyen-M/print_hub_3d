@@ -154,6 +154,10 @@ export const translations: Dict = {
   'admin.dash.aovDesc':      { vi: 'Giá trị trung bình mỗi đơn hàng.', en: 'Average value per order.' },
   'admin.dash.orderCount':   { vi: 'Số đơn hàng',   en: 'Order Count' },
   'admin.dash.orderCountDesc': { vi: 'Đơn hàng tạo doanh thu.', en: 'Orders that generated revenue.' },
+  'admin.dash.loadError':          { vi: 'Không tải được dữ liệu bảng điều khiển. Vui lòng thử lại.', en: 'Could not load dashboard data. Please try again.' },
+  'admin.dash.pendingOrders':      { vi: 'Đơn chờ xử lý', en: 'Pending orders' },
+  'admin.dash.pendingOrdersDesc':  { vi: 'Số đơn đang chờ xác nhận', en: 'Orders awaiting confirmation' },
+
 
   // ── Admin products ──
   'admin.prod.label':  { vi: 'Quản lý sản phẩm', en: 'Product Management' },

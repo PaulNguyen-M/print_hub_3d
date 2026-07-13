@@ -10,17 +10,24 @@ export default function AdminDashboardPage() {
   const [overview, setOverview] = useState<AdminDashboardOverview | null>(null)
   const [revenueStats, setRevenueStats] = useState<RevenueStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     const loadDashboard = async () => {
       setLoading(true)
-      const [overviewData, statsData] = await Promise.all([
-        adminService.getDashboardOverview(),
-        adminService.getRevenueStats()
-      ])
-      setOverview(overviewData)
-      setRevenueStats(statsData)
-      setLoading(false)
+      setError(false)
+      try {
+        const [overviewData, statsData] = await Promise.all([
+          adminService.getDashboardOverview(),
+          adminService.getRevenueStats()
+        ])
+        setOverview(overviewData)
+        setRevenueStats(statsData)
+      } catch {
+        setError(true)
+      } finally {
+        setLoading(false)
+      }
     }
 
     void loadDashboard()
@@ -30,6 +37,14 @@ export default function AdminDashboardPage() {
     return (
       <div className="rounded-3xl border border-slate-200 bg-white/90 p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900/90">
         {t('common.loading')}
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-3xl border border-rose-200 bg-rose-50 p-8 text-rose-600 daek:border-rose-900/50 dark:bg-rose-900/50">
+        {t('admin.dash.loadError')}
       </div>
     )
   }
@@ -75,9 +90,9 @@ export default function AdminDashboardPage() {
 
         <div className="mt-6 grid gap-4 lg:grid-cols-2">
           <AdminStatCard
-            label={t('admin.dash.revenue')}
-            value={fmtVnd(revenueStats?.totalRevenue)}
-            description={t('admin.dash.revenueDesc')}
+            label={t('admin.dash.pendingOrders')}
+            value={overview?.pendingOrders ?? 0}
+            description={t('admin.dash.pendingOrdersDesc')}
           />
           <AdminStatCard
             label={t('admin.dash.pending')}

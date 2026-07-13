@@ -184,14 +184,16 @@ function ProductSkeleton() {
 // Component trang Marketplace, state - bộ nhớ cảu trang
 export default function MarketplacePage() {
   const { t } = useTranslation()
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [search, setSearch] = useState(searchParams.get('q') ?? '')
   const [debouncedSearch, setDebouncedSearch] = useState(search)
-  const [sort, setSort] = useState('newest')
+  const [sort, setSort] = useState(searchParams.get('sort') ?? 'newest')
   const [category, setCategory] = useState(searchParams.get('category') ?? 'all')
   const [priceRange, setPriceRange] = useState<{ min: number; max: number } | null>(null)
   const [filterOpen, setFilterOpen] = useState(false)
-  const [page, setPage] = useState(0)
+  const [page, setPage] = useState(Number(searchParams.get('page')) || 0)
+
+
 
   // Debounce: chỉ cập nhật từ khóa dùng để gọi API sau khi ngừng gõ 300ms
   useEffect(() => {
@@ -202,6 +204,21 @@ export default function MarketplacePage() {
 
     return () => clearTimeout(handler)
   }, [search])
+
+    // Ghi trạng thái lọc vào URL để chia sẻ / bookmark / tải lại đều khôi phục được
+  useEffect(() => {
+    const next: Record<string, string> = {}
+    if (debouncedSearch) next.q = debouncedSearch
+    if (sort !== 'newest') next.sort = sort
+    if (category !== 'all') next.category = category
+    if (priceRange) {
+      next.minPrice = String(priceRange.min)
+      next.maxPrice = String(priceRange.max)
+    }
+    if (page > 0) next.page = String(page)
+    setSearchParams(next, { replace: true })
+  }, [debouncedSearch, sort, category, priceRange, page, setSearchParams])
+
 
   // Khi đang tìm kiếm hoặc lọc → mặc định sắp theo rating cao nhất.
   // Khi không tìm/lọc → mặc định sản phẩm mới nhất. Người dùng vẫn đổi được qua dropdown.
