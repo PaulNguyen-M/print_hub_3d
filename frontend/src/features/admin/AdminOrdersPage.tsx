@@ -3,6 +3,13 @@ import adminService from './adminService'
 import type { AdminOrder } from './adminService'
 import { useTranslation } from '../../i18n/useTranslation'
 
+const NEXT_STATUS: Record<string, string> = {
+  CONFIRMED: 'PRINTING',
+  PRINTING: 'FINISHING',
+  FINISHING: 'SHIPPING',
+  SHIPPING: 'DELIVERED', 
+}
+
 export default function AdminOrdersPage() {
   const { t } = useTranslation()
   const [orders, setOrders] = useState<AdminOrder[]>([])
@@ -53,6 +60,18 @@ export default function AdminOrdersPage() {
     }
   }
 
+  const advanceStatus = async (order: AdminOrder, nextStatus: string) => {
+    setBusyId(order.orderId)
+    try {
+      await adminService.advanceOrderStatus(order.orderId, nextStatus)
+      await fetchOrders(page)
+    } catch (err) {
+      alert((err as {response?: {data?: {message?: string}}}).response?.data?.message ?? t('admin.order.actionFailed'))
+    } finally {
+      setBusyId(null)
+    }
+  }
+
   return (
     <div className="space-y-6">
       <section className="rounded-3xl border border-slate-200 bg-white/90 p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900/90">
@@ -97,7 +116,7 @@ export default function AdminOrdersPage() {
                     <td className="px-4 py-4 text-slate-600 dark:text-slate-300">{t(`status.${order.orderStatus}`)}</td>
                     <td className="px-4 py-4 text-slate-600 dark:text-slate-300">{order.trackingNumber || '—'}</td>
                     <td className="px-4 py-4">
-                      <div className="flex flex-wrap gap-2">
+                                            <div className="flex flex-wrap gap-2">
                         {(order.orderStatus === 'PROCESSING' || order.orderStatus === 'PENDING') && (
                           <button
                             type="button"
@@ -108,7 +127,17 @@ export default function AdminOrdersPage() {
                             {t('admin.order.confirm')}
                           </button>
                         )}
-                        {order.orderStatus === 'CONFIRMED' && (
+                        {NEXT_STATUS[order.orderStatus] && (
+                          <button
+                            type="button"
+                            className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-50"
+                            onClick={() => void advanceStatus(order, NEXT_STATUS[order.orderStatus])}
+                            disabled={busyId === order.orderId}
+                          >
+                            {t('admin.order.advanceTo')} {t(`status.${NEXT_STATUS[order.orderStatus]}`)}
+                          </button>
+                        )}
+                        {order.orderStatus === 'DELIVERED' && (
                           <button
                             type="button"
                             className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-50"
@@ -121,10 +150,11 @@ export default function AdminOrdersPage() {
                         {order.orderStatus === 'COMPLETED' && (
                           <span className="text-xs font-medium text-emerald-600">{t('admin.order.doneNote')}</span>
                         )}
-                        {(order.orderStatus === 'CANCELLED') && (
+                        {order.orderStatus === 'CANCELLED' && (
                           <span className="text-xs text-slate-400">—</span>
                         )}
                       </div>
+
                     </td>
                   </tr>
                 ))}

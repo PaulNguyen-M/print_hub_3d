@@ -190,6 +190,8 @@ export const translations: Dict = {
   'admin.order.tracking': { vi: 'Mã vận đơn',    en: 'Tracking' },
   'admin.order.advance': { vi: 'Tiến trình',     en: 'Advance' },
   'admin.order.advanceNotApplicable': { vi: 'Đơn đang ở trạng thái Đã xác nhận/Hoàn tất — hãy dùng nút "Xác nhận"/"Hoàn tất" thay vì "Tiến trình".', en: 'Order is Confirmed/Completed — use the "Confirm"/"Complete" button instead of "Advance".' },
+  'admin.order.advanceTo': { vi: 'Chuyển sang', en: 'Advance to' },
+
 
   // ── Admin STL ──
   'admin.stl.label':   { vi: 'Duyệt STL',        en: 'STL Review' },
