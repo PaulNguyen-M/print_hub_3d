@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import apiClient from '../api/axios'
 import { useTranslation } from '../i18n/useTranslation'
 import StlFileViewer from '../features/stl-viewer/StlFileViewer'
+import { useToast } from '../hooks/useToast'
 
 // react-dropzone may not be installed — provide a simple fallback
 const useSimpleDropzone = (onDrop: (files: File[]) => void) => {
@@ -16,7 +17,7 @@ const useSimpleDropzone = (onDrop: (files: File[]) => void) => {
       onClick: () => {
         const input = document.createElement('input')
         input.type = 'file'
-        input.accept = '.stl,.obj,.fbx,.gltf,.glb'
+        input.accept = '.stl'
         input.onchange = (e) => {
           const f = (e.target as HTMLInputElement).files
           if (f?.length) onDrop(Array.from(f))
@@ -28,6 +29,8 @@ const useSimpleDropzone = (onDrop: (files: File[]) => void) => {
     isDragActive: false,
   }
 }
+
+const MAX_FILE_MB = 50
 
 const MATERIALS = [
   { id: 'PLA',   name: 'PLA',   descKey: 'mat.pla.desc',   price: 150, icon: '🌿', propKeys: ['mat.prop.easyPrint', 'mat.prop.richColor', 'mat.prop.cheap'] },
@@ -72,6 +75,7 @@ const STEPS = [
 
 export default function PrintingServicePage() {
   const { t } = useTranslation()
+  const { showToast } = useToast()
   const [step, setStep] = useState(1)
   const [file, setFile] = useState<File | null>(null)
   const [material, setMaterial] = useState('PLA')
@@ -84,8 +88,19 @@ export default function PrintingServicePage() {
   const navigate = useNavigate()
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles[0]) setFile(acceptedFiles[0])
-  }, [])
+    const f = acceptedFiles[0]
+    if (!f) return
+    if (!f.name.toLowerCase().endsWith('.stl')) {
+      showToast(t('ps.errStlOnly'))
+      return
+    }
+    if (f.size > MAX_FILE_MB * 1024 * 1024) {
+      showToast(t('ps.errTooBig'))
+      return
+    }
+    setFile(f)
+  }, [showToast, t])
+
 
   const dropzone = useSimpleDropzone(onDrop)
 
@@ -101,14 +116,14 @@ export default function PrintingServicePage() {
   const formatPrice = (p: number) =>
     p.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
 
-  const handleSubmit = async () => {
+    const handleSubmit = async () => {
     if (!file) return
     setSubmitting(true)
     try {
       const fd = new FormData()
       fd.append('file', file)
       fd.append('material', material)
-      fd.append('color', t(selectedColor.nameKey))
+      fd.append('color', selectedColor.id)
       fd.append('infillDensity', String(infill))
       fd.append('layerHeight', String(layerHeight))
       fd.append('quantity', String(qty))
@@ -116,14 +131,16 @@ export default function PrintingServicePage() {
       await apiClient.post('/printing-requests', fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
+      showToast(t('ps.submitSuccess'))
       navigate('/account?tab=printing')
-    } catch {
-      // still navigate to account
-      navigate('/account')
+    } catch (err) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+      showToast(msg || t('ps.submitError'))
     } finally {
       setSubmitting(false)
     }
   }
+
 
   return (
     <div className="min-h-screen pt-6 pb-16">

@@ -563,8 +563,7 @@ export const translations: Dict = {
   'ps.view3dHint':     { vi: 'Kéo để xoay · Lăn chuột để zoom · Bấm 360° để tự xoay. Hiển thị dạng phôi.', en: 'Drag to rotate · Scroll to zoom · Tap 360° to auto-spin. Shown as raw mesh.' },
   'ps.uploadTitle':    { vi: 'Upload File 3D',   en: 'Upload 3D File' },
   'ps.dropHint':       { vi: 'Kéo thả hoặc click để chọn file', en: 'Drag & drop or click to select file' },
-  'ps.formats':        { vi: 'Hỗ trợ: STL, OBJ, FBX, GLTF, GLB (tối đa 50MB)', en: 'Supports: STL, OBJ, FBX, GLTF, GLB (max 50MB)' },
-  'ps.autoAnalyze':    { vi: 'File sẽ được phân tích tự động', en: 'File will be analyzed automatically' },
+  'ps.formats':     { vi: 'Chỉ hỗ trợ file STL · tối đa 50MB', en: 'STL files only · max 50MB' },  'ps.autoAnalyze':    { vi: 'File sẽ được phân tích tự động', en: 'File will be analyzed automatically' },
   'ps.removeFile':     { vi: 'Xóa và chọn lại',  en: 'Remove and reselect' },
   'ps.fileInfo':       { vi: 'Thông Tin File',   en: 'File Info' },
   'ps.estWeight':      { vi: 'Khối lượng ước tính', en: 'Estimated weight' },
@@ -596,6 +595,10 @@ export const translations: Dict = {
   'ps.delivery':       { vi: 'Giao hàng 3-7 ngày làm việc', en: 'Delivery in 3-7 business days' },
   'ps.equipment':      { vi: 'Máy in FDM & SLA chuyên nghiệp', en: 'Professional FDM & SLA printers' },
   'ps.uploadToQuote':  { vi: 'Upload file để xem báo giá', en: 'Upload file to see quote' },
+  'ps.submitSuccess': { vi: 'Đã gửi yêu cầu in! Chúng tôi sẽ báo giá sớm.', en: 'Print request sent! We’ll send a quote soon.' },
+  'ps.submitError':   { vi: 'Không gửi được yêu cầu, vui lòng thử lại.', en: 'Could not submit the request, please try again.' },
+  'ps.errStlOnly':  { vi: 'Chỉ chấp nhận file .STL', en: 'Only .STL files are accepted' },
+  'ps.errTooBig':   { vi: 'File vượt quá 50MB', en: 'File exceeds 50MB' },
 
   // ── Hero trust badges ──
   'hero.badge1':       { vi: 'PLA / PETG / Resin', en: 'PLA / PETG / Resin' },
