@@ -1,9 +1,16 @@
 import { useEffect, useState } from 'react'
 import adminService from './adminService'
-import type{ AdminPrintingRequest } from './adminService'
+import type { AdminPrintingRequest } from './adminService'
 import { useTranslation } from '../../i18n/useTranslation'
+import { Loader2 } from 'lucide-react'
 
-const allowedStatuses = ['QUOTED', 'ACCEPTED', 'REJECTED']
+const STATUS_ACTIONS: Record<string, string[]> = {
+  REVIEWING: ['QUOTED', 'REJECTED'],
+  QUOTED: ['ACCEPTED', 'REJECTED'],
+  ACCEPTED: ['PRINTING'],
+  PRINTING: ['COMPLETED'],
+  // COMPLETED, REJECTED → không còn hành động
+}
 
 export default function AdminStlRequestsPage() {
   const { t } = useTranslation()
@@ -52,8 +59,11 @@ export default function AdminStlRequestsPage() {
 
       <section className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/90">
         {loading ? (
-          <div>{t('common.loading')}</div>
+          <div className="flex justify-center py-16 text-slate-400"><Loader2 className="animate-spin" /></div>
+        ) : requests.length === 0 ? (
+          <div className="py-16 text-center text-slate-400">{t('admin.stl.empty')}</div>
         ) : (
+
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
               <thead className="bg-slate-50 text-slate-700 dark:bg-slate-950/80 dark:text-slate-200">
@@ -73,17 +83,24 @@ export default function AdminStlRequestsPage() {
                     <td className="px-4 py-4 text-slate-600 dark:text-slate-300">{t(`status.${request.modelStatus}`)}</td>
                     <td className="px-4 py-4 text-slate-600 dark:text-slate-300">{(request.quoteAmount ?? 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
                     <td className="px-4 py-4 space-x-2">
-                      {allowedStatuses.map((status) => (
-                        <button
-                          key={`${request.requestId}-${status}`}
-                          type="button"
-                          className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white transition hover:bg-slate-700"
-                          onClick={() => void updateStatus(request.requestId, status)}
-                        >
-                          {t(`status.${status}`)}
-                        </button>
-                      ))}
+                      {(STATUS_ACTIONS[request.modelStatus] ?? []).length === 0 ? (
+                        <span className="text-xs text-slate-400">—</span>
+                      ) : (
+                        (STATUS_ACTIONS[request.modelStatus] ?? []).map((status) => (
+                          <button
+                            key={`${request.requestId}-${status}`}
+                            type="button"
+                            className={`rounded-full px-3 py-1 text-xs font-semibold text-white transition ${
+                              status === 'REJECTED' ? 'bg-rose-600 hover:bg-rose-700' : 'bg-slate-900 hover:bg-slate-700'
+                            }`}
+                            onClick={() => void updateStatus(request.requestId, status)}
+                          >
+                            {t(`status.${status}`)}
+                          </button>
+                        ))
+                      )}
                     </td>
+
                   </tr>
                 ))}
               </tbody>

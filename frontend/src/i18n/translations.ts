@@ -157,6 +157,7 @@ export const translations: Dict = {
   'admin.dash.loadError':          { vi: 'Không tải được dữ liệu bảng điều khiển. Vui lòng thử lại.', en: 'Could not load dashboard data. Please try again.' },
   'admin.dash.pendingOrders':      { vi: 'Đơn chờ xử lý', en: 'Pending orders' },
   'admin.dash.pendingOrdersDesc':  { vi: 'Số đơn đang chờ xác nhận', en: 'Orders awaiting confirmation' },
+  'admin.dash.noRevenue':   { vi: 'Chưa có dữ liệu doanh thu', en: 'No revenue data available' },
 
 
   // ── Admin products ──
@@ -199,6 +200,8 @@ export const translations: Dict = {
   'admin.stl.sub':     { vi: 'Duyệt báo giá, từ chối file không hợp lệ và giữ hàng đợi in luôn vận hành.', en: 'Approve quotes, reject invalid uploads, and keep the printing queue moving.' },
   'admin.stl.request': { vi: 'Yêu cầu',          en: 'Request' },
   'admin.stl.quote':   { vi: 'Báo giá',          en: 'Quote' },
+  'admin.stl.empty':   { vi: 'Chưa có yêu cầu in nào', en: 'No printing requests yet' },
+
 
   // ── Admin users (đã có 1 phần, bổ sung) ──
   'admin.user.label':  { vi: 'Phân quyền',       en: 'Access Control' },
@@ -217,7 +220,7 @@ export const translations: Dict = {
   'admin.user.colRole':    { vi: 'Phân quyền', en: 'Role' },
   'admin.user.colStatus':  { vi: 'Trạng thái', en: 'Status' },
   'admin.user.colAction':  { vi: 'Hành động', en: 'Action' },
-
+  'admin.user.confirmRole': { vi: 'Đổi vai trò của người dùng này?', en: 'Change this user’s role?' },
 
 
   // ── Creator dashboard ──

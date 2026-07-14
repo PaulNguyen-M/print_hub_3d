@@ -71,11 +71,16 @@ export default function AdminUsersPage() {
   const changeRole = async (user: AdminUser, role: string) => {
     if (role === user.role) return
     if (currentUser?.id === user.userId) return
+    if (!window.confirm(t('admin.user.confirmRole'))) {
+      setUsers((u) => [...u])
+      return
+    }
     setSavingId(user.userId)
     await adminService.updateUserRole(user.userId, role)
     await fetchUsers(page)
     setSavingId(null)
   }
+
 
   const initials = (name: string) =>
     name?.split(' ').map((w) => w[0]).slice(-2).join('').toUpperCase() || 'U'

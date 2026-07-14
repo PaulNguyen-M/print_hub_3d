@@ -1,3 +1,5 @@
+import { useTranslation } from '../../i18n/useTranslation'
+
 interface RevenuePoint {
   period: string
   revenue: number
@@ -8,9 +10,11 @@ interface AdminRevenueChartProps {
 }
 
 export default function AdminRevenueChart({ points }: AdminRevenueChartProps) {
+  const { t } = useTranslation()
   if (!points?.length) {
-    return <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-950/80 dark:text-slate-300">No revenue data available.</div>
+    return <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-950/80 dark:text-slate-300">{t('admin.dash.noRevenue')}</div>
   }
+
 
   const maxRevenue = Math.max(...points.map((point) => point.revenue), 1)
   const fmtVnd = (n: number) => (n ?? 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })

@@ -151,8 +151,9 @@ export default function AdminProductsPage() {
                       {product.sellerEmail && <p className="text-xs text-slate-400">{product.sellerEmail}</p>}
                     </td>
                     <td className="px-4 py-4 text-slate-600 dark:text-slate-300">
-                      {product.price.toLocaleString('vi-VN')}đ
+                      {(product.price ?? 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                     </td>
+
                     <td className="px-4 py-4">
                       <StatusBadge status={product.status} />
                       {product.rejectionReason && (
