@@ -33,8 +33,6 @@ function ShopPageKeyed() {
   const { slug } = useParams<{ slug: string }>()
   return <ShopPage key={slug} />
 }
-import StlViewerDemo from '../features/stl-viewer/StlViewerDemo'
-import { StlViewerProvider } from '../features/stl-viewer'
 import CreatorDashboardPage from '../features/creator/CreatorDashboardPage'
 
 export default function AppRoutes() {
@@ -55,8 +53,7 @@ export default function AppRoutes() {
         <Route path="shops/:slug" element={<ShopPageKeyed />} />
         <Route path="printing-service" element={<ProtectedRoute><PrintingServicePage /></ProtectedRoute>} />
         <Route path="cart" element={<CartPage />} />
-        <Route path="stl" element={<StlViewerProvider><StlViewerDemo /></StlViewerProvider>} />
-
+        
         {/* Checkout */}
         <Route path="checkout" element={<CheckoutPage />} />
         <Route path="checkout/success" element={<CheckoutSuccessPage />} />

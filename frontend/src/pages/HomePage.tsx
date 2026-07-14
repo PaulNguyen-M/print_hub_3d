@@ -3,7 +3,7 @@ import { motion, type Variants } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import {
   ArrowRight, Box, Printer, Star, ChevronRight, Play,
-  ShoppingBag, Store, Eye, Download, Sparkles
+  ShoppingBag, Store, Download, Sparkles
 } from 'lucide-react'
 import HeroScene from '../features/stl-viewer/HeroScene'
 import apiClient from '../api/axios'
@@ -79,7 +79,6 @@ export default function HomePage() {
     { icon: ShoppingBag, to: '/marketplace', title: t('home.explore.market.title'), desc: t('home.explore.market.desc'), color: 'from-brand-500 to-indigo-600' },
     { icon: Printer, to: '/printing-service', title: t('home.explore.print.title'), desc: t('home.explore.print.desc'), color: 'from-cyan-500 to-blue-600' },
     { icon: Store, to: sellTo, title: t('home.explore.sell.title'), desc: t('home.explore.sell.desc'), color: 'from-emerald-500 to-teal-600' },
-    { icon: Eye, to: '/stl', title: t('home.explore.viewer.title'), desc: t('home.explore.viewer.desc'), color: 'from-amber-500 to-orange-600' },
   ]
 
   return (
