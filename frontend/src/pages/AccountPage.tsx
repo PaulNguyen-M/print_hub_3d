@@ -10,6 +10,9 @@ import {
 import apiClient from '../api/axios'
 import useAuth from '../hooks/useAuth'
 import { useTranslation } from '../i18n/useTranslation'
+import { useWishlistStore, getWishlist } from '../store/wishlistStore'
+import type { WishlistProduct } from '../store/wishlistStore'
+
 
 interface UserProfile {
   id: number
@@ -40,6 +43,11 @@ const STATUS_MAP: Record<string, { color: string }> = {
   DELIVERED:  { color: 'badge-green' },
   CANCELLED:  { color: 'badge-red' },
 }
+
+const PLACEHOLDER = 'https://placehold.co/400x400/1e293b/64748b?text=3D'
+const formatPrice = (p: number) =>
+  (p ?? 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+
 
 const NAV_ITEMS = [
   { id: 'profile',   key: 'account.nav.profile',   icon: User },
@@ -85,6 +93,14 @@ export default function AccountPage() {
     },
     enabled: tab === 'orders',
   })
+
+  const toggleWish = useWishlistStore((s) => s.toggle)
+  const { data: wishlist, isLoading: wishlistLoading } = useQuery<WishlistProduct[]>({
+    queryKey: ['wishlist'],
+    queryFn: getWishlist,
+    enabled: tab === 'wishlist',
+  })
+
 
   const updateProfile = useMutation({
     mutationFn: (payload: Record<string, string>) => apiClient.put('/users/profile', payload),
@@ -388,13 +404,53 @@ export default function AccountPage() {
                 {tab === 'wishlist' && (
                   <div className="card p-6">
                     <h2 className="mb-6 text-lg font-semibold text-slate-900 dark:text-white">{t('account.wishlistTitle')}</h2>
-                    <div className="flex flex-col items-center py-12 text-center">
-                      <Heart size={40} className="mb-3 text-slate-300" />
-                      <p className="font-semibold text-slate-500">{t('account.noWishlist')}</p>
-                      <Link to="/marketplace" className="btn-primary mt-4">{t('account.exploreMarket')}</Link>
-                    </div>
+                    {wishlistLoading ? (
+                      <div className="flex justify-center py-12 text-slate-400"><Loader2 className="animate-spin" /></div>
+                    ) : !wishlist?.length ? (
+                      <div className="flex flex-col items-center py-12 text-center">
+                        <Heart size={40} className="mb-3 text-slate-300" />
+                        <p className="font-semibold text-slate-500">{t('account.noWishlist')}</p>
+                        <Link to="/marketplace" className="btn-primary mt-4">{t('account.exploreMarket')}</Link>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+                        {wishlist.map((p) => (
+                          <div
+                            key={p.id}
+                            className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:border-brand-300 hover:shadow-card dark:border-slate-800 dark:bg-slate-900"
+                          >
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                await toggleWish(p.id)
+                                qc.invalidateQueries({ queryKey: ['wishlist'] })
+                              }}
+                              title={t('account.removeWish')}
+                              className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow transition hover:scale-110 dark:bg-slate-800/90"
+                            >
+                              <Heart size={15} className="fill-rose-500 text-rose-500" />
+                            </button>
+                            <Link to={`/products/${p.id}`} className="block">
+                              <div className="aspect-square overflow-hidden bg-slate-100 dark:bg-slate-800">
+                                <img
+                                  src={p.thumbnailUrl || PLACEHOLDER}
+                                  alt={p.title}
+                                  className="h-full w-full object-cover transition group-hover:scale-105"
+                                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = PLACEHOLDER }}
+                                />
+                              </div>
+                              <div className="p-3">
+                                <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{p.title}</p>
+                                <p className="mt-1 text-sm font-bold text-brand-600">{formatPrice(p.price)}</p>
+                              </div>
+                            </Link>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
+
 
                 {/* ── Downloads ── */}
                 {tab === 'downloads' && (

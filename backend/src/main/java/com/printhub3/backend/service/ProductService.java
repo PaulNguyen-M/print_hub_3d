@@ -344,6 +344,12 @@ public class ProductService {
         return productRepository.findAll(spec, pageable).map(this::mapToProductDto);
     }
 
+    /** Public wrapper để service khác (vd wishlist) tái dùng logic map ProductDto. */
+    public ProductDto toProductDto(Product product) {
+        return mapToProductDto(product);
+    }
+
+
     private ProductDto mapToProductDto(Product product) {
         String imageUrl = getPrimaryImageUrl(product).orElse(null);
         java.util.List<String> images = (product.getImages() == null) ? java.util.List.of()

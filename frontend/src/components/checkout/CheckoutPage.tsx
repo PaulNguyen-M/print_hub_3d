@@ -47,7 +47,6 @@ export const CheckoutPage = () => {
   // When set, shows the QR-payment step for the just-created order
   const [qrOrder, setQrOrder] = useState<{ orderId: number; orderNumber: string; method: string } | null>(null)
   const [shippingMethodId, setShippingMethodId] = useState('STANDARD')
-  const [coupon, setCoupon] = useState('')
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
@@ -278,18 +277,6 @@ export const CheckoutPage = () => {
                     ))}
                   </div>
 
-                  {/* Coupon */}
-                  <div className="mb-4 flex gap-2">
-                    <input
-                      value={coupon}
-                      onChange={e => setCoupon(e.target.value)}
-                      placeholder={t('co.couponPlaceholder')}
-                      className="input flex-1 text-sm py-2"
-                    />
-                    <button type="button" className="btn-secondary px-3 py-2 text-sm">
-                      {t('co.apply')}
-                    </button>
-                  </div>
 
                   <div className="space-y-2 border-t border-slate-100 pt-3 text-sm dark:border-slate-800">
                     <div className="flex justify-between text-slate-600 dark:text-slate-400">

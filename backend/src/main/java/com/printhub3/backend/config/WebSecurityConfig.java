@@ -128,6 +128,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/v1/cart/**").authenticated()
                         .requestMatchers("/api/v1/payments/**").authenticated()
                         .requestMatchers("/api/v1/printing-requests/**").authenticated()
+                        .requestMatchers("/api/v1/wishlist/**").authenticated()
 
                         // WebSocket
                         .requestMatchers("/ws/**").permitAll()

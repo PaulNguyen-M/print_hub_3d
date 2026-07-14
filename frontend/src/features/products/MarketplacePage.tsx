@@ -1,14 +1,18 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Search, SlidersHorizontal, Star, ShoppingCart,
-  Heart, X, ChevronDown, Loader2, Package
+  Heart, X, ChevronDown, Loader2, Package, Store
 } from 'lucide-react'
 import apiClient from '../../api/axios'
 import { useCartStore } from '../../store/cartStore'
 import { useTranslation } from '../../i18n/useTranslation'
+import { useWishlistStore } from '../../store/wishlistStore'
+import useAuthStore from '../../store/authStore'
+import { useToast } from '../../hooks/useToast'
+
 
 //Khai báo kiểu dữ liệu cho sản phẩm và phản hồi phân trang từ API
 interface Product {
@@ -22,6 +26,9 @@ interface Product {
   isDigital?: boolean
   materialType?: string
   creatorName?: string
+  shopName?: string
+  shopSlug?: string
+  totalSold?: number
 }
 
 interface PageResponse<T> {
@@ -71,9 +78,14 @@ const PRICE_RANGES = [
 // Component ProductCard hiển thị thông tin sản phẩm trong lưới sản phẩm
 function ProductCard({ product }: { product: Product }) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { showToast } = useToast()
   const addToCart = useCartStore((s) => s.addToCart)
-  const [wished, setWished] = useState(false)
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const wished = useWishlistStore((s) => s.ids.has(product.id))
+  const toggleWish = useWishlistStore((s) => s.toggle)
   const [adding, setAdding] = useState(false)
+
 
   const handleAdd = async (e: React.MouseEvent) => {
     e.preventDefault()
@@ -81,6 +93,22 @@ function ProductCard({ product }: { product: Product }) {
     await addToCart(product.id, 1)
     setAdding(false)
   }
+
+  const handleWish = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!isAuthenticated) {
+      showToast(t('market.loginToWish'))
+      navigate('/auth/login')
+      return
+    }
+    try {
+      await toggleWish(product.id)
+    } catch {
+      showToast(t('market.wishError'))
+    }
+  }
+
 
   const formatPrice = (p: number) =>
     p.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
@@ -111,7 +139,7 @@ function ProductCard({ product }: { product: Product }) {
           {/* Wishlist */}
           <button
             type="button"
-            onClick={(e) => { e.preventDefault(); setWished(!wished) }}
+            onClick={handleWish}
             className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow transition hover:scale-110 dark:bg-slate-800/90"
           >
             <Heart size={15} className={wished ? 'fill-rose-500 text-rose-500' : 'text-slate-400'} />
@@ -140,9 +168,22 @@ function ProductCard({ product }: { product: Product }) {
           <h3 className="line-clamp-2 text-sm font-semibold text-slate-900 dark:text-white leading-snug">
             {product.title}
           </h3>
-          {product.creatorName && (
-            <p className="mt-1 text-xs text-slate-400">by {product.creatorName}</p>
+          {product.shopName && (
+            product.shopSlug ? (
+              <button
+                type="button"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(`/shops/${product.shopSlug}`) }}
+                className="mt-1 flex items-center gap-1 text-xs text-slate-400 transition hover:text-brand-600"
+              >
+                <Store size={11} /> {product.shopName}
+              </button>
+            ) : (
+              <p className="mt-1 flex items-center gap-1 text-xs text-slate-400">
+                <Store size={11} /> {product.shopName}
+              </p>
+            )
           )}
+
           <div className="mt-3 flex items-center justify-between">
             <p className="text-base font-bold text-slate-900 dark:text-white">
               {formatPrice(product.price)}
@@ -159,6 +200,9 @@ function ProductCard({ product }: { product: Product }) {
               </div>
             )}
           </div>
+          {(product.totalSold ?? 0) > 0 && (
+            <p className="mt-1 text-xs text-slate-400">{t('market.sold')} {product.totalSold}</p>
+          )}
         </div>
       </Link>
     </motion.div>
@@ -192,8 +236,9 @@ export default function MarketplacePage() {
   const [priceRange, setPriceRange] = useState<{ min: number; max: number } | null>(null)
   const [filterOpen, setFilterOpen] = useState(false)
   const [page, setPage] = useState(Number(searchParams.get('page')) || 0)
+  const fetchWishlistIds = useWishlistStore((s) => s.fetchIds)
 
-
+  useEffect(() => { void fetchWishlistIds() }, [fetchWishlistIds])
 
   // Debounce: chỉ cập nhật từ khóa dùng để gọi API sau khi ngừng gõ 300ms
   useEffect(() => {

@@ -9,6 +9,9 @@ interface CartSummaryProps {
   loading?: boolean;
 }
 
+const formatPrice = (p: number) =>
+  (p ?? 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+
 export const CartSummary: React.FC<CartSummaryProps> = ({
   totalItems,
   totalPrice,
@@ -16,44 +19,43 @@ export const CartSummary: React.FC<CartSummaryProps> = ({
   loading = false,
 }) => {
   const { t } = useTranslation();
+  const tax = totalPrice * 0.1;
   return (
-    <div className="bg-gray-50 rounded-lg p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('cart.summary')}</h2>
+    <div className="card p-6">
+      <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">{t('cart.summary')}</h2>
 
-      <div className="space-y-3 mb-4">
-        <div className="flex justify-between text-gray-700">
+      <div className="mb-4 space-y-3 text-sm">
+        <div className="flex justify-between text-slate-600 dark:text-slate-400">
           <span>{t('cart.subtotal')} ({totalItems})</span>
-          <span>${totalPrice.toFixed(2)}</span>
+          <span>{formatPrice(totalPrice)}</span>
         </div>
-        <div className="flex justify-between text-gray-700">
+        <div className="flex justify-between text-slate-600 dark:text-slate-400">
           <span>{t('cart.shipping')}</span>
-          <span className="text-green-600">{t('cart.free')}</span>
+          <span className="font-medium text-green-600">{t('cart.free')}</span>
         </div>
-        <div className="flex justify-between text-gray-700">
+        <div className="flex justify-between text-slate-600 dark:text-slate-400">
           <span>{t('cart.tax')}</span>
-          <span>${(totalPrice * 0.1).toFixed(2)}</span>
+          <span>{formatPrice(tax)}</span>
         </div>
       </div>
 
-      <div className="border-t pt-4 mb-6">
-        <div className="flex justify-between text-lg font-semibold text-gray-900">
+      <div className="mb-6 border-t border-slate-100 pt-4 dark:border-slate-800">
+        <div className="flex justify-between text-lg font-semibold text-slate-900 dark:text-white">
           <span>{t('cart.total')}</span>
-          <span>${(totalPrice + totalPrice * 0.1).toFixed(2)}</span>
+          <span className="text-brand-600">{formatPrice(totalPrice + tax)}</span>
         </div>
       </div>
 
       <button
+        type="button"
         onClick={onCheckout}
         disabled={totalItems === 0 || loading}
-        className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+        className="btn-primary w-full justify-center py-3 disabled:opacity-60"
       >
         {loading ? t('cart.processing') : t('cart.checkout')}
       </button>
 
-      <Link
-        to="/marketplace"
-        className="block text-center text-blue-600 mt-4 hover:underline"
-      >
+      <Link to="/marketplace" className="mt-4 block text-center text-sm text-brand-600 hover:underline">
         {t('cart.continue')}
       </Link>
     </div>

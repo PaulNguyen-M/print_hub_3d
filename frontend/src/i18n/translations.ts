@@ -432,6 +432,10 @@ export const translations: Dict = {
   'market.price.100to300': { vi: '100K – 300K',  en: '100K – 300K' },
   'market.price.300to500': { vi: '300K – 500K',  en: '300K – 500K' },
   'market.price.over500': { vi: 'Trên 500K',     en: 'Over 500K' },
+  'market.sold': { vi: 'Đã bán', en: 'Sold' },
+  'market.loginToWish': { vi: 'Đăng nhập để lưu yêu thích', en: 'Log in to save favorites' },
+  'market.wishError':   { vi: 'Không lưu được, vui lòng thử lại', en: 'Could not save, please try again' },
+
 
   // ── Account ──
   'account.title':     { vi: 'Tài Khoản',        en: 'Account' },
@@ -484,9 +488,11 @@ export const translations: Dict = {
   'account.change':    { vi: 'Đổi',              en: 'Change' },
   'account.emailNotif': { vi: 'Thông Báo Email', en: 'Email Notifications' },
   'account.emailNotifDesc': { vi: 'Nhận cập nhật đơn hàng qua email', en: 'Receive order updates via email' },
-  'account.deleteAcc': { vi: 'Xóa Tài Khoản',    en: 'Delete Account' },
+  'account.deleteAcc': { vi: 'Xóa Tài Khoản', en: 'Delete Account'},
   'account.deleteAccDesc': { vi: 'Hành động này không thể hoàn tác', en: 'This action cannot be undone' },
-  'account.delete':    { vi: 'Xóa',              en: 'Delete' },
+  'account.delete':    { vi: 'Xóa', en: 'Delete' },
+    'account.removeWish': { vi: 'Bỏ yêu thích', en: 'Remove from wishlist' },
+
 
   // ── Checkout page (form) ──
   'co.emptyTitle':     { vi: 'Giỏ Hàng Trống',   en: 'Cart is Empty' },
