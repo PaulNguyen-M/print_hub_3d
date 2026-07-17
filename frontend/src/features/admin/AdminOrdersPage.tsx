@@ -3,13 +3,20 @@ import adminService from './adminService'
 import type { AdminOrder } from './adminService'
 import { useTranslation } from '../../i18n/useTranslation'
 
-const NEXT_STATUS: Record<string, string> = {
-  CONFIRMED: 'PRINTING',
-  PRINTING: 'FINISHING',
-  FINISHING: 'SHIPPING',
-  SHIPPING: 'DELIVERED', 
+/** Map trạng thái xử lý của sạp → key i18n (dùng chung với trang seller). */
+const FF_LABEL_KEY: Record<string, string> = {
+  PENDING: 'ff.pending',
+  CONFIRMED: 'ff.confirmed',
+  PRINTING: 'ff.printing',
+  FINISHING: 'ff.finishing',
+  SHIPPING: 'ff.shipping',
+  DELIVERED: 'ff.delivered',
+  AWAITING_APPROVAL: 'ff.awaiting',
+  COMPLETED: 'ff.completed',
 }
 
+
+/** AdminOrdersPage — Quản lý đơn hàng: bảng đơn + cập nhật trạng thái theo vòng đời. */
 export default function AdminOrdersPage() {
   const { t } = useTranslation()
   const [orders, setOrders] = useState<AdminOrder[]>([])
@@ -48,10 +55,11 @@ export default function AdminOrdersPage() {
     }
   }
 
-  const completeOrder = async (order: AdminOrder) => {
+    /** Admin duyệt hoàn tất phần hàng của một sạp → chi tiền cho sạp đó. */
+  const approveShop = async (order: AdminOrder, shopId: number) => {
     setBusyId(order.orderId)
     try {
-      await adminService.completeOrder(order.orderId)
+      await adminService.approveShopCompletion(order.orderId, shopId)
       await fetchOrders(page)
     } catch (err) {
       alert((err as { response?: { data?: { message?: string } } }).response?.data?.message ?? t('admin.order.actionFailed'))
@@ -60,17 +68,6 @@ export default function AdminOrdersPage() {
     }
   }
 
-  const advanceStatus = async (order: AdminOrder, nextStatus: string) => {
-    setBusyId(order.orderId)
-    try {
-      await adminService.advanceOrderStatus(order.orderId, nextStatus)
-      await fetchOrders(page)
-    } catch (err) {
-      alert((err as {response?: {data?: {message?: string}}}).response?.data?.message ?? t('admin.order.actionFailed'))
-    } finally {
-      setBusyId(null)
-    }
-  }
 
   return (
     <div className="space-y-6">
@@ -98,6 +95,7 @@ export default function AdminOrdersPage() {
                   <th className="px-4 py-3">{t('co.paymentMethod')}</th>
                   <th className="px-4 py-3">{t('common.status')}</th>
                   <th className="px-4 py-3">{t('admin.order.tracking')}</th>
+                  <th className="px-4 py-3">{t('admin.order.shopProgress')}</th>
                   <th className="px-4 py-3">{t('common.action')}</th>
                 </tr>
               </thead>
@@ -116,7 +114,21 @@ export default function AdminOrdersPage() {
                     <td className="px-4 py-4 text-slate-600 dark:text-slate-300">{t(`status.${order.orderStatus}`)}</td>
                     <td className="px-4 py-4 text-slate-600 dark:text-slate-300">{order.trackingNumber || '—'}</td>
                     <td className="px-4 py-4">
-                                            <div className="flex flex-wrap gap-2">
+                      {order.shops?.length ? (
+                        <div className="space-y-1">
+                          {order.shops.map((s) => (
+                            <div key={s.shopId} className="flex items-center gap-2 text-xs">
+                              <span className="max-w-[140px] truncate text-slate-600 dark:text-slate-300">{s.shopName}</span>
+                              <span className="rounded-full bg-slate-100 px-2 py-0.5 font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                                {t(FF_LABEL_KEY[s.fulfillmentStatus] ?? 'ff.pending')}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : <span className="text-slate-400">—</span>}
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="flex flex-wrap gap-2">
                         {(order.orderStatus === 'PROCESSING' || order.orderStatus === 'PENDING') && (
                           <button
                             type="button"
@@ -127,26 +139,19 @@ export default function AdminOrdersPage() {
                             {t('admin.order.confirm')}
                           </button>
                         )}
-                        {NEXT_STATUS[order.orderStatus] && (
-                          <button
-                            type="button"
-                            className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-50"
-                            onClick={() => void advanceStatus(order, NEXT_STATUS[order.orderStatus])}
-                            disabled={busyId === order.orderId}
-                          >
-                            {t('admin.order.advanceTo')} {t(`status.${NEXT_STATUS[order.orderStatus]}`)}
-                          </button>
-                        )}
-                        {order.orderStatus === 'DELIVERED' && (
-                          <button
-                            type="button"
-                            className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-50"
-                            onClick={() => void completeOrder(order)}
-                            disabled={busyId === order.orderId}
-                          >
-                            {t('admin.order.complete')}
-                          </button>
-                        )}
+                        {order.shops
+                          ?.filter((s) => s.fulfillmentStatus === 'AWAITING_APPROVAL')
+                          .map((s) => (
+                            <button
+                              key={s.shopId}
+                              type="button"
+                              className="rounded-full bg-emerald-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-50"
+                              onClick={() => void approveShop(order, s.shopId)}
+                              disabled={busyId === order.orderId}
+                            >
+                              {t('admin.order.approveShop')}: {s.shopName}
+                            </button>
+                          ))}
                         {order.orderStatus === 'COMPLETED' && (
                           <span className="text-xs font-medium text-emerald-600">{t('admin.order.doneNote')}</span>
                         )}
@@ -154,6 +159,7 @@ export default function AdminOrdersPage() {
                           <span className="text-xs text-slate-400">—</span>
                         )}
                       </div>
+
 
                     </td>
                   </tr>

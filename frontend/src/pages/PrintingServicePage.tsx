@@ -73,6 +73,10 @@ const STEPS = [
   { id: 4, key: 'ps.step.view', icon: Eye },
 ]
 
+/**
+ * PrintingServicePage — Dịch vụ in 3D: wizard 4 bước (tải file → cấu hình vật liệu/màu/thông số
+ * → xác nhận → xem 3D) kèm bảng báo giá tạm tính, cuối cùng gửi yêu cầu in.
+ */
 export default function PrintingServicePage() {
   const { t } = useTranslation()
   const { showToast } = useToast()

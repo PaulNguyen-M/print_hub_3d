@@ -30,6 +30,7 @@ public class ImageUploadController {
     private static final Set<String> ALLOWED = Set.of(".jpg", ".jpeg", ".png", ".webp", ".gif");
     private static final long MAX_BYTES = 10 * 1024 * 1024L; // 10MB
 
+    /** Tải lên ảnh (JPG/PNG/WEBP/GIF, tối đa 10MB), lưu local và trả URL công khai. POST /api/v1/images/upload */
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Map<String, String>>> uploadImage(

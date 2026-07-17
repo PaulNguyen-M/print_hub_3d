@@ -1,7 +1,7 @@
 package com.printhub3.backend.exception;
 
 /**
- * Exception thrown when order is not found or invalid
+ * OrderNotFoundException — Ném khi không tìm thấy đơn hàng (dạng lỗi thanh toán).
  */
 public class OrderNotFoundException extends PaymentException {
     public OrderNotFoundException(Long orderId) {

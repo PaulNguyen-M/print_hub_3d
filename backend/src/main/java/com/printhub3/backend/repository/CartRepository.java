@@ -7,10 +7,14 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * Cart Repository - Data access for Cart entity
+ * CartRepository — Truy vấn giỏ hàng.
  */
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
-    Optional<Cart> findByUser_UserId(Long userId);    
+
+    /** Giỏ hàng của một người dùng. */
+    Optional<Cart> findByUser_UserId(Long userId);
+
+    /** Người dùng đã có giỏ hàng chưa. */
     boolean existsByUser_UserId(Long userId);
 }

@@ -226,6 +226,10 @@ function ProductSkeleton() {
   )
 }
 // Component trang Marketplace, state - bộ nhớ cảu trang
+/**
+ * MarketplacePage — Trang chợ: lưới sản phẩm với tìm kiếm (debounce), lọc danh mục/giá,
+ * sắp xếp, phân trang, đồng bộ bộ lọc lên URL, nút tym (wishlist) và thêm giỏ nhanh.
+ */
 export default function MarketplacePage() {
   const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()

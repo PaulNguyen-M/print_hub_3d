@@ -16,6 +16,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * ProductController — API sản phẩm (public + của người bán).
+ * Gồm: tạo/sửa/xóa sản phẩm của seller, danh sách sản phẩm của tôi, danh sách
+ * công khai có lọc, xem chi tiết, và tải gói file STL.
+ */
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
@@ -23,6 +28,7 @@ public class ProductController {
 
     private final ProductService productService;
 
+    /** Tạo sản phẩm mới (seller). Sản phẩm ở trạng thái chờ admin duyệt. */
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<ProductDto>> createProduct(
@@ -34,6 +40,7 @@ public class ProductController {
                 .body(ApiResponse.created(product, "Product created successfully"));
     }
 
+    /** Danh sách sản phẩm của chính người bán đang đăng nhập (phân trang). */
     @GetMapping("/my")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Page<ProductDto>>> getMyProducts(
@@ -45,6 +52,7 @@ public class ProductController {
         return ResponseEntity.ok(ApiResponse.success(products, "My products retrieved successfully"));
     }
 
+    /** Cập nhật một sản phẩm (chỉ chủ sản phẩm). */
     @PutMapping("/{productId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<ProductDto>> updateProduct(
@@ -56,6 +64,7 @@ public class ProductController {
         return ResponseEntity.ok(ApiResponse.success(product, "Product updated successfully"));
     }
 
+    /** Xóa một sản phẩm (chủ sản phẩm hoặc admin). */
     @DeleteMapping("/{productId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Void>> deleteProduct(
@@ -66,6 +75,7 @@ public class ProductController {
         return ResponseEntity.ok(ApiResponse.success(null, "Product deleted successfully"));
     }
 
+    /** Danh sách sản phẩm công khai ở chợ: lọc theo search/danh mục/khoảng giá + sắp xếp. */
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ProductDto>>> getProducts(
             @RequestParam(defaultValue = "0") int page,
@@ -99,6 +109,7 @@ public class ProductController {
                 .body(zip.data());
     }
 
+    /** Chi tiết một sản phẩm theo id (công khai). */
     @GetMapping("/{productId}")
     public ResponseEntity<ApiResponse<ProductDto>> getProduct(
             @PathVariable Long productId

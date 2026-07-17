@@ -9,7 +9,13 @@ export interface OrderItem {
   quantity: number;
   unitPrice: number;
   subtotal: number;
+  /** Sạp bán sản phẩm này. */
+  shopId?: number;
+  shopName?: string;
+  /** Trạng thái xử lý của sạp cho món này. */
+  fulfillmentStatus?: string;
 }
+
 
 export interface OrderTimeline {
   status: string;
@@ -77,6 +83,10 @@ interface OrderStore {
   getOrderById: (orderId: number) => Order | undefined;
 }
 
+/**
+ * orderStore — Quản lý đơn hàng phía người mua: tải danh sách/chi tiết/lịch sử,
+ * tạo đơn và cập nhật trạng thái.
+ */
 export const useOrderStore = create<OrderStore>((set, get) => ({
   orders: [],
   currentOrder: null,
@@ -84,6 +94,7 @@ export const useOrderStore = create<OrderStore>((set, get) => ({
   error: null,
   totalCount: 0,
 
+  /** Tải danh sách đơn của người dùng (phân trang). */
   fetchOrders: async (page = 0, size = 10) => {
     set({ loading: true, error: null });
     try {
@@ -101,6 +112,7 @@ export const useOrderStore = create<OrderStore>((set, get) => ({
     }
   },
 
+  /** Tải chi tiết một đơn theo id. */
   fetchOrder: async (orderId: number) => {
     set({ loading: true, error: null });
     try {
@@ -113,6 +125,7 @@ export const useOrderStore = create<OrderStore>((set, get) => ({
     }
   },
 
+  /** Tải toàn bộ lịch sử đơn của người dùng. */
   fetchOrderHistory: async () => {
     set({ loading: true, error: null });
     try {
@@ -125,6 +138,7 @@ export const useOrderStore = create<OrderStore>((set, get) => ({
     }
   },
 
+  /** Tạo đơn mới từ dữ liệu giao hàng. */
   createOrder: async (shippingData: any) => {
     set({ loading: true, error: null });
     try {
@@ -139,6 +153,7 @@ export const useOrderStore = create<OrderStore>((set, get) => ({
     }
   },
 
+  /** Cập nhật trạng thái một đơn và đồng bộ vào state. */
   updateOrderStatus: async (orderId: number, status: string) => {
     set({ error: null });
     try {
@@ -161,6 +176,7 @@ export const useOrderStore = create<OrderStore>((set, get) => ({
     }
   },
 
+  /** Lấy đơn theo id từ state (đơn đang xem hoặc trong danh sách). */
   getOrderById: (orderId: number) => {
     const state = get();
     return state.currentOrder?.orderId === orderId

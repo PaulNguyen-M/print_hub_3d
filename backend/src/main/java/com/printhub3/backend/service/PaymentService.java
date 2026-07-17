@@ -46,6 +46,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+/**
+ * PaymentService — Thanh toán qua Stripe (có chế độ mock khi chưa cấu hình Stripe):
+ * tạo phiên thanh toán, hoàn tiền, và xử lý webhook để cập nhật trạng thái thanh toán.
+ */
 @Transactional
 public class PaymentService {
 
@@ -70,6 +74,7 @@ public class PaymentService {
     @Value("${stripe.webhook-secret:}")
     private String webhookSecret;
 
+    /** Tạo phiên thanh toán cho đơn (Stripe thật, hoặc mock nếu chưa cấu hình Stripe). */
     public PaymentSessionResponse createPaymentSession(CreatePaymentSessionRequest request, Long userId) throws StripeException {
         // Validate request
         if (request == null || request.getOrderId() == null) {
@@ -140,6 +145,7 @@ public class PaymentService {
     /**
      * Whether a real Stripe secret key is configured.
      */
+    /** Stripe đã được cấu hình khóa API chưa. */
     private boolean isStripeConfigured() {
         return stripeSecretKey != null && !stripeSecretKey.isBlank();
     }
@@ -149,6 +155,7 @@ public class PaymentService {
      * paid, advances the order, and returns the frontend success URL as the
      * checkout URL so the purchase flow completes end-to-end.
      */
+    /** Tạo phiên thanh toán giả lập (khi chưa có Stripe — môi trường dev). */
     private PaymentSessionResponse createMockSession(Order order, Payment payment, CreatePaymentSessionRequest request) {
         String mockTransactionId = "MOCK-" + java.util.UUID.randomUUID();
 
@@ -185,6 +192,7 @@ public class PaymentService {
     /**
      * Create a new payment record
      */
+    /** Tạo bản ghi Payment mới cho một đơn. */
     private Payment createNewPayment(Order order, BigDecimal amount, String paymentMethod) {
         return Payment.builder()
                 .order(order)
@@ -198,6 +206,7 @@ public class PaymentService {
     /**
      * Create Stripe checkout session
      */
+    /** Tạo Checkout Session thật trên Stripe. */
     private Session createStripeSession(Order order, Payment payment, CreatePaymentSessionRequest request, String currency) throws StripeException {
         try {
             SessionCreateParams.LineItem.PriceData.ProductData productData = 
@@ -237,10 +246,12 @@ public class PaymentService {
     /**
      * Helper method to get value or default
      */
+    /** Trả value nếu có, ngược lại trả giá trị mặc định. */
     private String getOrDefault(String value, String defaultValue) {
         return value != null && !value.isBlank() ? value : defaultValue;
     }
 
+    /** Lấy thông tin thanh toán theo đơn (kiểm tra quyền của người dùng). */
     @Transactional(readOnly = true)
     public PaymentDto getPaymentByOrderId(Long orderId, Long userId) {
         if (orderId == null || userId == null) {
@@ -259,6 +270,7 @@ public class PaymentService {
                 .orElse(null);
     }
 
+    /** Danh sách thanh toán của một người dùng (phân trang). */
     @Transactional(readOnly = true)
     public Page<PaymentDto> getUserPayments(Long userId, Pageable pageable) {
         if (userId == null) {
@@ -272,6 +284,7 @@ public class PaymentService {
                 .map(this::mapPaymentToDto);
     }
 
+    /** Lấy thanh toán theo id (kiểm tra quyền của người dùng). */
     @Transactional(readOnly = true)
     public PaymentDto getPaymentById(Long paymentId, Long userId) {
         if (paymentId == null || userId == null) {
@@ -288,6 +301,7 @@ public class PaymentService {
         return mapPaymentToDto(payment);
     }
 
+    /** Yêu cầu hoàn tiền một khoản thanh toán (Stripe thật hoặc mock). */
     public PaymentDto refundPayment(Long paymentId, RefundPaymentRequest request, Long userId) throws StripeException {
         if (paymentId == null || userId == null) {
             throw new IllegalArgumentException("paymentId and userId cannot be null");
@@ -350,6 +364,7 @@ public class PaymentService {
     /**
      * Process refund through Stripe
      */
+    /** Gọi Stripe thực hiện hoàn tiền. */
     private Refund processStripeRefund(Payment payment, BigDecimal refundAmount) throws StripeException {
         try {
             long refundAmountCents = refundAmount.multiply(new BigDecimal("100")).longValue();
@@ -366,6 +381,7 @@ public class PaymentService {
         }
     }
 
+    /** Nhận & xác thực webhook Stripe rồi phân loại xử lý theo loại sự kiện. */
     public String handleWebhook(String payload, String signatureHeader) {
         if (webhookSecret == null || webhookSecret.isBlank()) {
             throw new InvalidPaymentStateException("Stripe webhook secret is not configured");
@@ -409,6 +425,7 @@ public class PaymentService {
         return "ok";
     }
 
+    /** Xử lý sự kiện checkout.session.completed. */
     private void handleCheckoutSessionCompleted(Event event) {
         try {
             Session session = (Session) event.getDataObjectDeserializer()
@@ -439,6 +456,7 @@ public class PaymentService {
     /**
      * Process completed checkout session
      */
+    /** Cập nhật thanh toán/đơn khi phiên checkout hoàn tất. */
     private void processCompletedCheckoutSession(Payment payment, Session session) {
         try {
             if (session.getPaymentIntent() == null) {
@@ -476,6 +494,7 @@ public class PaymentService {
         }
     }
 
+    /** Xử lý sự kiện payment_intent.succeeded. */
     private void handlePaymentIntentSucceeded(Event event) {
         try {
             PaymentIntent paymentIntent = (PaymentIntent) event.getDataObjectDeserializer()
@@ -497,6 +516,7 @@ public class PaymentService {
     /**
      * Process succeeded payment intent
      */
+    /** Cập nhật trạng thái khi thanh toán (payment intent) thành công. */
     private void processSucceededPaymentIntent(Payment payment, PaymentIntent paymentIntent) {
         payment.setPaymentStatus(Payment.PaymentStatus.PAID);
         payment.setGatewayResponseCode(paymentIntent.getStatus());
@@ -516,6 +536,7 @@ public class PaymentService {
         log.info("Payment intent succeeded for payment {}", payment.getPaymentId());
     }
 
+    /** Xử lý sự kiện charge.refunded. */
     private void handleChargeRefunded(Event event) {
         try {
             Charge charge = (Charge) event.getDataObjectDeserializer()
@@ -537,6 +558,7 @@ public class PaymentService {
     /**
      * Process refunded charge
      */
+    /** Cập nhật trạng thái khi một khoản charge được hoàn tiền. */
     private void processRefundedCharge(Payment payment, Charge charge) {
         payment.setPaymentStatus(Payment.PaymentStatus.REFUNDED);
         payment.setGatewayResponseCode(charge.getStatus());
@@ -562,6 +584,7 @@ public class PaymentService {
     /**
      * Handle charge disputes (chargebacks)
      */
+    /** Xử lý sự kiện tranh chấp thanh toán (charge.dispute). */
     private void handleChargeDispute(Event event) {
         try {
             log.warn("Received charge dispute event: {}", event.getId());
@@ -571,6 +594,7 @@ public class PaymentService {
         }
     }
 
+    /** Ghi một giao dịch con (transaction) cho thanh toán để lưu vết. */
     private void createPaymentTransaction(Payment payment, String type, BigDecimal amount, String responseCode, String responseMessage) {
         PaymentTransaction transaction = PaymentTransaction.builder()
                 .payment(payment)
@@ -582,10 +606,12 @@ public class PaymentService {
         paymentTransactionRepository.save(transaction);
     }
 
+    /** Chuyển Payment sang DTO. */
     private PaymentDto mapPaymentToDto(Payment payment) {
         return paymentDtoMapper.mapPaymentToDto(payment);
     }
 
+    /** Chuyển PaymentTransaction sang DTO. */
     private PaymentTransactionDto mapTransactionToDto(PaymentTransaction transaction) {
         return paymentDtoMapper.mapTransactionToDto(transaction);
     }

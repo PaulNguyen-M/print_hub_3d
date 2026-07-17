@@ -5,6 +5,7 @@ interface Props {
   otherUserId: number;
 }
 
+/** ChatBox — Khung chat 1-1 đơn giản với một người (kết nối, tải lịch sử, gửi tin, báo đang gõ). */
 export const ChatBox: React.FC<Props> = ({ otherUserId }) => {
   const { connect, disconnect, connected, messages, sendMessage, sendTyping, fetchConversation, typingFrom } = useChat();
   const [text, setText] = useState('');
@@ -15,12 +16,14 @@ export const ChatBox: React.FC<Props> = ({ otherUserId }) => {
     return () => disconnect();
   }, [connect, disconnect, fetchConversation, otherUserId]);
 
+  // Gửi nội dung đang gõ (bỏ qua nếu rỗng)
   const handleSend = () => {
     if (!text.trim()) return;
     sendMessage(otherUserId, text.trim());
     setText('');
   };
 
+  // Cập nhật ô nhập và báo trạng thái đang gõ cho người kia
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
     sendTyping(otherUserId, true);

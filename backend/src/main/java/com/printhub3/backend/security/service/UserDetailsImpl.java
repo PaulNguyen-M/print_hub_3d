@@ -14,9 +14,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Custom UserDetails Implementation
- * Implements Spring Security's UserDetails interface
- * Carries user information from the database
+ * UserDetailsImpl — Cài đặt UserDetails của Spring Security, mang thông tin người dùng
+ * (id, email, vai trò, trạng thái kích hoạt) lấy từ DB.
  */
 @Getter
 @Setter
@@ -36,9 +35,7 @@ public class UserDetailsImpl implements UserDetails {
     private Boolean isCredentialsNonExpired;
     private Boolean isEnabled;
 
-    /**
-     * Build UserDetailsImpl from User entity
-     */
+    /** Dựng UserDetailsImpl từ entity User (gắn quyền ROLE_&lt;role&gt; theo vai trò). */
     public static UserDetailsImpl build(User user) {
         // Build authorities from user role
         List<GrantedAuthority> authorities = new ArrayList<>();

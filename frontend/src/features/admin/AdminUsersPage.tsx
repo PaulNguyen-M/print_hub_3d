@@ -26,6 +26,7 @@ const AVATAR_COLORS = [
   'bg-gradient-to-br from-emerald-400 to-teal-600',
 ]
 
+/** AdminUsersPage — Quản lý người dùng: tìm kiếm, đổi vai trò, khóa/mở (chặn tự thao tác chính mình). */
 export default function AdminUsersPage() {
   const { t } = useTranslation()
   const { user: currentUser } = useAuth()

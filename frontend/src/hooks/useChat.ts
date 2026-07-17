@@ -1,6 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
 import { Client } from '@stomp/stompjs';
-import type { Frame } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import api from '../api/axios';
 
@@ -20,6 +19,7 @@ export interface TypingPayload {
   senderId: number;
 }
 
+/** useChat — Hook chat realtime qua WebSocket/STOMP: kết nối, gửi/nhận tin, typing, presence. */
 export const useChat = () => {
   const clientRef = useRef<Client | null>(null);
   const [connected, setConnected] = useState(false);
@@ -27,6 +27,7 @@ export const useChat = () => {
   const [onlineUsers, setOnlineUsers] = useState<number[]>([]);
   const [typingFrom, setTypingFrom] = useState<number | null>(null);
 
+  // Kết nối WebSocket và đăng ký các hàng đợi (tin nhắn / typing / đã đọc / presence)
   const connect = useCallback((onMessageCb?: (m: Message) => void) => {
     if (clientRef.current && clientRef.current.connected) return;
 
@@ -36,7 +37,7 @@ export const useChat = () => {
       connectHeaders: token ? { Authorization: `Bearer ${token}` } : {},
       reconnectDelay: 4000,
       debug: () => { /* silent */ },
-      onConnect: (_frame: Frame) => {
+      onConnect: () => {
         setConnected(true);
 
 
@@ -80,12 +81,14 @@ export const useChat = () => {
     clientRef.current = client;
   }, []);
 
+  // Ngắt kết nối WebSocket
   const disconnect = useCallback(() => {
     clientRef.current?.deactivate();
     clientRef.current = null;
     setConnected(false);
   }, []);
 
+  // Gửi một tin nhắn tới người nhận
   const sendMessage = useCallback((recipientId: number, content: string) => {
     if (!clientRef.current || !clientRef.current.connected) throw new Error('Not connected');
 
@@ -93,11 +96,13 @@ export const useChat = () => {
     clientRef.current.publish({ destination: '/app/chat.send', body: payload });
   }, []);
 
+  // Báo trạng thái "đang gõ" tới người nhận
   const sendTyping = useCallback((recipientId: number, typing: boolean) => {
     if (!clientRef.current || !clientRef.current.connected) return;
     clientRef.current.publish({ destination: '/app/chat.typing', body: JSON.stringify({ recipientId, typing }) });
   }, []);
 
+  // Tải lịch sử hội thoại với một người qua REST
   const fetchConversation = useCallback(async (otherUserId: number) => {
     const { data } = await api.get(`/chat/conversation/${otherUserId}`);
     setMessages(data);

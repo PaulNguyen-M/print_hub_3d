@@ -26,6 +26,7 @@ function Stars({ value, size = 14 }: { value: number; size?: number }) {
   )
 }
 
+/** ProductReviews — Danh sách đánh giá của một sản phẩm kèm form viết/sửa đánh giá. */
 export default function ProductReviews({ productId }: Props) {
   const { t } = useTranslation()
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)

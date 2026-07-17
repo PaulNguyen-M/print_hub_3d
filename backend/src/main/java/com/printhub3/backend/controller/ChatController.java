@@ -20,6 +20,11 @@ import org.springframework.stereotype.Controller;
 import java.security.Principal;
 import java.util.Map;
 
+/**
+ * ChatController — Xử lý chat realtime qua WebSocket/STOMP.
+ * Gồm: gửi tin nhắn (/chat.send), báo đang gõ (/chat.typing), báo đã đọc (/chat.read).
+ * Việc đọc lịch sử/danh sách hội thoại do ChatRestController (REST) đảm nhận.
+ */
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -29,6 +34,7 @@ public class ChatController {
     private final ChatService chatService;
     private final PresenceService presenceService;
 
+    /** Nhận & lưu tin nhắn, đẩy tới hàng đợi của người nhận + người gửi + cập nhật presence. */
     @MessageMapping("/chat.send")
     public void sendMessage(@Payload ChatMessageRequest request, Principal principal, SimpMessageHeaderAccessor headerAccessor) {
         Long senderId;
@@ -70,6 +76,7 @@ public class ChatController {
         log.debug("Message sent from {} to {}", senderId, request.getRecipientId());
     }
 
+    /** Báo trạng thái "đang gõ" tới người nhận. */
     @MessageMapping("/chat.typing")
     public void typing(@Payload Map<String, Object> payload, Principal principal) {
         Long senderId = extractUserId(principal);
@@ -79,6 +86,7 @@ public class ChatController {
         messagingTemplate.convertAndSendToUser(String.valueOf(recipientId), "/queue/typing", Map.of("senderId", senderId, "typing", typing));
     }
 
+    /** Đánh dấu một tin nhắn đã đọc và báo lại cho người gửi. */
     @MessageMapping("/chat.read")
     public void readReceipt(@Payload Map<String, Object> payload, Principal principal) {
         Long userId = extractUserId(principal);
@@ -90,6 +98,7 @@ public class ChatController {
         messagingTemplate.convertAndSendToUser(String.valueOf(updated.getSenderId()), "/queue/read", Map.of("messageId", updated.getMessageId(), "readerId", userId));
     }
 
+    /** Lấy id người dùng từ Principal của phiên WebSocket. */
     private Long extractUserId(Principal principal) {
         if (principal instanceof Authentication authentication && authentication.getPrincipal() instanceof UserDetailsImpl userDetails) {
             return userDetails.getUserId();

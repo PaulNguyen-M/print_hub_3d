@@ -38,6 +38,13 @@ export interface AdminProduct {
   createdAt: string
 }
 
+/** Trạng thái xử lý của một sạp trong đơn. */
+export interface ShopFulfillment {
+  shopId: number
+  shopName: string
+  fulfillmentStatus: string
+}
+
 export interface AdminOrder {
   orderId: number
   orderNumber: string
@@ -47,6 +54,8 @@ export interface AdminOrder {
   paymentMethod?: string
   trackingNumber?: string
   createdAt: string
+  /** Các sạp có hàng trong đơn + tiến trình của từng sạp. */
+  shops?: ShopFulfillment[]
 }
 
 export interface AdminUser {
@@ -110,6 +119,10 @@ export interface PagedResponse<T> {
   size: number
 }
 
+/**
+ * adminService — Gọi API khu quản trị: dashboard, duyệt sản phẩm, quản lý đơn/người dùng,
+ * yêu cầu in 3D, đơn mở sạp và rút tiền.
+ */
 const adminService = {
   getDashboardOverview: async () => {
     const response = await apiClient.get('/admin/dashboard')
@@ -153,18 +166,13 @@ const adminService = {
     return response.data.data as PagedResponse<AdminOrder>
   },
 
-  advanceOrderStatus: async (orderId: number, nextStatus: string) => {
-    await apiClient.put(`/admin/orders/${orderId}/status`, null, {
-      params: { status: nextStatus }
-    })
-  },
-
-  confirmOrder: async (orderId: number) => {
+   confirmOrder: async (orderId: number) => {
     await apiClient.post(`/admin/orders/${orderId}/confirm`)
   },
 
-  completeOrder: async (orderId: number) => {
-    await apiClient.post(`/admin/orders/${orderId}/complete`)
+  /** Duyệt hoàn tất phần hàng của một sạp trong đơn (và chi tiền cho sạp đó). */
+  approveShopCompletion: async (orderId: number, shopId: number) => {
+    await apiClient.post(`/admin/orders/${orderId}/shops/${shopId}/approve`)
   },
 
   getUsers: async (page: number, size: number, search?: string) => {

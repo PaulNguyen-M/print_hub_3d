@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 
 /**
- * Configurable marketplace fees for the shop / seller system.
- * Bound from {@code marketplace.shop.*} in application.properties.
+ * MarketplaceProperties — Các mức phí cấu hình được cho hệ thống sạp/người bán.
+ * Nạp từ {@code marketplace.shop.*} trong application.properties.
  */
 @Component
 @ConfigurationProperties(prefix = "marketplace.shop")
@@ -17,9 +17,9 @@ import java.math.BigDecimal;
 @Setter
 public class MarketplaceProperties {
 
-    /** One-time fee to open a shop, in VND. 0 = free. */
+    /** Phí mở sạp một lần, tính bằng VND. 0 = miễn phí. */
     private BigDecimal openingFee = BigDecimal.ZERO;
 
-    /** Default commission taken from each completed sale (fraction, e.g. 0.15 = 15%). */
+    /** Hoa hồng mặc định trừ trên mỗi đơn hoàn tất (dạng phân số, vd 0.15 = 15%). */
     private BigDecimal commissionRate = new BigDecimal("0.15");
 }

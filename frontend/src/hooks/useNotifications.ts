@@ -15,9 +15,10 @@ export interface NotificationItem {
   createdAt: string
 }
 
-/** Which dashboard "section" a notification belongs to (for per-menu badges). */
+/** Thông báo thuộc "mục" nào của dashboard (để hiện badge đếm theo từng menu). */
 export type NotifSection = 'orders' | 'shop' | 'wallet' | 'printing' | 'other'
 
+/** Suy ra mục của một thông báo dựa trên loại thực thể liên quan. */
 export function sectionOf(relatedType?: string): NotifSection {
   const t = (relatedType ?? '').toUpperCase()
   if (t === 'ORDER') return 'orders'
@@ -38,9 +39,9 @@ export interface SectionCounts {
 const REFETCH_MS = 20_000
 
 /**
- * Central notification state for the current account. Polls the backend so the
- * bell badge and per-menu counts stay fresh. Grouping of UNREAD notifications by
- * section powers the little count badges next to each menu item.
+ * useNotifications — Trạng thái thông báo tập trung cho tài khoản hiện tại.
+ * Poll backend định kỳ để badge chuông và số đếm theo menu luôn mới; nhóm các thông báo
+ * CHƯA ĐỌC theo mục để hiện badge nhỏ cạnh từng mục menu.
  */
 export function useNotifications() {
   const { isAuthenticated } = useAuth()
@@ -80,10 +81,12 @@ export function useNotifications() {
     void qc.invalidateQueries({ queryKey: ['notif-unread-count'] })
   }
 
+  /** Đánh dấu một thông báo đã đọc rồi làm mới. */
   const markRead = async (id: number) => {
     try { await apiClient.put(`/notifications/${id}/read`) } finally { invalidate() }
   }
 
+  /** Đánh dấu tất cả thông báo đã đọc rồi làm mới. */
   const markAllRead = async () => {
     try { await apiClient.put('/notifications/read-all') } finally { invalidate() }
   }

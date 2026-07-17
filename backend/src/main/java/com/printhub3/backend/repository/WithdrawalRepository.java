@@ -11,22 +11,25 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 
 /**
- * Withdrawal Repository - Data access for seller wallet withdrawals.
+ * WithdrawalRepository — Truy vấn yêu cầu rút tiền từ ví người bán.
  */
 @Repository
 public interface WithdrawalRepository extends JpaRepository<Withdrawal, Long> {
 
+    /** Yêu cầu rút của một sạp, mới nhất trước (phân trang). */
     Page<Withdrawal> findByShop_ShopIdOrderByCreatedAtDesc(Long shopId, Pageable pageable);
 
+    /** Tất cả yêu cầu rút, mới nhất trước (phân trang). */
     Page<Withdrawal> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
+    /** Yêu cầu rút theo trạng thái, mới nhất trước (phân trang). */
     Page<Withdrawal> findByStatusOrderByCreatedAtDesc(WithdrawalStatus status, Pageable pageable);
 
-    /** Total amount already paid out to a shop (successful withdrawals). */
+    /** Tổng tiền đã chi trả (trạng thái PAID) cho một sạp. */
     @Query("SELECT COALESCE(SUM(w.amount), 0) FROM Withdrawal w WHERE w.shop.shopId = ?1 AND w.status = 'PAID'")
     BigDecimal totalPaidForShop(Long shopId);
 
-    /** Total amount currently held in pending withdrawal requests for a shop. */
+    /** Tổng tiền đang bị giữ trong các yêu cầu rút chờ duyệt (PENDING) của một sạp. */
     @Query("SELECT COALESCE(SUM(w.amount), 0) FROM Withdrawal w WHERE w.shop.shopId = ?1 AND w.status = 'PENDING'")
     BigDecimal totalPendingForShop(Long shopId);
 }

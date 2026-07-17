@@ -1,7 +1,7 @@
 package com.printhub3.backend.exception;
 
 /**
- * Exception thrown when a payment operation is not allowed in current state
+ * InvalidPaymentStateException — Ném khi thao tác thanh toán không hợp lệ ở trạng thái hiện tại.
  */
 public class InvalidPaymentStateException extends PaymentException {
     public InvalidPaymentStateException(String message) {

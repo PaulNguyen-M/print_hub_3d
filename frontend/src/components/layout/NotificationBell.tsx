@@ -6,7 +6,7 @@ import useAuth from '../../hooks/useAuth'
 import { useTranslation } from '../../i18n/useTranslation'
 import useNotifications, { sectionOf, type NotificationItem } from '../../hooks/useNotifications'
 
-/** Human-friendly "x phút trước" style label. */
+/** Định dạng thời gian tương đối kiểu "x phút trước". */
 function timeAgo(iso: string, t: (k: string) => string): string {
   const then = new Date(iso).getTime()
   if (Number.isNaN(then)) return ''
@@ -48,6 +48,10 @@ function routeFor(n: NotificationItem, role?: string): { path: string; state?: u
   return { path: '/account' }
 }
 
+/**
+ * NotificationBell — Chuông thông báo trên navbar: badge số chưa đọc, dropdown danh sách,
+ * đánh dấu đã đọc và điều hướng theo loại thông báo.
+ */
 export default function NotificationBell() {
   const { t } = useTranslation()
   const { user } = useAuth()

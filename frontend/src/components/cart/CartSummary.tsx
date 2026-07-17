@@ -12,6 +12,7 @@ interface CartSummaryProps {
 const formatPrice = (p: number) =>
   (p ?? 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 
+/** CartSummary — Ô tóm tắt giỏ: tạm tính, phí ship, thuế, tổng và nút thanh toán. */
 export const CartSummary: React.FC<CartSummaryProps> = ({
   totalItems,
   totalPrice,

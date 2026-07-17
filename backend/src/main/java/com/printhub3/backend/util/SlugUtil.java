@@ -5,8 +5,8 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
- * Utility for turning arbitrary text (incl. Vietnamese diacritics) into a
- * URL-friendly slug, e.g. "Sạp của Tân" -> "sap-cua-tan".
+ * SlugUtil — Tiện ích chuyển văn bản bất kỳ (kể cả dấu tiếng Việt) thành slug thân thiện
+ * với URL, ví dụ "Sạp của Tân" → "sap-cua-tan".
  */
 public final class SlugUtil {
 
@@ -17,6 +17,7 @@ public final class SlugUtil {
     private SlugUtil() {
     }
 
+    /** Chuyển chuỗi thành slug: bỏ dấu, thay khoảng trắng bằng '-', về chữ thường; rỗng → "shop". */
     public static String toSlug(String input) {
         if (input == null || input.isBlank()) {
             return "shop";

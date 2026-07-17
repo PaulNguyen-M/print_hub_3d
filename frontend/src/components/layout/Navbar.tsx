@@ -17,6 +17,10 @@ import LanguageToggle from '../ui/LanguageToggle'
 import NotificationBell from './NotificationBell'
 import useNotifications from '../../hooks/useNotifications'
 
+/**
+ * Navbar — Thanh điều hướng trên cùng: menu theo vai trò, giỏ hàng, chuông thông báo,
+ * chat, đổi ngôn ngữ/giao diện và menu tài khoản (hỗ trợ mobile).
+ */
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)

@@ -16,7 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * ReviewController - Product reviews (public read, authenticated write).
+ * ReviewController — Đánh giá sản phẩm.
+ * Đọc công khai (ai cũng xem được), ghi phải đăng nhập (tạo/sửa đánh giá của chính mình).
  */
 @RestController
 @RequestMapping("/api/v1/products/{productId}/reviews")
@@ -25,7 +26,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    /** Public: list reviews for a product. */
+    /** Công khai: danh sách đánh giá của một sản phẩm (phân trang). */
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ReviewDto>>> getReviews(
             @PathVariable Long productId,
@@ -35,7 +36,7 @@ public class ReviewController {
         return ResponseEntity.ok(ApiResponse.success(reviews, "Reviews retrieved successfully"));
     }
 
-    /** Authenticated: create or update the current user's review. */
+    /** Cần đăng nhập: tạo mới hoặc cập nhật đánh giá của chính người dùng. */
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<ReviewDto>> addReview(
@@ -46,6 +47,7 @@ public class ReviewController {
                 .body(ApiResponse.created(dto, "Đã gửi đánh giá"));
     }
 
+    /** Lấy id người dùng hiện tại từ SecurityContext. */
     private Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof UserDetailsImpl userDetails) {

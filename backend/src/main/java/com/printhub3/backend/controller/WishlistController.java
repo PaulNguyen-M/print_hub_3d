@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * WishlistController — Danh sách yêu thích của người dùng.
+ * Gồm: bật/tắt thích một sản phẩm, lấy tập id đã thích (để tô tym), và danh sách đầy đủ.
+ * Mọi endpoint yêu cầu đăng nhập.
+ */
 @RestController
 @RequestMapping("/api/v1/wishlist")
 @RequiredArgsConstructor

@@ -9,6 +9,7 @@ interface AppProvidersProps {
   children: ReactNode
 }
 
+/** AppProviders — Gói toàn bộ provider (Router, React Query, Theme, Toast) quanh app. */
 export default function AppProviders({ children }: AppProvidersProps) {
   return (
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>

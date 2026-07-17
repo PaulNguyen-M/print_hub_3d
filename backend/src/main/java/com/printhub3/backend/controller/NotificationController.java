@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+/**
+ * NotificationController — Thông báo trong ứng dụng của người dùng.
+ * Gồm: xem danh sách, đếm chưa đọc, lọc theo loại, đánh dấu đã đọc (một/tất cả) và xóa.
+ * Mọi endpoint yêu cầu đăng nhập.
+ */
 @RestController
 @RequestMapping("/api/v1/notifications")
 @RequiredArgsConstructor
@@ -81,6 +86,7 @@ public class NotificationController {
         return ResponseEntity.ok(ApiResponse.success("OK", "Notification deleted"));
     }
 
+    /** Lấy id người dùng hiện tại từ Authentication. */
     private Long currentUserId(Authentication auth) {
         return ((UserDetailsImpl) auth.getPrincipal()).getUserId();
     }

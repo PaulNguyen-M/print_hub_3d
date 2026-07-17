@@ -4,6 +4,7 @@ import { Box } from 'lucide-react'
 import LanguageToggle from '../components/ui/LanguageToggle'
 import { useTranslation } from '../i18n/useTranslation'
 
+/** AuthLayout — Bố cục cho các trang xác thực (đăng nhập/đăng ký). */
 export default function AuthLayout() {
   const location = useLocation()
   const {t} = useTranslation()

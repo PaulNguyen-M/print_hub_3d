@@ -84,6 +84,8 @@ interface SellerOrder {
   netEarning: number
   sellerConfirmed: boolean
   paidOut: boolean
+  /** Trạng thái xử lý của SẠP trong đơn này (backend trả về). */
+  fulfillmentStatus?: string
 }
 
 interface MyShop {
@@ -154,6 +156,7 @@ function SimpleBarChart({ data }: { data: { month: string; revenue: number }[] }
   )
 }
 
+/** CreatorDashboardPage — Bảng điều khiển người bán: số liệu bán hàng, sản phẩm, đơn và ví. */
 export default function CreatorDashboardPage() {
   const { t } = useTranslation()
   const qc = useQueryClient()
@@ -374,19 +377,28 @@ export default function CreatorDashboardPage() {
   const sellerOrders = sellerOrdersPage?.content
   const ordersTotalPages = sellerOrdersPage?.totalPages ?? 1
 
-  const [confirmingOrderId, setConfirmingOrderId] = useState<number | null>(null)
-  const handleConfirmOrder = async (orderId: number) => {
-    setConfirmingOrderId(orderId)
+  const [busyOrderId, setBusyOrderId] = useState<number | null>(null)
+
+  /** Gọi API rồi làm mới danh sách đơn; báo lỗi nếu thất bại. */
+  const runOrderAction = async (orderId: number, path: string) => {
+    setBusyOrderId(orderId)
     try {
-      await apiClient.post(`/seller/orders/${orderId}/confirm`)
+      await apiClient.post(`/seller/orders/${orderId}/${path}`)
       qc.invalidateQueries({ queryKey: ['seller-orders'] })
     } catch (err) {
       const msg = (err as { response?: { data?: { message?: string } } }).response?.data?.message
-      alert(msg ?? t('creatorOrders.confirmFailed'))
+      alert(msg ?? t('creatorOrders.actionFailed'))
     } finally {
-      setConfirmingOrderId(null)
+      setBusyOrderId(null)
     }
   }
+
+  /** Chuyển sang bước xử lý kế tiếp (PRINTING → … → DELIVERED). */
+  const handleAdvance = (orderId: number) => runOrderAction(orderId, 'advance')
+
+  /** Đã giao xong → xin admin duyệt hoàn tất. */
+  const handleRequestCompletion = (orderId: number) => runOrderAction(orderId, 'request-completion')
+
 
   const ORDER_STATUS_LABEL: Record<string, { label: string; cls: string }> = {
     PROCESSING: { label: t('creatorOrders.statusProcessing'), cls: 'badge-amber' },
@@ -394,6 +406,27 @@ export default function CreatorDashboardPage() {
     COMPLETED:  { label: t('creatorOrders.statusCompleted'), cls: 'badge-green' },
     CANCELLED:  { label: t('creatorOrders.statusCancelled'), cls: 'badge-red' },
   }
+
+    /** Nhãn + màu cho trạng thái xử lý theo sạp. */
+  const FULFILLMENT_LABEL: Record<string, { label: string; cls: string }> = {
+    PENDING:           { label: t('ff.pending'),   cls: 'badge-slate' },
+    CONFIRMED:         { label: t('ff.confirmed'), cls: 'badge-blue' },
+    PRINTING:          { label: t('ff.printing'),  cls: 'badge-blue' },
+    FINISHING:         { label: t('ff.finishing'), cls: 'badge-blue' },
+    SHIPPING:          { label: t('ff.shipping'),  cls: 'badge-amber' },
+    DELIVERED:         { label: t('ff.delivered'), cls: 'badge-green' },
+    AWAITING_APPROVAL: { label: t('ff.awaiting'),  cls: 'badge-amber' },
+    COMPLETED:         { label: t('ff.completed'), cls: 'badge-green' },
+  }
+
+  /** Bước kế tiếp seller được phép chuyển. */
+  const FF_NEXT: Record<string, string> = {
+    CONFIRMED: 'PRINTING',
+    PRINTING: 'FINISHING',
+    FINISHING: 'SHIPPING',
+    SHIPPING: 'DELIVERED',
+  }
+
 
   const monthlyData = stats?.monthlyRevenue ?? []
 
@@ -795,8 +828,9 @@ export default function CreatorDashboardPage() {
                       ) : (
                         <div className="space-y-4">
                           {sellerOrders.map((o) => {
-                            const st = ORDER_STATUS_LABEL[o.orderStatus] ?? { label: o.orderStatus, cls: 'badge-slate' }
-                            const canConfirm = o.orderStatus === 'CONFIRMED' && !o.sellerConfirmed
+                            const ff = o.fulfillmentStatus ?? 'PENDING'
+                            const st = FULFILLMENT_LABEL[ff] ?? { label: ff, cls: 'badge-slate' }
+                            const next = FF_NEXT[ff]
                             return (
                               <div key={o.orderId} className="rounded-2xl border border-slate-100 p-4 dark:border-slate-800">
                                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -831,25 +865,38 @@ export default function CreatorDashboardPage() {
                                     <p>{t('creatorOrders.commission')} ({(o.commissionRate * 100).toFixed(0)}%): −{formatPrice(o.commissionAmount)}</p>
                                     <p className="text-sm font-bold text-green-600">{t('creatorOrders.youGet')}: {formatPrice(o.netEarning)}</p>
                                   </div>
-                                  {canConfirm ? (
+                                                                    {next ? (
                                     <button
                                       type="button"
-                                      onClick={() => void handleConfirmOrder(o.orderId)}
-                                      disabled={confirmingOrderId === o.orderId}
-                                      className="btn-primary gap-2 text-sm"
+                                      onClick={() => void handleAdvance(o.orderId)}
+                                      disabled={busyOrderId === o.orderId}
+                                      className="btn-primary gap-2 text-sm disabled:opacity-60"
                                     >
-                                      {confirmingOrderId === o.orderId ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
-                                      {t('creatorOrders.confirm')}
+                                      {busyOrderId === o.orderId && <Loader2 size={14} className="animate-spin" />}
+                                      {t('creatorOrders.advanceTo')} {FULFILLMENT_LABEL[next]?.label ?? next}
                                     </button>
-                                  ) : o.sellerConfirmed && !o.paidOut ? (
+                                  ) : ff === 'DELIVERED' ? (
+                                    <button
+                                      type="button"
+                                      onClick={() => void handleRequestCompletion(o.orderId)}
+                                      disabled={busyOrderId === o.orderId}
+                                      className="btn-primary gap-2 text-sm disabled:opacity-60"
+                                    >
+                                      {busyOrderId === o.orderId
+                                        ? <Loader2 size={14} className="animate-spin" />
+                                        : <CheckCircle2 size={14} />}
+                                      {t('creatorOrders.requestCompletion')}
+                                    </button>
+                                  ) : ff === 'AWAITING_APPROVAL' ? (
                                     <span className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600">
-                                      <Clock size={13} /> {t('creatorOrders.confirmedWaiting')}
+                                      <Clock size={13} /> {t('creatorOrders.awaitingAdmin')}
                                     </span>
-                                  ) : o.paidOut ? (
+                                  ) : ff === 'COMPLETED' || o.paidOut ? (
                                     <span className="inline-flex items-center gap-1.5 text-xs font-medium text-green-600">
                                       <CheckCircle2 size={13} /> {t('creatorOrders.paid')}
                                     </span>
                                   ) : null}
+
                                 </div>
                               </div>
                             )

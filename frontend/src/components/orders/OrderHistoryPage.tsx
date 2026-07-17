@@ -5,6 +5,7 @@ import { Package } from 'lucide-react';
 import { useOrder } from '../../hooks/useOrder';
 import { useTranslation } from '../../i18n/useTranslation';
 
+/** OrderHistoryPage — Danh sách lịch sử đơn của người dùng, bấm vào để xem chi tiết. */
 export const OrderHistoryPage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();

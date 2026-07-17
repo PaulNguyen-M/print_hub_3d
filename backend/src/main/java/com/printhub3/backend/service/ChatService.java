@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * ChatService — Nghiệp vụ chat: dựng hộp thư, lấy hội thoại, lưu và đánh dấu đã đọc tin nhắn.
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -26,10 +29,10 @@ public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
 
-    /** Build the user's inbox: one entry per peer with the latest message + unread count. */
+    /** Dựng hộp thư của người dùng: mỗi người đối thoại một dòng, kèm tin nhắn mới nhất + số chưa đọc. */
     @Transactional(readOnly = true)
     public List<ConversationDto> getConversations(Long userId) {
-        List<ChatMessage> all = chatMessageRepository.findAllForUser(userId); // newest first
+        List<ChatMessage> all = chatMessageRepository.findAllForUser(userId); // mới nhất trước
         Map<Long, ChatMessage> latestByPeer = new LinkedHashMap<>();
         Map<Long, Long> unreadByPeer = new java.util.HashMap<>();
         for (ChatMessage m : all) {
@@ -60,11 +63,13 @@ public class ChatService {
         return result;
     }
 
+    /** Lưu một tin nhắn mới và trả về DTO. */
     public ChatMessageDto saveMessage(ChatMessage message) {
         ChatMessage saved = chatMessageRepository.save(message);
         return mapToDto(saved);
     }
 
+    /** Lấy toàn bộ tin nhắn giữa hai người dùng. */
     public List<ChatMessageDto> getConversation(Long userA, Long userB) {
         return chatMessageRepository.findConversation(userA, userB)
                 .stream()
@@ -72,6 +77,7 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
+    /** Đánh dấu một tin nhắn là đã đọc. */
     public ChatMessageDto markMessageRead(Long messageId) {
         ChatMessage message = chatMessageRepository.findById(messageId)
                 .orElseThrow(() -> new ResourceNotFoundException("Message not found"));
@@ -80,6 +86,7 @@ public class ChatService {
         return mapToDto(saved);
     }
 
+    /** Chuyển entity ChatMessage sang DTO trả về frontend. */
     private ChatMessageDto mapToDto(ChatMessage message) {
         return ChatMessageDto.builder()
                 .messageId(message.getMessageId())

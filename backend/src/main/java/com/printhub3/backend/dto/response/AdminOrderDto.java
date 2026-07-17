@@ -6,6 +6,8 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import java.util.List;
+
 @Data
 @Builder
 public class AdminOrderDto {
@@ -17,4 +19,7 @@ public class AdminOrderDto {
     private String paymentMethod;
     private String trackingNumber;
     private LocalDateTime createdAt;
+    
+    /** Các sạp có hàng trong đơn, kèm trạng thái xử lý của từng sạp. */
+    private List<ShopFulfillmentDto> shops;
 }

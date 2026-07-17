@@ -8,11 +8,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * PaymentTransaction Repository - Data access for PaymentTransaction entity
+ * PaymentTransactionRepository — Truy vấn các giao dịch con của một thanh toán.
  */
 @Repository
 public interface PaymentTransactionRepository extends JpaRepository<PaymentTransaction, Long> {
-    
+
+    /** Các giao dịch của một thanh toán, mới nhất trước. */
     @Query("SELECT pt FROM PaymentTransaction pt WHERE pt.payment.paymentId = ?1 ORDER BY pt.createdAt DESC")
     List<PaymentTransaction> findTransactionsByPaymentId(Long paymentId);
 }

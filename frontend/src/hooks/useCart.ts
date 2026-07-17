@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useCartStore } from '../store/cartStore';
 import useAuthStore from '../store/authStore';
 
+/** useCart — Hook giỏ hàng: tự tải giỏ theo tài khoản và expose thao tác + tổng số/tiền. */
 export const useCart = () => {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const userId = useAuthStore((s) => s.user?.id)

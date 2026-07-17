@@ -13,7 +13,7 @@ import software.amazon.awssdk.services.s3.S3Configuration;
 import java.net.URI;
 
 /**
- * AWS S3 client configuration
+ * S3Config — Cấu hình client AWS S3 (hỗ trợ endpoint tùy chỉnh cho môi trường dev).
  */
 @Configuration
 public class S3Config {
@@ -30,6 +30,7 @@ public class S3Config {
     @Value("${aws.s3.endpoint:}")
     private String endpoint;
 
+    /** Tạo bean S3Client với credentials + region + endpoint từ cấu hình. */
     @Bean
     public S3Client s3Client() {
         S3ClientBuilder builder = S3Client.builder()

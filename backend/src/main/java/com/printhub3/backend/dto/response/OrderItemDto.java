@@ -19,4 +19,9 @@ public class OrderItemDto {
     private Integer quantity;
     private BigDecimal unitPrice;
     private BigDecimal subtotal;
+    /** Sạp bán sản phẩm này (null nếu sản phẩm không thuộc sạp nào). */
+    private Long shopId;
+    private String shopName;
+    /** Trạng thái xử lý của SẠP cho món này: CONFIRMED/PRINTING/.../DELIVERED/AWAITING_APPROVAL/COMPLETED. */
+    private String fulfillmentStatus;
 }

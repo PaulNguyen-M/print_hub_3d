@@ -17,6 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * DataInitializer — Khởi tạo dữ liệu nền khi ứng dụng khởi động:
+ * tạo vai trò, tài khoản mặc định, sạp cho seller sẵn có và gắn sản phẩm vào sạp.
+ */
 @Slf4j
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -36,6 +40,7 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /** Chạy một lần khi khởi động: seed dữ liệu nền theo thứ tự. */
     @Override
     @Transactional
     public void run(String... args) {
@@ -48,6 +53,7 @@ public class DataInitializer implements CommandLineRunner {
 
     // ── 1. Seed roles ──────────────────────────────────────────────────────────
 
+    /** Tạo các vai trò mặc định (ADMIN, SELLER, BUYER, PRINTER_PARTNER) nếu chưa có. */
     private void seedRoles() {
         List<Object[]> rolesData = List.of(
             new Object[]{"ADMIN",           "System administrator with full access"},
@@ -69,6 +75,7 @@ public class DataInitializer implements CommandLineRunner {
 
     // ── 2. Fix existing users that have plain-text passwords ───────────────────
 
+    /** Băm lại các mật khẩu còn lưu dạng plain-text (dữ liệu cũ) sang BCrypt. */
     private void fixPlainTextPasswords() {
         userRepository.findAll().forEach(user -> {
             String hash = user.getPasswordHash();
@@ -83,6 +90,7 @@ public class DataInitializer implements CommandLineRunner {
 
     // ── 3. Seed default test users if they don't exist ─────────────────────────
 
+    /** Tạo các tài khoản mặc định (admin, seller, buyer...) nếu chưa tồn tại. */
     private void seedDefaultUsers() {
         List<Object[]> usersData = List.of(
             new Object[]{"admin@printhub3d.com",   "admin123",  "Admin User",       "+841234567890", "ADMIN"},
@@ -120,6 +128,7 @@ public class DataInitializer implements CommandLineRunner {
 
     // ── 4. Auto-create a shop for any existing SELLER without one ───────────────
 
+    /** Tạo sạp cho những người dùng có vai trò SELLER mà chưa có sạp. */
     private void seedShopsForExistingSellers() {
         userRepository.findAll().stream()
                 .filter(u -> u.getRole() != null && "SELLER".equals(u.getRole().getName()))
@@ -153,6 +162,7 @@ public class DataInitializer implements CommandLineRunner {
 
     // ── 5. Backfill: attach existing products to their seller's shop ───────────
 
+    /** Gắn các sản phẩm chưa có sạp vào sạp của người bán tương ứng. */
     private void linkExistingProductsToShops() {
         shopRepository.findAll().forEach(shop -> {
             var orphans = productRepository.findBySeller_UserIdAndShopIsNull(shop.getOwner().getUserId());

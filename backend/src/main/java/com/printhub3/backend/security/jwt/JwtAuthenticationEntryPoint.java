@@ -15,9 +15,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 /**
- * JWT Authentication Entry Point
- * Handles unauthorized access attempts (401 errors)
- * Returns JSON response instead of default error page
+ * JwtAuthenticationEntryPoint — Xử lý truy cập chưa xác thực (lỗi 401):
+ * trả về JSON lỗi thay vì trang lỗi mặc định.
  */
 @Slf4j
 @Component
@@ -29,6 +28,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         this.objectMapper = objectMapper;
     }
 
+    /** Ghi log và trả JSON 401 khi request chưa được xác thực. */
     @Override
     public void commence(HttpServletRequest httpServletRequest,
                          HttpServletResponse httpServletResponse,

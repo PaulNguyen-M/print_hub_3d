@@ -5,6 +5,7 @@ interface AdminStatCardProps {
   accent?: string
 }
 
+/** AdminStatCard — Thẻ hiển thị một số liệu thống kê (nhãn + giá trị + mô tả). */
 export default function AdminStatCard({
   label,
   value,

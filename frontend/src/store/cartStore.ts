@@ -35,6 +35,7 @@ interface CartStore {
   getTotalPrice: () => number;
 }
 
+/** cartStore — Giỏ hàng phía client: đồng bộ với server qua API và lưu bền qua localStorage. */
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
@@ -42,6 +43,7 @@ export const useCartStore = create<CartStore>()(
       loading: false,
       error: null,
 
+      /** Tải giỏ từ server (bỏ qua nếu chưa đăng nhập). */
       fetchCart: async () => {
         // Không fetch nếu chưa đăng nhập
         const token = localStorage.getItem('accessToken')
@@ -60,6 +62,7 @@ export const useCartStore = create<CartStore>()(
         }
       },
 
+      /** Thêm sản phẩm vào giỏ. */
       addToCart: async (productId: number, quantity: number) => {
         set({ loading: true, error: null });
         try {
@@ -75,6 +78,7 @@ export const useCartStore = create<CartStore>()(
         }
       },
 
+      /** Xóa một sản phẩm khỏi giỏ. */
       removeFromCart: async (productId: number) => {
         set({ loading: true, error: null });
         try {
@@ -87,6 +91,7 @@ export const useCartStore = create<CartStore>()(
         }
       },
 
+      /** Đổi số lượng một món trong giỏ. */
       updateQuantity: async (productId: number, quantity: number) => {
         set({ loading: true, error: null });
         try {
@@ -103,6 +108,7 @@ export const useCartStore = create<CartStore>()(
         }
       },
 
+      /** Dọn sạch giỏ hàng. */
       clearCart: async () => {
         set({ loading: true, error: null });
         try {
@@ -115,6 +121,7 @@ export const useCartStore = create<CartStore>()(
         }
       },
 
+      // Các getter tiện lấy giỏ / tổng số món / tổng tiền từ state
       getCart: () => get().cart,
 
       getTotalItems: () => get().cart?.totalItems || 0,

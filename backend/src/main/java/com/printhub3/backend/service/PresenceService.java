@@ -9,14 +9,19 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+/**
+ * PresenceService — Theo dõi người dùng đang online (lưu trong bộ nhớ) để hiện
+ * chấm xanh và trạng thái "đang hoạt động" trong chat. Một user có thể mở nhiều phiên.
+ */
 @Service
 @Slf4j
 public class PresenceService {
 
-    // Map userId -> sessionId(s)
+    // Map userId -> danh sách sessionId đang mở
     private final Map<Long, Set<String>> onlineUsers = new ConcurrentHashMap<>();
     private final Map<String, Long> sessionToUser = new ConcurrentHashMap<>();
 
+    /** Ghi nhận một phiên WebSocket của người dùng khi vừa kết nối. */
     public void userConnected(Long userId, String sessionId) {
         onlineUsers.compute(userId, (k, v) -> {
             if (v == null) v = Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -27,6 +32,7 @@ public class PresenceService {
         log.debug("User {} connected with session {}", userId, sessionId);
     }
 
+    /** Gỡ một phiên khi ngắt kết nối; nếu người dùng hết phiên thì coi là offline. */
     public void userDisconnected(String sessionId) {
         Long userId = sessionToUser.remove(sessionId);
         if (userId != null) {
@@ -41,10 +47,12 @@ public class PresenceService {
         }
     }
 
+    /** Người dùng có đang online không. */
     public boolean isOnline(Long userId) {
         return onlineUsers.containsKey(userId);
     }
 
+    /** Tập id tất cả người dùng đang online. */
     public Set<Long> getOnlineUsers() {
         return onlineUsers.keySet().stream().collect(Collectors.toSet());
     }

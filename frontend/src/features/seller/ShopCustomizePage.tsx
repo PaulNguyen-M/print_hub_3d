@@ -41,6 +41,7 @@ function ImagePreview({ url, alt, aspect }: { url: string; alt: string; aspect: 
   )
 }
 
+/** ShopCustomizePage — Trang tùy chỉnh sạp: ảnh banner/logo, thông tin sạp và chọn sản phẩm nổi bật. */
 export default function ShopCustomizePage() {
   const { t } = useTranslation()
   const [shop, setShop] = useState<Shop | null>(null)

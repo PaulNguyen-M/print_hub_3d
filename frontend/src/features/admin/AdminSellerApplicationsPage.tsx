@@ -21,6 +21,7 @@ const STATUS_META: Record<string, { labelKey: string; badge: string; icon: typeo
   REJECTED: { labelKey: 'adminApp.filterRejected', badge: 'bg-rose-50 text-rose-600 border-rose-200', icon: XCircle },
 }
 
+/** AdminSellerApplicationsPage — Duyệt đơn mở sạp: lọc theo trạng thái, duyệt/từ chối kèm lý do. */
 export default function AdminSellerApplicationsPage() {
   const { t } = useTranslation()
   const [apps, setApps] = useState<AdminSellerApplication[]>([])

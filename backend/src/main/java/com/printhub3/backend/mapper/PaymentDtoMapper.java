@@ -11,16 +11,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Mapper for Payment DTOs
- * Centralizes payment DTO mapping logic to avoid duplication
+ * PaymentDtoMapper — Gom logic map DTO thanh toán về một nơi để tránh lặp code.
  */
 @Component
 @RequiredArgsConstructor
 public class PaymentDtoMapper {
     
-    /**
-     * Map Payment entity to PaymentDto
-     */
+    /** Chuyển entity Payment sang PaymentDto (kèm danh sách giao dịch con). */
     public PaymentDto mapPaymentToDto(Payment payment) {
         if (payment == null) {
             return null;
@@ -49,9 +46,7 @@ public class PaymentDtoMapper {
                 .build();
     }
     
-    /**
-     * Map PaymentTransaction entity to PaymentTransactionDto
-     */
+    /** Chuyển entity PaymentTransaction sang PaymentTransactionDto. */
     public PaymentTransactionDto mapTransactionToDto(PaymentTransaction transaction) {
         if (transaction == null) {
             return null;

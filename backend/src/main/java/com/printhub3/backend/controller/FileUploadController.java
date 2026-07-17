@@ -30,6 +30,7 @@ public class FileUploadController {
     private static final Set<String> ALLOWED = Set.of(".stl", ".obj", ".fbx", ".gltf", ".glb", ".zip");
     private static final long MAX_BYTES = 100 * 1024 * 1024L; // 100MB
 
+    /** Tải lên file 3D (STL/OBJ/FBX/GLTF/GLB/ZIP), lưu local và trả URL công khai. POST /api/v1/files/upload */
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Map<String, String>>> uploadFile(

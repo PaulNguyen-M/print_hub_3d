@@ -192,6 +192,8 @@ export const translations: Dict = {
   'admin.order.advance': { vi: 'Tiến trình',     en: 'Advance' },
   'admin.order.advanceNotApplicable': { vi: 'Đơn đang ở trạng thái Đã xác nhận/Hoàn tất — hãy dùng nút "Xác nhận"/"Hoàn tất" thay vì "Tiến trình".', en: 'Order is Confirmed/Completed — use the "Confirm"/"Complete" button instead of "Advance".' },
   'admin.order.advanceTo': { vi: 'Chuyển sang', en: 'Advance to' },
+  'admin.order.shopProgress': { vi: 'Tiến trình sạp', en: 'Shop progress' },
+  'admin.order.approveShop':  { vi: 'Duyệt hoàn tất', en: 'Approve' },
 
 
   // ── Admin STL ──
@@ -361,6 +363,9 @@ export const translations: Dict = {
   'order.noItems':     { vi: 'Không có sản phẩm trong đơn', en: 'No items in this order' },
   'order.timeline':    { vi: 'Tiến Trình Đơn Hàng', en: 'Order Timeline' },
   'order.noTimeline':  { vi: 'Chưa có sự kiện nào', en: 'No timeline events yet' },
+  'order.shopProgress': { vi: 'Tiến trình theo sạp', en: 'Progress by shop' },
+  'order.otherItems':   { vi: 'Sản phẩm khác', en: 'Other items' },
+
 
   // ── Checkout success / cancel ──
   'checkout.successTitle': { vi: 'Thanh Toán Thành Công', en: 'Payment Successful' },
@@ -491,7 +496,7 @@ export const translations: Dict = {
   'account.deleteAcc': { vi: 'Xóa Tài Khoản', en: 'Delete Account'},
   'account.deleteAccDesc': { vi: 'Hành động này không thể hoàn tác', en: 'This action cannot be undone' },
   'account.delete':    { vi: 'Xóa', en: 'Delete' },
-    'account.removeWish': { vi: 'Bỏ yêu thích', en: 'Remove from wishlist' },
+  'account.removeWish': { vi: 'Bỏ yêu thích', en: 'Remove from wishlist' },
 
 
   // ── Checkout page (form) ──
@@ -860,6 +865,10 @@ export const translations: Dict = {
   'creatorOrders.statusConfirmed':  { vi: 'Chờ bạn xác nhận', en: 'Awaiting your confirmation' },
   'creatorOrders.statusCompleted':  { vi: 'Hoàn tất', en: 'Completed' },
   'creatorOrders.statusCancelled':  { vi: 'Đã huỷ', en: 'Cancelled' },
+  'creatorOrders.advanceTo':         { vi: 'Chuyển sang', en: 'Advance to' },
+  'creatorOrders.requestCompletion': { vi: 'Đã giao — xin hoàn tất', en: 'Delivered — request completion' },
+  'creatorOrders.awaitingAdmin':     { vi: 'Chờ admin duyệt hoàn tất', en: 'Awaiting admin approval' },
+  'creatorOrders.actionFailed':      { vi: 'Thao tác thất bại, vui lòng thử lại', en: 'Action failed, please try again' },
 
   // ── Creator dashboard: wallet & withdrawals ──
   'creatorWallet.available':      { vi: 'Số dư khả dụng', en: 'Available balance' },
@@ -943,6 +952,15 @@ export const translations: Dict = {
   'home.featured.viewAll':   { vi: 'Xem tất cả', en: 'View all' },
   'home.featured.sold':      { vi: 'đã bán', en: 'sold' },
   'home.featured.empty':     { vi: 'Chưa có sản phẩm nào', en: 'No products yet' },
+
+  'ff.pending':   { vi: 'Chờ xác nhận', en: 'Pending' },
+  'ff.confirmed': { vi: 'Chờ xử lý', en: 'To process' },
+  'ff.printing':  { vi: 'Đang in', en: 'Printing' },
+  'ff.finishing': { vi: 'Hoàn thiện', en: 'Finishing' },
+  'ff.shipping':  { vi: 'Đang giao', en: 'Shipping' },
+  'ff.delivered': { vi: 'Đã giao', en: 'Delivered' },
+  'ff.awaiting':  { vi: 'Chờ admin duyệt', en: 'Awaiting approval' },
+  'ff.completed': { vi: 'Đã hoàn tất', en: 'Completed' },
 }
 
 export function translate(key: string, lang: Lang): string {

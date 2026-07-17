@@ -32,9 +32,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * SellerWalletService - The seller's wallet: dashboard statistics plus the
- * withdrawal flow (seller requests → admin approves/rejects). Requested money
- * is held out of the shop balance immediately and refunded if rejected.
+ * SellerWalletService — Ví của người bán: thống kê tổng quan và luồng rút tiền
+ * (seller yêu cầu → admin duyệt/từ chối). Tiền yêu cầu bị giữ khỏi số dư ngay,
+ * và được hoàn lại nếu bị từ chối.
  */
 @Service
 @RequiredArgsConstructor
@@ -54,6 +54,7 @@ public class SellerWalletService {
     // ── Seller: dashboard stats ─────────────────────────────────────────
 
     @Transactional(readOnly = true)
+    /** Thống kê ví & doanh số của seller (số dư, đã rút, đang chờ rút, doanh thu theo tháng). */
     public SellerStatsDto getStats(Long userId) {
         Shop shop = requireShop(userId);
         List<ShopPayout> payouts = payoutRepository.findByShop_ShopIdOrderByCreatedAtDesc(shop.getShopId());
@@ -85,6 +86,7 @@ public class SellerWalletService {
     }
 
     /** Net earnings for the last 6 months (oldest → newest). */
+    /** Gom các khoản chi trả (payout) theo từng tháng để vẽ biểu đồ doanh thu. */
     private List<SellerStatsDto.MonthlyRevenue> buildMonthly(List<ShopPayout> payouts) {
         Map<YearMonth, BigDecimal> byMonth = new LinkedHashMap<>();
         YearMonth current = YearMonth.now();
@@ -111,6 +113,7 @@ public class SellerWalletService {
 
     // ── Seller: withdrawals ─────────────────────────────────────────────
 
+    /** Tạo yêu cầu rút tiền: kiểm tra số dư & hạn mức tối thiểu, giữ tiền khỏi số dư ngay và báo admin. */
     public WithdrawalDto requestWithdrawal(Long userId, WithdrawalRequest request) {
         Shop shop = requireShop(userId);
         BigDecimal amount = request.getAmount();
@@ -145,6 +148,7 @@ public class SellerWalletService {
     }
 
     @Transactional(readOnly = true)
+    /** Danh sách yêu cầu rút của seller hiện tại (phân trang). */
     public Page<WithdrawalDto> getMyWithdrawals(Long userId, Pageable pageable) {
         Shop shop = requireShop(userId);
         return withdrawalRepository.findByShop_ShopIdOrderByCreatedAtDesc(shop.getShopId(), pageable).map(this::toDto);
@@ -153,6 +157,7 @@ public class SellerWalletService {
     // ── Admin: process withdrawals ──────────────────────────────────────
 
     @Transactional(readOnly = true)
+    /** (Admin) Danh sách tất cả yêu cầu rút, lọc theo trạng thái (phân trang). */
     public Page<WithdrawalDto> listWithdrawals(WithdrawalStatus status, Pageable pageable) {
         Page<Withdrawal> page = (status == null)
                 ? withdrawalRepository.findAllByOrderByCreatedAtDesc(pageable)
@@ -160,6 +165,7 @@ public class SellerWalletService {
         return page.map(this::toDto);
     }
 
+    /** (Admin) Duyệt & xác nhận đã chi trả một yêu cầu rút (tiền đã bị giữ từ trước). */
     public WithdrawalDto approveWithdrawal(Long withdrawalId, Long adminId) {
         Withdrawal w = requireWithdrawal(withdrawalId);
         if (w.getStatus() != WithdrawalStatus.PENDING) {
@@ -177,6 +183,7 @@ public class SellerWalletService {
         return toDto(w);
     }
 
+    /** (Admin) Từ chối yêu cầu rút kèm lý do và hoàn tiền lại vào số dư của sạp. */
     public WithdrawalDto rejectWithdrawal(Long withdrawalId, Long adminId, String reason) {
         Withdrawal w = requireWithdrawal(withdrawalId);
         if (w.getStatus() != WithdrawalStatus.PENDING) {
@@ -203,20 +210,24 @@ public class SellerWalletService {
 
     // ── Helpers ─────────────────────────────────────────────────────────
 
+    /** Lấy sạp của người dùng, ném lỗi nếu chưa có. */
     private Shop requireShop(Long userId) {
         return shopRepository.findByOwner_UserId(userId)
                 .orElseThrow(() -> new BusinessException("Bạn chưa có sạp"));
     }
 
+    /** Lấy yêu cầu rút theo id, ném lỗi nếu không có. */
     private Withdrawal requireWithdrawal(Long id) {
         return withdrawalRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Withdrawal", "id", id));
     }
 
+    /** Lấy user theo id (null nếu không có). */
     private User resolveUser(Long id) {
         return id == null ? null : userRepository.findById(id).orElse(null);
     }
 
+    /** Gửi một thông báo hệ thống cho người dùng. */
     private void notify(User user, String title, String message, Long relatedId) {
         if (user == null) return;
         notificationRepository.save(Notification.builder()
@@ -231,6 +242,7 @@ public class SellerWalletService {
     }
 
     /** Notify every active admin (e.g. a new withdrawal request to review). */
+    /** Gửi thông báo cho tất cả admin (vd có yêu cầu rút mới cần duyệt). */
     private void notifyAdmins(String title, String message, String relatedType, Long relatedId) {
         userRepository.findUsersByRole("ADMIN", Pageable.unpaged())
                 .forEach(admin -> notificationRepository.save(Notification.builder()
@@ -244,10 +256,12 @@ public class SellerWalletService {
                         .build()));
     }
 
+    /** Trả 0 nếu giá trị null (null-safe). */
     private static BigDecimal nz(BigDecimal v) {
         return v != null ? v : BigDecimal.ZERO;
     }
 
+    /** Chuyển entity Withdrawal sang DTO trả về frontend. */
     private WithdrawalDto toDto(Withdrawal w) {
         Shop shop = w.getShop();
         return WithdrawalDto.builder()

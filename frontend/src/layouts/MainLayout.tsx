@@ -5,6 +5,7 @@ import Footer from '../components/layout/Footer'
 import ChatWidget from '../components/chat/ChatWidget'
 import useAuthStore from '../store/authStore'
 
+/** MainLayout — Bố cục chính: Navbar + nội dung trang + Footer + widget chat nổi. */
 export default function MainLayout() {
   const location = useLocation()
   const isHome = location.pathname === '/'

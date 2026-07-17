@@ -12,17 +12,17 @@ import org.springframework.context.annotation.Primary;
 import java.text.SimpleDateFormat;
 
 /**
- * Jackson Configuration for JSON serialization/deserialization
- * Customizes ObjectMapper bean for consistent JSON handling
+ * JacksonConfig — Cấu hình Jackson cho việc chuyển đổi JSON.
+ * Tùy chỉnh bean ObjectMapper để xử lý JSON nhất quán toàn hệ thống.
  */
 @Configuration
 public class JacksonConfig {
 
     /**
-     * Configure ObjectMapper bean
-     * - Handles Java 8 date/time types
-     * - Excludes null values from serialization
-     * - Fails on unknown properties during deserialization
+     * Bean ObjectMapper dùng chung:
+     * - Hỗ trợ kiểu ngày/giờ Java 8; ghi ngày dạng ISO thay vì timestamp.
+     * - Bỏ qua field null khi serialize.
+     * - Không lỗi khi gặp field lạ lúc deserialize; dùng BigDecimal cho số thực.
      */
     @Bean
     @Primary

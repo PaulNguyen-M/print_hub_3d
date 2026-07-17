@@ -20,6 +20,11 @@ import java.util.List;
 
 import com.printhub3.backend.security.service.UserDetailsImpl;
 
+/**
+ * OrderController — API đơn hàng phía người mua.
+ * Gồm: tạo đơn từ giỏ, xem chi tiết/lịch sử đơn, và (admin/seller) cập nhật
+ * trạng thái + mã vận đơn. Mọi endpoint yêu cầu đăng nhập.
+ */
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
@@ -28,9 +33,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    /**
-     * Create order from cart
-     */
+    /** Tạo đơn từ giỏ hàng của người dùng. POST /api/v1/orders/create */
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<OrderDto>> createOrder(@RequestBody CreateOrderRequest request) {
         Long userId = getCurrentUserId();
@@ -40,18 +43,14 @@ public class OrderController {
             .body(ApiResponse.success(orderDto, "Order created successfully"));
     }
 
-    /**
-     * Get order by ID
-     */
+    /** Lấy chi tiết một đơn theo id. */
     @GetMapping("/{orderId}")
     public ResponseEntity<ApiResponse<OrderDto>> getOrder(@PathVariable Long orderId) {
         OrderDto order = orderService.getOrderDto(orderId);
         return ResponseEntity.ok(ApiResponse.success(order, "Order retrieved successfully"));
     }
 
-    /**
-     * Get user's orders with pagination
-     */
+    /** Danh sách đơn của người dùng hiện tại (phân trang). */
     @GetMapping
     public ResponseEntity<ApiResponse<Page<OrderDto>>> getUserOrders(
             @RequestParam(defaultValue = "0") int page,
@@ -64,9 +63,7 @@ public class OrderController {
         return ResponseEntity.ok(ApiResponse.success(orders, "Orders retrieved successfully"));
     }
 
-    /**
-     * Get order history (all orders for user)
-     */
+    /** Toàn bộ lịch sử đơn của người dùng (không phân trang). */
     @GetMapping("/history")
     public ResponseEntity<ApiResponse<List<OrderDto>>> getOrderHistory() {
         Long userId = getCurrentUserId();
@@ -74,9 +71,7 @@ public class OrderController {
         return ResponseEntity.ok(ApiResponse.success(orders, "Order history retrieved successfully"));
     }
 
-    /**
-     * Update order status (Admin only)
-     */
+    /** Cập nhật trạng thái đơn (chỉ admin/seller). */
     @PutMapping("/{orderId}/status")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SELLER')")
     public ResponseEntity<ApiResponse<OrderDto>> updateOrderStatus(
@@ -87,9 +82,7 @@ public class OrderController {
         return ResponseEntity.ok(ApiResponse.success(orderDto, "Order status updated successfully"));
     }
 
-    /**
-     * Update tracking number
-     */
+    /** Cập nhật mã vận đơn (chỉ admin/seller). */
     @PutMapping("/{orderId}/tracking")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SELLER')")
     public ResponseEntity<ApiResponse<OrderDto>> updateTrackingNumber(
@@ -100,9 +93,7 @@ public class OrderController {
         return ResponseEntity.ok(ApiResponse.success(orderDto, "Tracking number updated successfully"));
     }
 
-    /**
-     * Get current user ID from security context
-     */
+    /** Lấy id người dùng hiện tại từ SecurityContext (ném lỗi nếu chưa đăng nhập). */
     private Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {

@@ -4,6 +4,9 @@ import com.printhub3.backend.dto.response.OrderItemDto;
 import com.printhub3.backend.dto.response.SellerOrderDto;
 import com.printhub3.backend.entity.*;
 import com.printhub3.backend.entity.Order.OrderStatus;
+
+import com.printhub3.backend.entity.OrderItem.FulfillmentStatus;
+
 import com.printhub3.backend.exception.BusinessException;
 import com.printhub3.backend.exception.ResourceNotFoundException;
 import com.printhub3.backend.repository.*;
@@ -20,10 +23,12 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import java.util.Map;
+
 /**
- * OrderWorkflowService - The multi-party order lifecycle:
- * buyer pays (mock) → admin confirms → seller(s) confirm their items →
- * admin completes → each shop is paid out (gross − platform commission).
+ * OrderWorkflowService — Vòng đời đơn nhiều bên:
+ * người mua thanh toán → admin xác nhận → (các) người bán xác nhận món của mình →
+ * admin hoàn tất → mỗi sạp được chi trả (doanh thu − hoa hồng nền tảng).
  */
 @Service
 @RequiredArgsConstructor
@@ -38,9 +43,15 @@ public class OrderWorkflowService {
     private final NotificationRepository notificationRepository;
     private final ProductRepository productRepository;
 
+    /** Chuỗi bước seller tự chuyển: CONFIRMED → PRINTING → FINISHING → SHIPPING → DELIVERED. */
+    private static final List<FulfillmentStatus> SELLER_CHAIN = List.of(
+            FulfillmentStatus.CONFIRMED, FulfillmentStatus.PRINTING, FulfillmentStatus.FINISHING,
+            FulfillmentStatus.SHIPPING, FulfillmentStatus.DELIVERED);
+
     // ── Admin ───────────────────────────────────────────────────────────
 
     /** Admin confirms a paid order and notifies the shops involved. */
+    /** (Admin) Xác nhận đơn đã thanh toán: chuyển sang CONFIRMED và báo các sạp liên quan. */
     public void adminConfirmOrder(Long orderId) {
         Order order = getOrder(orderId);
         if (order.getOrderStatus() != OrderStatus.PROCESSING && order.getOrderStatus() != OrderStatus.PENDING) {
@@ -48,6 +59,12 @@ public class OrderWorkflowService {
         }
         order.setOrderStatus(OrderStatus.CONFIRMED);
         orderRepository.save(order);
+
+        // Đặt trạng thái xử lý ban đầu cho mọi món = CONFIRMED để các sạp bắt đầu được.
+        List<OrderItem> confirmItems = orderItemRepository.findItemsByOrderId(orderId);
+        confirmItems.forEach(it -> it.setFulfillmentStatus(FulfillmentStatus.CONFIRMED));
+        orderItemRepository.saveAll(confirmItems);
+
 
         for (Long shopId : orderItemRepository.findShopIdsByOrder(orderId)) {
             shopRepository.findById(shopId).ifPresent(shop ->
@@ -65,6 +82,7 @@ public class OrderWorkflowService {
      * Admin completes a confirmed order: requires every shop item to be
      * seller-confirmed, then pays out each shop (gross − commission).
      */
+    /** (Admin) Hoàn tất đơn: chi trả cho từng sạp (trừ hoa hồng) và đóng đơn (COMPLETED). */
     public void adminCompleteOrder(Long orderId) {
         Order order = getOrder(orderId);
         if (order.getOrderStatus() != OrderStatus.CONFIRMED) {
@@ -91,6 +109,40 @@ public class OrderWorkflowService {
         log.info("Order {} completed and shops paid out", orderId);
     }
 
+        /**
+     * (Admin) Duyệt hoàn tất phần hàng của MỘT sạp trong đơn (khi sạp đã xin hoàn tất):
+     * chi tiền cho sạp đó; nếu mọi sạp trong đơn đã COMPLETED thì đóng đơn.
+     */
+    public void adminApproveShopCompletion(Long orderId, Long shopId) {
+        Order order = getOrder(orderId);
+        List<OrderItem> shopItems = orderItemRepository.findItemsByOrderAndShop(orderId, shopId);
+        if (shopItems.isEmpty()) {
+            throw new BusinessException("Đơn không có sản phẩm của sạp này");
+        }
+        if (shopStatus(shopItems) != FulfillmentStatus.AWAITING_APPROVAL) {
+            throw new BusinessException("Sạp này chưa xin hoàn tất");
+        }
+
+        shopItems.forEach(it -> it.setFulfillmentStatus(FulfillmentStatus.COMPLETED));
+        orderItemRepository.saveAll(shopItems);
+        payoutShop(shopId, order); // chi tiền cho sạp này (đã chống trả trùng bên trong)
+
+        // Nếu tất cả sạp của đơn đều COMPLETED → đóng đơn tổng.
+        List<OrderItem> all = orderItemRepository.findItemsByOrderId(orderId);
+        boolean allDone = all.stream()
+                .filter(it -> it.getProduct() != null && it.getProduct().getShop() != null)
+                .allMatch(it -> it.getFulfillmentStatus() == FulfillmentStatus.COMPLETED);
+        if (allDone && order.getOrderStatus() != OrderStatus.COMPLETED) {
+            order.setOrderStatus(OrderStatus.COMPLETED);
+            orderRepository.save(order);
+            notify(order.getUser(), "Đơn hàng đã hoàn tất",
+                    "Đơn hàng #" + order.getOrderNumber() + " đã hoàn tất. Cảm ơn bạn đã mua sắm!", orderId);
+        }
+        log.info("Admin approved completion order {} shop {}", orderId, shopId);
+    }
+
+
+    /** Chi trả cho một sạp phần hàng của họ trong đơn (chống chi trả trùng, cộng vào số dư). */
     private void payoutShop(Long shopId, Order order) {
         if (payoutRepository.existsByShop_ShopIdAndOrder_OrderId(shopId, order.getOrderId())) {
             return; // already paid out
@@ -142,6 +194,7 @@ public class OrderWorkflowService {
     // ── Seller ───────────────────────────────────────────────────────────
 
     @Transactional(readOnly = true)
+    /** Danh sách đơn có chứa sản phẩm của sạp (góc nhìn seller), kèm khoản thu (phân trang). */
     public Page<SellerOrderDto> getSellerOrders(Long userId, Pageable pageable) {
         Shop shop = shopRepository.findByOwner_UserId(userId)
                 .orElseThrow(() -> new BusinessException("Bạn chưa có sạp"));
@@ -163,6 +216,7 @@ public class OrderWorkflowService {
     }
 
     /** Seller confirms fulfillment of all their items in an order. */
+    /** Seller xác nhận đã xử lý các món của mình trong một đơn. */
     public SellerOrderDto sellerConfirmItems(Long orderId, Long userId) {
         Shop shop = shopRepository.findByOwner_UserId(userId)
                 .orElseThrow(() -> new BusinessException("Bạn chưa có sạp"));
@@ -190,8 +244,54 @@ public class OrderWorkflowService {
         return buildSellerOrderDto(order, shop);
     }
 
+    /** Seller chuyển đơn của sạp mình sang bước kế tiếp trong chuỗi CONFIRMED→…→DELIVERED. */
+    public SellerOrderDto sellerAdvanceStatus(Long orderId, Long userId) {
+        Shop shop = shopRepository.findByOwner_UserId(userId)
+                .orElseThrow(() -> new BusinessException("Bạn chưa có sạp"));
+        Order order = getOrder(orderId);
+        List<OrderItem> shopItems = orderItemRepository.findItemsByOrderAndShop(orderId, shop.getShopId());
+        if (shopItems.isEmpty()) {
+            throw new BusinessException("Đơn này không có sản phẩm của sạp bạn");
+        }
+
+        FulfillmentStatus current = shopStatus(shopItems);
+        int idx = SELLER_CHAIN.indexOf(current);
+        if (idx < 0 || idx >= SELLER_CHAIN.size() - 1) {
+            throw new BusinessException("Không thể chuyển bước ở trạng thái hiện tại");
+        }
+        FulfillmentStatus next = SELLER_CHAIN.get(idx + 1);
+        shopItems.forEach(it -> it.setFulfillmentStatus(next));
+        orderItemRepository.saveAll(shopItems);
+
+        notify(order.getUser(), "Cập nhật đơn hàng",
+                "Sạp \"" + shop.getName() + "\" đã chuyển đơn #" + order.getOrderNumber()
+                        + " sang trạng thái: " + next.name() + ".", orderId);
+        log.info("Seller {} advanced order {} (shop {}) to {}", userId, orderId, shop.getShopId(), next);
+        return buildSellerOrderDto(order, shop);
+    }
+
+    /** Seller đã giao xong → xin hoàn tất (chuyển DELIVERED → AWAITING_APPROVAL để admin duyệt). */
+    public SellerOrderDto sellerRequestCompletion(Long orderId, Long userId) {
+        Shop shop = shopRepository.findByOwner_UserId(userId)
+                .orElseThrow(() -> new BusinessException("Bạn chưa có sạp"));
+        Order order = getOrder(orderId);
+        List<OrderItem> shopItems = orderItemRepository.findItemsByOrderAndShop(orderId, shop.getShopId());
+        if (shopItems.isEmpty()) {
+            throw new BusinessException("Đơn này không có sản phẩm của sạp bạn");
+        }
+        if (shopStatus(shopItems) != FulfillmentStatus.DELIVERED) {
+            throw new BusinessException("Chỉ xin hoàn tất khi đã giao hàng (DELIVERED)");
+        }
+        shopItems.forEach(it -> it.setFulfillmentStatus(FulfillmentStatus.AWAITING_APPROVAL));
+        orderItemRepository.saveAll(shopItems);
+        log.info("Seller {} requested completion for order {} shop {}", userId, orderId, shop.getShopId());
+        return buildSellerOrderDto(order, shop);
+    }
+
+
     // ── Helpers ───────────────────────────────────────────────────────────
 
+    /** Dựng DTO đơn ở góc nhìn seller: chỉ gồm các món thuộc sạp và khoản thu tương ứng. */
     private SellerOrderDto buildSellerOrderDto(Order order, Shop shop) {
         List<OrderItem> shopItems = orderItemRepository.findItemsByOrderAndShop(order.getOrderId(), shop.getShopId());
         BigDecimal gross = shopItems.stream()
@@ -218,9 +318,11 @@ public class OrderWorkflowService {
                 .netEarning(gross.subtract(commission))
                 .sellerConfirmed(confirmed)
                 .paidOut(paidOut)
+                .fulfillmentStatus(shopStatus(shopItems).name())
                 .build();
     }
 
+    /** Chuyển OrderItem sang DTO. */
     private OrderItemDto toItemDto(OrderItem it) {
         Product p = it.getProduct();
         String image = null;
@@ -241,11 +343,20 @@ public class OrderWorkflowService {
                 .build();
     }
 
+    /** Lấy đơn theo id, ném lỗi nếu không có. */
     private Order getOrder(Long orderId) {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId));
     }
 
+    /** Trạng thái xử lý hiện tại của một sạp (các món cùng sạp đồng bộ; null → PENDING). */
+    private FulfillmentStatus shopStatus(List<OrderItem> shopItems) {
+        FulfillmentStatus s = shopItems.isEmpty() ? null : shopItems.get(0).getFulfillmentStatus();
+        return s != null ? s : FulfillmentStatus.PENDING;
+    }
+
+
+    /** Gửi một thông báo liên quan đến đơn cho người dùng. */
     private void notify(User user, String title, String message, Long orderId) {
         if (user == null) return;
         notificationRepository.save(Notification.builder()

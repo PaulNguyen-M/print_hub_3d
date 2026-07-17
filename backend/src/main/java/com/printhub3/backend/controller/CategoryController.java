@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * CategoryController — Danh mục sản phẩm (công khai).
+ * Cung cấp danh sách danh mục đang hoạt động cho bộ lọc ở trang chợ.
+ */
 @RestController
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor

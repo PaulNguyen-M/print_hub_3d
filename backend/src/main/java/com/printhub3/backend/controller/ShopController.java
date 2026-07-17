@@ -22,7 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ShopController - Public shop ("sạp") profiles, products, reviews and follow.
+ * ShopController — Trang sạp công khai của người bán.
+ * Gồm: hồ sơ sạp, sản phẩm của sạp, đánh giá sạp, sản phẩm nổi bật và theo dõi sạp.
+ * Đọc công khai; đánh giá và theo dõi cần đăng nhập.
  */
 @RestController
 @RequestMapping("/api/v1/shops")
@@ -32,14 +34,14 @@ public class ShopController {
     private final ShopService shopService;
     private final ProductService productService;
 
-    /** Public shop profile by slug (includes follow state when authenticated). */
+    /** Hồ sơ sạp công khai theo slug (kèm trạng thái theo dõi nếu đã đăng nhập). */
     @GetMapping("/{slug}")
     public ResponseEntity<ApiResponse<ShopDto>> getShop(@PathVariable String slug) {
         ShopDto shop = shopService.getShopBySlug(slug, currentUserIdOrNull());
         return ResponseEntity.ok(ApiResponse.success(shop, "Shop retrieved successfully"));
     }
 
-    /** Products belonging to a shop, with optional search + sort. */
+    /** Sản phẩm thuộc một sạp (có tìm kiếm + sắp xếp tùy chọn). */
     @GetMapping("/{slug}/products")
     public ResponseEntity<ApiResponse<Page<ProductDto>>> getShopProducts(
             @PathVariable String slug,
@@ -52,7 +54,7 @@ public class ShopController {
         return ResponseEntity.ok(ApiResponse.success(products, "Shop products retrieved successfully"));
     }
 
-    /** Shop-level reviews. */
+    /** Danh sách đánh giá cấp sạp (phân trang). */
     @GetMapping("/{slug}/reviews")
     public ResponseEntity<ApiResponse<Page<ShopReviewDto>>> getShopReviews(
             @PathVariable String slug,
@@ -62,7 +64,7 @@ public class ShopController {
         return ResponseEntity.ok(ApiResponse.success(reviews, "Shop reviews retrieved successfully"));
     }
 
-    /** Create or update the current user's review of a shop. */
+    /** Tạo/cập nhật đánh giá sạp của người dùng hiện tại (cần đăng nhập). */
     @PostMapping("/{slug}/reviews")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<ShopReviewDto>> reviewShop(
@@ -72,14 +74,14 @@ public class ShopController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created(dto, "Đã gửi đánh giá sạp"));
     }
 
-    /** Featured ("nổi bật") products pinned by the shop owner. */
+    /** Sản phẩm nổi bật do chủ sạp ghim. */
     @GetMapping("/{slug}/featured")
     public ResponseEntity<ApiResponse<List<ProductDto>>> getFeaturedProducts(@PathVariable String slug) {
         List<ProductDto> featured = shopService.getFeaturedProducts(slug);
         return ResponseEntity.ok(ApiResponse.success(featured, "Featured products retrieved"));
     }
 
-    /** Toggle following a shop. Returns { following: true|false }. */
+    /** Bật/tắt theo dõi một sạp (cần đăng nhập). Trả về { following: true|false }. */
     @PostMapping("/{slug}/follow")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Map<String, Boolean>>> toggleFollow(@PathVariable String slug) {
@@ -90,12 +92,14 @@ public class ShopController {
 
     // ── helpers ─────────────────────────────────────────────────────────
 
+    /** Id người dùng hiện tại; ném lỗi nếu chưa đăng nhập. */
     private Long currentUserId() {
         Long id = currentUserIdOrNull();
         if (id == null) throw new IllegalStateException("User is not authenticated");
         return id;
     }
 
+    /** Id người dùng hiện tại, hoặc null nếu khách chưa đăng nhập (dùng cho endpoint công khai). */
     private Long currentUserIdOrNull() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof UserDetailsImpl details) {

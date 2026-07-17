@@ -2,6 +2,10 @@ import axios from 'axios'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080/api/v1'
 
+/**
+ * apiClient — Axios cấu hình sẵn cho backend: tự đính JWT vào mỗi request,
+ * và tự dọn session + chuyển về trang đăng nhập khi gặp lỗi 401.
+ */
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {

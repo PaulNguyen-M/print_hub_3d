@@ -29,12 +29,17 @@ import OpenShopPage from '../features/seller/OpenShopPage'
 import ShopCustomizePage from '../features/seller/ShopCustomizePage'
 import ShopPage from '../features/shop/ShopPage'
 
+/** Bọc ShopPage với key=slug để component remount (reset state) khi đổi sạp. */
 function ShopPageKeyed() {
   const { slug } = useParams<{ slug: string }>()
   return <ShopPage key={slug} />
 }
 import CreatorDashboardPage from '../features/creator/CreatorDashboardPage'
 
+/**
+ * AppRoutes — Bảng định tuyến toàn app: nhóm auth, layout chính (chợ, sản phẩm, sạp,
+ * dịch vụ in, giỏ, thanh toán, đơn, tài khoản, creator/seller) và khu admin.
+ */
 export default function AppRoutes() {
   return (
     <Routes>

@@ -4,18 +4,18 @@ interface ChatState {
   open: boolean
   peerId: number | null
   peerName: string | null
-  /** Open the widget directly on a conversation with a peer. */
+  /** Mở widget chat trực tiếp vào cuộc hội thoại với một người. */
   openChat: (peerId: number, peerName: string) => void
-  /** Toggle the widget; when opening, show the inbox list. */
+  /** Bật/tắt widget; khi mở thì hiện danh sách hộp thư. */
   toggle: () => void
-  /** Go back from a conversation to the inbox list. */
+  /** Quay từ một cuộc hội thoại về danh sách hộp thư. */
   back: () => void
   close: () => void
-  /** Clear all chat UI state (on logout / account switch). */
+  /** Xóa toàn bộ trạng thái UI chat (khi đăng xuất / đổi tài khoản). */
   reset: () => void
 }
 
-/** Controls the global floating chat widget. */
+/** chatStore — Điều khiển widget chat nổi toàn cục (mở/đóng, đang xem hội thoại nào). */
 export const useChatStore = create<ChatState>((set) => ({
   open: false,
   peerId: null,

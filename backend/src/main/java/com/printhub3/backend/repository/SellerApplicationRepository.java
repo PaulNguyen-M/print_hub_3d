@@ -11,21 +11,26 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * SellerApplication Repository - Data access for shop-opening requests.
+ * SellerApplicationRepository — Truy vấn đơn đăng ký mở sạp.
  */
 @Repository
 public interface SellerApplicationRepository extends JpaRepository<SellerApplication, Long> {
 
+    /** Đơn theo trạng thái, mới nhất trước (phân trang). */
     Page<SellerApplication> findByStatusOrderByCreatedAtDesc(ApplicationStatus status, Pageable pageable);
 
+    /** Tất cả đơn, mới nhất trước (phân trang). */
     Page<SellerApplication> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
+    /** Tất cả đơn của một người nộp, mới nhất trước. */
     List<SellerApplication> findByApplicant_UserIdOrderByCreatedAtDesc(Long applicantId);
 
-    /** A user can only have one open (PENDING) application at a time. */
+    /** Đơn đang mở (PENDING) của một người — mỗi lúc chỉ được có một. */
     Optional<SellerApplication> findFirstByApplicant_UserIdAndStatus(Long applicantId, ApplicationStatus status);
 
+    /** Người dùng đã có đơn ở trạng thái này chưa. */
     boolean existsByApplicant_UserIdAndStatus(Long applicantId, ApplicationStatus status);
 
+    /** Đếm đơn theo trạng thái. */
     long countByStatus(ApplicationStatus status);
 }

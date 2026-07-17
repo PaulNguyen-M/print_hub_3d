@@ -23,6 +23,7 @@ function StatusBadge({ status }: { status: string }) {
   return <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"><Clock size={11} />{t('admin.prod.pending')}</span>
 }
 
+/** AdminProductsPage — Duyệt sản phẩm: tab theo trạng thái, duyệt/từ chối (modal nhập lý do). */
 export default function AdminProductsPage() {
   const { t } = useTranslation()
   const [tab, setTab] = useState<StatusTab>('PENDING')

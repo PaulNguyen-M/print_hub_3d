@@ -80,6 +80,7 @@ function Scene() {
   )
 }
 
+/** HeroScene — Cảnh 3D trang trí ở khu hero trang chủ (các khối hình lơ lửng, xoay nhẹ). */
 export default function HeroScene() {
   return (
     <Canvas

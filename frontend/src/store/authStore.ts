@@ -43,6 +43,10 @@ function clearUserScopedData() {
 const storedToken = localStorage.getItem('accessToken')
 const storedUser = loadStoredUser()
 
+/**
+ * authStore — Trạng thái phiên đăng nhập (user + access/refresh token), lưu & khôi phục
+ * qua localStorage. Khi đăng nhập/đăng xuất sẽ dọn dữ liệu phụ thuộc người dùng (giỏ, cache, chat).
+ */
 const useAuthStore = create<AuthState>((set) => ({
   // Chỉ coi là đã đăng nhập khi có CẢ token lẫn user → tránh trạng thái lệch sau refresh
   user: storedToken ? storedUser : null,

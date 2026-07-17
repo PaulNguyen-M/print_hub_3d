@@ -10,12 +10,12 @@ interface TimelineProps {
 const statusColors: { [key: string]: string } = {
   PENDING: 'bg-gray-200 text-gray-800',
   PROCESSING: 'bg-blue-200 text-blue-800',
-  PRINTING: 'bg-purple-200 text-purple-800',
-  FINISHING: 'bg-indigo-200 text-indigo-800',
-  SHIPPING: 'bg-orange-200 text-orange-800',
+  CONFIRMED: 'bg-blue-200 text-blue-800',
   DELIVERED: 'bg-green-200 text-green-800',
+  COMPLETED: 'bg-green-200 text-green-800',
   CANCELLED: 'bg-red-200 text-red-800',
 };
+
 
 /** Định dạng ngày an toàn: nếu timestamp thiếu/không hợp lệ thì trả chuỗi rỗng
  *  thay vì để date-fns ném lỗi làm sập cả trang. */
@@ -25,6 +25,7 @@ const formatTimestamp = (value?: string): string => {
   return Number.isNaN(date.getTime()) ? '' : format(date, 'MMM dd, yyyy • h:mm a');
 };
 
+/** OrderTimeline — Dòng thời gian trạng thái đơn (mỗi mốc kèm màu + thời điểm). */
 export const OrderTimeline: React.FC<TimelineProps> = ({ timeline }) => {
   const { t } = useTranslation();
   return (

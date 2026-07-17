@@ -7,10 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * ProductStlFile Repository - STL/3D files attached to a product.
+ * ProductStlFileRepository — File STL/3D đính kèm một sản phẩm.
  */
 @Repository
 public interface ProductStlFileRepository extends JpaRepository<ProductStlFile, Long> {
 
+    /** Các file STL của một sản phẩm, sắp theo thứ tự hiển thị. */
     List<ProductStlFile> findByProduct_ProductIdOrderByDisplayOrderAsc(Long productId);
 }

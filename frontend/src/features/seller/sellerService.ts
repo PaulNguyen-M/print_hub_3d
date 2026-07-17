@@ -18,6 +18,7 @@ export interface SellerApplication {
   createdAt: string
 }
 
+/** sellerService — API người bán: đăng ký mở sạp, lấy/cập nhật sạp của mình, sản phẩm của sạp. */
 const sellerService = {
   /** Submit an application to open a shop. */
   apply: async (shopName: string, description: string) => {

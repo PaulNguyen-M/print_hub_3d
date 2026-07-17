@@ -6,8 +6,8 @@ import org.mapstruct.ReportingPolicy;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * MapStruct Configuration
- * Defines global mapping rules for all mappers
+ * MapStructConfig — Cấu hình MapStruct: quy tắc mapping chung cho mọi mapper
+ * (component kiểu Spring, cảnh báo nếu có field chưa được ánh xạ).
  */
 @Configuration
 @MapperConfig(

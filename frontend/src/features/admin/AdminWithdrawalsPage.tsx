@@ -17,6 +17,7 @@ const STATUS_BADGE: Record<string, string> = {
   REJECTED: 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300',
 }
 
+/** AdminWithdrawalsPage — Duyệt yêu cầu rút tiền của người bán: lọc trạng thái, duyệt/từ chối. */
 export default function AdminWithdrawalsPage() {
   const { t } = useTranslation()
   const [status, setStatus] = useState('PENDING')

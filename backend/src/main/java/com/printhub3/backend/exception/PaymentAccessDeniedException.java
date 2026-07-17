@@ -1,7 +1,7 @@
 package com.printhub3.backend.exception;
 
 /**
- * Exception thrown when payment is not authorized for the current user
+ * PaymentAccessDeniedException — Ném khi người dùng không có quyền với tài nguyên thanh toán.
  */
 public class PaymentAccessDeniedException extends PaymentException {
     public PaymentAccessDeniedException(Long userId, Long resourceId) {

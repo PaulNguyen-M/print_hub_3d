@@ -36,6 +36,10 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+/**
+ * ProductService — Nghiệp vụ sản phẩm: tạo/sửa/xóa (của người bán), danh sách công khai
+ * có lọc động, sản phẩm theo sạp, đóng gói file STL để tải, và map sang ProductDto.
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -47,6 +51,7 @@ public class ProductService {
     private final com.printhub3.backend.repository.ShopRepository shopRepository;
     private final com.printhub3.backend.repository.ProductStlFileRepository productStlFileRepository;
 
+    /** Tạo sản phẩm mới cho người bán; gắn vào sạp của họ (nếu có); trạng thái chờ duyệt. */
     @Transactional
     public ProductDto createProduct(CreateProductRequest request, String sellerEmail) {
         User seller = userRepository.findByEmail(sellerEmail)
@@ -133,6 +138,7 @@ public class ProductService {
         return mapToProductDto(saved);
     }
 
+    /** Suy ra tên file từ URL (mặc định model.stl). */
     private String deriveFileName(String url) {
         if (url == null || url.isBlank()) return "model.stl";
         String name = url.substring(url.lastIndexOf('/') + 1);
@@ -142,6 +148,7 @@ public class ProductService {
     /** A product's STL files bundled into a ZIP for download. */
     public record StlZip(byte[] data, String fileName) {}
 
+    /** Gom tất cả file STL/3D của một sản phẩm thành một file ZIP để tải về. */
     @Transactional(readOnly = true)
     public StlZip buildStlZip(Long productId) {
         Product product = productRepository.findById(productId)
@@ -177,7 +184,7 @@ public class ProductService {
         return new StlZip(baos.toByteArray(), SlugUtil.toSlug(product.getName()) + ".zip");
     }
 
-    /** Resolve a public /uploads/** URL to a local file path, guarding against traversal. */
+    /** Đổi URL công khai /uploads/** sang đường dẫn file local (chặn path traversal). */
     private Path resolveLocalPath(String url) {
         if (url == null) return null;
         int idx = url.indexOf("/uploads/");
@@ -188,6 +195,7 @@ public class ProductService {
         return resolved.startsWith(base) ? resolved : null;
     }
 
+    /** Tạo tên entry ZIP duy nhất (thêm hậu tố _1, _2... nếu trùng). */
     private String uniqueName(Set<String> used, String name) {
         String candidate = name;
         int n = 1;
@@ -199,6 +207,7 @@ public class ProductService {
         return candidate;
     }
 
+    /** Cập nhật sản phẩm; chỉ chủ sản phẩm hoặc admin; field null thì giữ nguyên. */
     @Transactional
     public ProductDto updateProduct(Long productId, CreateProductRequest request, String email) {
         User user = userRepository.findByEmail(email)
@@ -227,6 +236,7 @@ public class ProductService {
         return mapToProductDto(productRepository.save(product));
     }
 
+    /** Xóa mềm sản phẩm (đặt inactive + deletedAt); chỉ chủ sản phẩm hoặc admin. */
     @Transactional
     public void deleteProduct(Long productId, String email) {
         User user = userRepository.findByEmail(email)
@@ -247,6 +257,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    /** Danh sách sản phẩm của chính người bán, mới nhất trước (phân trang). */
     public Page<ProductDto> getMyProducts(String sellerEmail, int page, int size) {
         User seller = userRepository.findByEmail(sellerEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -309,6 +320,7 @@ public class ProductService {
         return productRepository.findAll(spec, pageable).map(this::mapToProductDto);
     }
 
+    /** Chi tiết một sản phẩm (ném lỗi nếu không tồn tại hoặc đã ẩn/xóa). */
     public ProductDto getProductById(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
@@ -320,7 +332,7 @@ public class ProductService {
         return mapToProductDto(product);
     }
 
-    /** Active products belonging to a shop ("sạp"), with optional search + sort. */
+    /** Sản phẩm đang bán của một sạp, có tìm kiếm + sắp xếp tùy chọn. */
     public Page<ProductDto> getProductsByShop(Long shopId, int page, int size, String sort, String search) {
         Sort sortObj = switch (sort == null ? "newest" : sort) {
             case "popular"    -> Sort.by(Sort.Direction.DESC, "totalSold");
@@ -350,6 +362,7 @@ public class ProductService {
     }
 
 
+    /** Chuyển entity Product sang ProductDto đầy đủ (ảnh, sạp, đã bán, file STL...). */
     private ProductDto mapToProductDto(Product product) {
         String imageUrl = getPrimaryImageUrl(product).orElse(null);
         java.util.List<String> images = (product.getImages() == null) ? java.util.List.of()
@@ -390,6 +403,7 @@ public class ProductService {
                 .build();
     }
 
+    /** Lấy URL ảnh chính của sản phẩm (ảnh primary, hoặc ảnh đầu tiên còn lại). */
     private Optional<String> getPrimaryImageUrl(Product product) {
         if (product.getImages() == null || product.getImages().isEmpty()) {
             return Optional.empty();

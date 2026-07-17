@@ -17,6 +17,7 @@ interface Conversation {
   unreadCount: number
 }
 
+/** Avatar tròn: hiện ảnh nếu có, ngược lại hiện chữ cái đầu của tên. */
 function Avatar({ name, url }: { name?: string; url?: string }) {
   return (
     <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand-600 text-sm font-bold text-white">
@@ -25,6 +26,10 @@ function Avatar({ name, url }: { name?: string; url?: string }) {
   )
 }
 
+/**
+ * ChatWidget — Widget chat nổi toàn cục: danh sách hội thoại (hộp thư) và cửa sổ chat 1-1,
+ * kết nối realtime qua useChat, đồng bộ mở/đóng qua chatStore.
+ */
 export default function ChatWidget() {
   const { t } = useTranslation()
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)

@@ -21,7 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
 
 /**
- * STL upload controller
+ * StlUploadController — Tải file STL lên S3 và lưu metadata mô hình.
+ * (Phục vụ tính năng xem/lưu mô hình; khác với FileUploadController lưu local.)
  */
 @Slf4j
 @RestController
@@ -37,6 +38,7 @@ public class StlUploadController {
         this.stlUploadService = stlUploadService;
     }
 
+    /** Tải một file STL lên S3 kèm metadata (tiêu đề, mô tả, vật liệu, màu). POST /api/v1/stl/upload */
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Upload an STL file", description = "Upload an STL file to S3 and save model metadata")
     @ApiResponses(value = {

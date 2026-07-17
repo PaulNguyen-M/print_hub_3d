@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { XCircle } from 'lucide-react';
 import { useTranslation } from '../../i18n/useTranslation';
 
+/** CheckoutCancelPage — Trang báo hủy/thất bại thanh toán, cho quay lại giỏ hoặc chợ. */
 export const CheckoutCancelPage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();

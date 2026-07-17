@@ -19,6 +19,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * PaymentController — Thanh toán qua cổng Stripe.
+ * Gồm: tạo phiên thanh toán, tra cứu thanh toán theo đơn, hoàn tiền, và nhận webhook Stripe.
+ */
 @RestController
 @RequestMapping("/api/v1/payments")
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
+    /** Tạo phiên thanh toán Stripe cho đơn hàng. POST /api/v1/payments/create-session */
     @PostMapping("/create-session")
     public ResponseEntity<ApiResponse<PaymentSessionResponse>> createPaymentSession(
             @RequestBody CreatePaymentSessionRequest request) {
@@ -54,6 +59,7 @@ public class PaymentController {
         }
     }
 
+    /** Lấy thông tin thanh toán theo id đơn hàng. */
     @GetMapping("/order/{orderId}")
     public ResponseEntity<ApiResponse<PaymentDto>> getPaymentByOrderId(@PathVariable Long orderId) {
         try {
@@ -75,6 +81,7 @@ public class PaymentController {
         }
     }
 
+    /** Yêu cầu hoàn tiền cho một khoản thanh toán. */
     @PostMapping("/{paymentId}/refund")
     public ResponseEntity<ApiResponse<PaymentDto>> refundPayment(
             @PathVariable Long paymentId,
@@ -102,6 +109,7 @@ public class PaymentController {
         }
     }
 
+    /** Nhận webhook từ Stripe: xác thực chữ ký rồi cập nhật trạng thái thanh toán. */
     @PostMapping(value = "/webhook", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> handleWebhook(
             @RequestBody String payload,
@@ -119,6 +127,7 @@ public class PaymentController {
         }
     }
 
+    /** Lấy id người dùng hiện tại từ SecurityContext. */
     private Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {

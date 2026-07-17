@@ -16,6 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+/**
+ * NotificationService — Tạo và quản lý thông báo trong ứng dụng.
+ * Vừa xử lý CRUD (tạo/đọc/đánh dấu đã đọc/xóa), vừa cung cấp các hàm tiện ích để
+ * các service khác bắn thông báo (xác nhận đơn, cập nhật đơn, báo giá in 3D...).
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -25,7 +30,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
 
-    /** Create and persist a notification for a given user. */
+    /** Tạo và lưu một thông báo cho người dùng cho trước. */
     public NotificationDto createNotification(Long userId, String title, String message,
                                               NotificationType type,
                                               String relatedEntityType, Long relatedEntityId) {
@@ -45,6 +50,7 @@ public class NotificationService {
         return toDto(notificationRepository.save(notification));
     }
 
+    /** Danh sách thông báo của người dùng (phân trang). */
     @Transactional(readOnly = true)
     public Page<NotificationDto> getNotifications(Long userId, Pageable pageable) {
         return notificationRepository
@@ -52,11 +58,13 @@ public class NotificationService {
                 .map(this::toDto);
     }
 
+    /** Đếm số thông báo chưa đọc của người dùng. */
     @Transactional(readOnly = true)
     public long countUnread(Long userId) {
         return notificationRepository.countUnreadNotifications(userId);
     }
 
+    /** Thông báo của người dùng theo loại (phân trang). */
     @Transactional(readOnly = true)
     public Page<NotificationDto> getByType(Long userId, NotificationType type, Pageable pageable) {
         return notificationRepository
@@ -64,7 +72,7 @@ public class NotificationService {
                 .map(this::toDto);
     }
 
-    /** Mark a single notification as read. */
+    /** Đánh dấu một thông báo là đã đọc (kiểm tra đúng chủ sở hữu). */
     public NotificationDto markAsRead(Long notificationId, Long userId) {
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Notification", "id", notificationId));
@@ -80,7 +88,7 @@ public class NotificationService {
         return toDto(notification);
     }
 
-    /** Mark all unread notifications of a user as read. */
+    /** Đánh dấu tất cả thông báo chưa đọc của người dùng là đã đọc. */
     public void markAllAsRead(Long userId) {
         notificationRepository.findNotificationsByUserId(userId, Pageable.unpaged())
                 .stream()
@@ -91,7 +99,7 @@ public class NotificationService {
                 });
     }
 
-    /** Soft-delete a notification. */
+    /** Xóa mềm một thông báo (kiểm tra đúng chủ sở hữu). */
     public void deleteNotification(Long notificationId, Long userId) {
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Notification", "id", notificationId));
@@ -103,8 +111,9 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
-    // ── Convenience factory methods used by other services ──────────────────
+    // ── Các hàm tiện ích để service khác bắn thông báo ──────────────────────
 
+    /** Thông báo "đặt hàng thành công". */
     public void notifyOrderConfirmation(Long userId, Long orderId, String orderNumber) {
         createNotification(userId,
                 "Đặt hàng thành công",
@@ -112,6 +121,7 @@ public class NotificationService {
                 NotificationType.ORDER_CONFIRMATION, "Order", orderId);
     }
 
+    /** Thông báo đơn hàng đổi trạng thái. */
     public void notifyOrderUpdate(Long userId, Long orderId, String orderNumber, String newStatus) {
         createNotification(userId,
                 "Cập nhật đơn hàng",
@@ -119,6 +129,7 @@ public class NotificationService {
                 NotificationType.ORDER_UPDATE, "Order", orderId);
     }
 
+    /** Thông báo "thanh toán thành công". */
     public void notifyPaymentConfirmation(Long userId, Long orderId, String orderNumber) {
         createNotification(userId,
                 "Thanh toán thành công",
@@ -126,6 +137,7 @@ public class NotificationService {
                 NotificationType.PAYMENT_CONFIRMATION, "Order", orderId);
     }
 
+    /** Thông báo đã có báo giá cho yêu cầu in 3D. */
     public void notifyModelQuote(Long userId, Long requestId, String fileName, String quoteAmount) {
         createNotification(userId,
                 "Báo giá in 3D",
@@ -133,6 +145,7 @@ public class NotificationService {
                 NotificationType.MODEL_QUOTE, "PrintingRequest", requestId);
     }
 
+    /** Thông báo yêu cầu in 3D đổi trạng thái. */
     public void notifyModelStatusUpdate(Long userId, Long requestId, String fileName, String status) {
         createNotification(userId,
                 "Cập nhật trạng thái in 3D",
@@ -142,6 +155,7 @@ public class NotificationService {
 
     // ── Mapping ──────────────────────────────────────────────────────────────
 
+    /** Chuyển entity Notification sang DTO trả về frontend. */
     private NotificationDto toDto(Notification n) {
         return NotificationDto.builder()
                 .notificationId(n.getNotificationId())

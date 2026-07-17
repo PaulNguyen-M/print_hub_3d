@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from '../i18n/useTranslation'
 
+/** NotFoundPage — Trang 404 khi không khớp route nào. */
 export default function NotFoundPage() {
   const { t } = useTranslation()
   return (

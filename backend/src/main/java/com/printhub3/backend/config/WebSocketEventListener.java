@@ -14,6 +14,10 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.security.Principal;
 
+/**
+ * WebSocketEventListener — Lắng nghe sự kiện kết nối/ngắt kết nối WebSocket để
+ * cập nhật trạng thái online (PresenceService) và phát broadcast tới /topic/presence.
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -22,6 +26,7 @@ public class WebSocketEventListener {
     private final PresenceService presenceService;
     private final SimpMessagingTemplate messagingTemplate;
 
+    /** Khi một phiên WebSocket kết nối: đánh dấu user online và báo cho mọi người. */
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
@@ -39,6 +44,7 @@ public class WebSocketEventListener {
         }
     }
 
+    /** Khi một phiên ngắt kết nối: gỡ phiên và phát lại danh sách người đang online. */
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());

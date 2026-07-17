@@ -26,7 +26,8 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Service for storing STL uploads in AWS S3 and metadata persistence.
+ * StlUploadService — Lưu file STL lên AWS S3 (fallback lưu local khi S3 lỗi) và
+ * ghi metadata mô hình vào DB. Có tính checksum SHA-256 để kiểm tra toàn vẹn file.
  */
 @Service
 public class StlUploadService {
@@ -54,6 +55,7 @@ public class StlUploadService {
         this.endpoint = endpoint;
     }
 
+    /** Tải file STL lên S3 (hoặc local nếu S3 lỗi), lưu metadata + checksum và trả về DTO. */
     @Transactional
     public StlUploadResponse uploadStlFile(
             MultipartFile file,
@@ -131,6 +133,7 @@ public class StlUploadService {
 
     private static final Set<String> ALLOWED_EXT = Set.of(".stl", ".obj", ".fbx", ".gltf", ".glb");
 
+    /** Kiểm tra file: không rỗng, đúng định dạng cho phép, không quá 100MB. */
     private void validateUpload(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new BusinessException("No file provided for upload");
@@ -161,6 +164,7 @@ public class StlUploadService {
         }
     }
 
+    /** Làm sạch tên file (bỏ ký tự lạ) chống path traversal. */
     private String sanitizeFilename(String originalName) {
         if (originalName == null) {
             return "model.stl";
@@ -168,10 +172,12 @@ public class StlUploadService {
         return originalName.replaceAll("[^A-Za-z0-9_.-]", "_");
     }
 
+    /** Tạo key S3 duy nhất: <folder>/<uuid>/<tên file>. */
     private String buildObjectKey(String filename) {
         return s3Folder + UUID.randomUUID() + "/" + filename;
     }
 
+    /** Dựng URL công khai của object trên S3 (hoặc endpoint tùy chỉnh nếu có). */
     private String buildS3Url(String objectKey) {
         if (endpoint != null && !endpoint.isBlank()) {
             String trimmedEndpoint = endpoint.endsWith("/") ? endpoint.substring(0, endpoint.length() - 1) : endpoint;
@@ -180,15 +186,18 @@ public class StlUploadService {
         return String.format("https://%s.s3.%s.amazonaws.com/%s", bucketName, region, objectKey);
     }
 
+    /** Lấy content-type của file, mặc định application/octet-stream. */
     private String getContentType(MultipartFile file) {
         String contentType = file.getContentType();
         return contentType != null && !contentType.isBlank() ? contentType : "application/octet-stream";
     }
 
+    /** Chuẩn hóa chuỗi: trim, chuỗi rỗng → null. */
     private String normalizeString(String value) {
         return value != null && !value.isBlank() ? value.trim() : null;
     }
 
+    /** Tính checksum SHA-256 (chuỗi hex) của nội dung file. */
     private String calculateSha256(byte[] bytes) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hash = digest.digest(bytes);

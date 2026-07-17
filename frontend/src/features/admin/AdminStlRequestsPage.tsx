@@ -12,6 +12,7 @@ const STATUS_ACTIONS: Record<string, string[]> = {
   // COMPLETED, REJECTED → không còn hành động
 }
 
+/** AdminStlRequestsPage — Quản lý yêu cầu in 3D: cập nhật trạng thái theo vòng đời hợp lệ. */
 export default function AdminStlRequestsPage() {
   const { t } = useTranslation()
   const [requests, setRequests] = useState<AdminPrintingRequest[]>([])

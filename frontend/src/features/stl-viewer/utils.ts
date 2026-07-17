@@ -11,6 +11,7 @@ export interface STLFileInfo {
 /**
  * Validate if file is a valid STL file
  */
+/** Kiểm tra file có phải STL hợp lệ (đuôi .stl + kích thước cho phép). */
 export function isValidStlFile(file: File): boolean {
   if (!file.name.toLowerCase().endsWith('.stl')) {
     return false;
@@ -77,6 +78,7 @@ function isASCIISTL(arrayBuffer: ArrayBuffer): boolean {
 /**
  * Format file size for display
  */
+/** Đổi số byte sang chuỗi kích thước dễ đọc (KB/MB...). */
 export function formatFileSize(bytes: number): string {
   if (bytes === 0) return '0 Bytes';
 
@@ -90,6 +92,7 @@ export function formatFileSize(bytes: number): string {
 /**
  * Format number with separators
  */
+/** Định dạng số có phân tách hàng nghìn. */
 export function formatNumber(num: number): string {
   return num.toLocaleString();
 }
@@ -97,6 +100,7 @@ export function formatNumber(num: number): string {
 /**
  * Create a download link for a file
  */
+/** Tải một file từ URL về máy (tạo thẻ <a download> tạm). */
 export function downloadFile(url: string, fileName: string): void {
   const link = document.createElement('a');
   link.href = url;

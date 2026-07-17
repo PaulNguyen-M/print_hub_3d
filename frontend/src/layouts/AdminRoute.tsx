@@ -6,6 +6,7 @@ interface AdminRouteProps {
   children: JSX.Element
 }
 
+/** AdminRoute — Route guard: chỉ cho tài khoản ADMIN vào, ngược lại chuyển hướng đi. */
 export default function AdminRoute({ children }: AdminRouteProps) {
   const { isAuthenticated, user } = useAuth()
 

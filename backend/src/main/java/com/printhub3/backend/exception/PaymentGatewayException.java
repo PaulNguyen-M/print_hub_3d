@@ -1,7 +1,7 @@
 package com.printhub3.backend.exception;
 
 /**
- * Exception thrown when Stripe/payment gateway operation fails
+ * PaymentGatewayException — Ném khi thao tác với cổng thanh toán (Stripe...) thất bại.
  */
 public class PaymentGatewayException extends RuntimeException {
 

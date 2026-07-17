@@ -7,6 +7,7 @@ interface ToastProviderProps {
   children: ReactNode;
 }
 
+/** ToastProvider — Cung cấp hàm showToast và render thông báo nổi ở góc màn hình (tự ẩn sau 3s). */
 export default function ToastProvider({
   children,
 }: ToastProviderProps) {

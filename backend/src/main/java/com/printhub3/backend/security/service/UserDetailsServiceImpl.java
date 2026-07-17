@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * UserDetailsService Implementation
- * Loads user details from database for Spring Security authentication
+ * UserDetailsServiceImpl — Nạp thông tin người dùng từ DB cho Spring Security.
  */
 @Slf4j
 @Service
@@ -23,10 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    /**
-     * Load user by username (email in this case)
-     * Used by Spring Security for authentication
-     */
+    /** Nạp người dùng theo username (chính là email); chặn nếu tài khoản đã bị khóa. */
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -48,9 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return UserDetailsImpl.build(user);
     }
 
-    /**
-     * Load user by user ID
-     */
+    /** Nạp người dùng theo id. */
     @Transactional(readOnly = true)
     public UserDetails loadUserById(Long userId) {
         log.debug("Loading user by ID: {}", userId);

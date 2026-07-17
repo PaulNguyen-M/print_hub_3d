@@ -20,6 +20,7 @@ export interface PagedReviews {
   number: number
 }
 
+/** reviewService — Gọi API đánh giá sản phẩm (lấy danh sách, tạo/sửa đánh giá). */
 const reviewService = {
   getReviews: async (productId: number, page = 0, size = 10) => {
     const res = await apiClient.get(`/products/${productId}/reviews`, { params: { page, size } })

@@ -6,6 +6,7 @@ import { CartItemComponent } from './CartItemComponent';
 import { CartSummary } from './CartSummary';
 import { useTranslation } from '../../i18n/useTranslation';
 
+/** CartPage — Trang giỏ hàng: danh sách món + tóm tắt đơn, có trạng thái tải/rỗng. */
 export const CartPage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();

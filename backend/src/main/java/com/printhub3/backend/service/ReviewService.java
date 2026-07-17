@@ -22,8 +22,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * ReviewService - Product reviews, with automatic recalculation of both
- * product-level and shop-level ("sạp") ratings.
+ * ReviewService — Đánh giá sản phẩm, tự động tính lại điểm trung bình của sản phẩm
+ * mỗi khi có đánh giá mới/sửa. (Điểm của sạp lấy từ đánh giá sạp riêng — xem ShopService.)
  */
 @Service
 @RequiredArgsConstructor
@@ -35,10 +35,7 @@ public class ReviewService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
-    /**
-     * Create or update the current user's review for a product, then refresh
-     * the product and shop ratings.
-     */
+    /** Tạo mới hoặc cập nhật đánh giá của người dùng cho một sản phẩm, rồi tính lại điểm sản phẩm. */
     public ReviewDto addOrUpdateReview(Long userId, Long productId, CreateReviewRequest request) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
@@ -48,6 +45,7 @@ public class ReviewService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
+        // Có đánh giá cũ thì sửa, chưa có thì tạo mới
         ProductReview review = reviewRepository.findUserReviewForProduct(productId, userId)
                 .orElseGet(() -> ProductReview.builder()
                         .product(product)
@@ -60,27 +58,29 @@ public class ReviewService {
         review.setComment(request.getComment());
         review = reviewRepository.save(review);
 
-        // Product reviews drive the product's rating only; the shop's own rating
-        // comes from dedicated shop reviews (see ShopService).
+        // Đánh giá sản phẩm chỉ ảnh hưởng điểm của sản phẩm; điểm của sạp đến từ
+        // đánh giá sạp riêng (xem ShopService).
         recalcProductRating(product);
 
         log.info("Review {} saved for product {} by user {}", review.getReviewId(), productId, userId);
         return toDto(review);
     }
 
+    /** Danh sách đánh giá của một sản phẩm (phân trang). */
     @Transactional(readOnly = true)
     public Page<ReviewDto> getProductReviews(Long productId, int page, int size) {
         return reviewRepository.findReviewsByProductId(productId, PageRequest.of(page, size)).map(this::toDto);
     }
 
-    /** All reviews across a shop's products, newest first. */
+    /** Tất cả đánh giá của các sản phẩm trong một sạp, mới nhất trước. */
     @Transactional(readOnly = true)
     public Page<ReviewDto> getShopReviews(Long shopId, int page, int size) {
         return reviewRepository.findReviewsByShop(shopId, PageRequest.of(page, size)).map(this::toDto);
     }
 
-    // ── Recalculation ───────────────────────────────────────────────────
+    // ── Tính lại điểm ───────────────────────────────────────────────────
 
+    /** Tính lại điểm trung bình + số lượng đánh giá cho một sản phẩm rồi lưu. */
     private void recalcProductRating(Product product) {
         RatingAggregate agg = reviewRepository.aggregateForProduct(product.getProductId());
         product.setRating(round(agg != null ? agg.getAvg() : null));
@@ -88,11 +88,13 @@ public class ReviewService {
         productRepository.save(product);
     }
 
+    /** Làm tròn điểm về 2 chữ số thập phân (null → 0). */
     private BigDecimal round(Double avg) {
         if (avg == null) return BigDecimal.ZERO;
         return BigDecimal.valueOf(avg).setScale(2, RoundingMode.HALF_UP);
     }
 
+    /** Chuyển entity ProductReview sang DTO trả về frontend. */
     private ReviewDto toDto(ProductReview r) {
         User u = r.getUser();
         return ReviewDto.builder()

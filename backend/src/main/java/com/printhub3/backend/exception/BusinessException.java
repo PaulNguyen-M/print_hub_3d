@@ -1,7 +1,7 @@
 package com.printhub3.backend.exception;
 
 /**
- * Exception thrown when business rule is violated
+ * BusinessException — Ném khi vi phạm một quy tắc nghiệp vụ (vd đã có sạp, chưa mua hàng...).
  */
 public class BusinessException extends RuntimeException {
 

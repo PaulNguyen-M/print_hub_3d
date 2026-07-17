@@ -5,6 +5,7 @@ import AdminStatCard from './AdminStatCard'
 import AdminRevenueChart from './AdminRevenueChart'
 import { useTranslation } from '../../i18n/useTranslation'
 
+/** AdminDashboardPage — Bảng điều khiển admin: các thẻ số liệu tổng quan + biểu đồ doanh thu. */
 export default function AdminDashboardPage() {
   const { t } = useTranslation()
   const [overview, setOverview] = useState<AdminDashboardOverview | null>(null)

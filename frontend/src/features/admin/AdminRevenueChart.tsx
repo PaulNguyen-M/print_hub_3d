@@ -9,6 +9,7 @@ interface AdminRevenueChartProps {
   points: RevenuePoint[]
 }
 
+/** AdminRevenueChart — Biểu đồ doanh thu theo tháng (thanh ngang tự vẽ, tỉ lệ theo mức cao nhất). */
 export default function AdminRevenueChart({ points }: AdminRevenueChartProps) {
   const { t } = useTranslation()
   if (!points?.length) {

@@ -15,6 +15,10 @@ import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * CartService — Nghiệp vụ giỏ hàng: lấy/tạo giỏ, thêm/xóa/đổi số lượng món,
+ * dọn giỏ và tính lại tổng số món + tổng tiền.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -26,9 +30,7 @@ public class CartService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
-    /**
-     * Get or create cart for current user
-     */
+    /** Lấy giỏ của người dùng; chưa có thì tạo mới giỏ rỗng. */
     public Cart getOrCreateCart(Long userId) {
         return cartRepository.findByUser_UserId(userId)
                 .orElseGet(() -> {
@@ -43,25 +45,23 @@ public class CartService {
                 });
     }
 
-    /**
-     * Add product to cart
-     */
+    /** Thêm sản phẩm vào giỏ; nếu đã có thì cộng dồn số lượng. */
     public Cart addToCart(Long userId, AddToCartRequest request) {
         Cart cart = getOrCreateCart(userId);
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        // Check if item already in cart
+        // Kiểm tra món đã có trong giỏ chưa
         Optional<CartItem> existingItem = cartItemRepository
                 .findByCartAndProduct(cart.getCartId(), product.getProductId());
 
         CartItem cartItem;
         if (existingItem.isPresent()) {
-            // Update quantity
+            // Đã có → cộng dồn số lượng
             cartItem = existingItem.get();
             cartItem.setQuantity(cartItem.getQuantity() + request.getQuantity());
         } else {
-            // Create new cart item
+            // Chưa có → tạo món mới
             cartItem = CartItem.builder()
                     .cart(cart)
                     .product(product)
@@ -75,9 +75,7 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
-    /**
-     * Remove item from cart
-     */
+    /** Xóa một sản phẩm khỏi giỏ. */
     public Cart removeFromCart(Long userId, Long productId) {
         Cart cart = getOrCreateCart(userId);
                 cartItemRepository.findByCartAndProduct(cart.getCartId(), productId)
@@ -86,9 +84,7 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
-    /**
-     * Update cart item quantity
-     */
+    /** Đổi số lượng một món; nếu số lượng ≤ 0 thì xóa món khỏi giỏ. */
     public Cart updateCartItemQuantity(Long userId, Long productId, Integer quantity) {
         if (quantity <= 0) {
             return removeFromCart(userId, productId);
@@ -105,9 +101,7 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
-    /**
-     * Clear cart
-     */
+    /** Dọn sạch toàn bộ giỏ hàng. */
     public void clearCart(Long userId) {
         Cart cart = getOrCreateCart(userId);
                 cartItemRepository.deleteByCart_CartId(cart.getCartId());
@@ -116,9 +110,7 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    /**
-     * Get cart DTO
-     */
+    /** Dựng DTO giỏ hàng để trả về frontend (kèm ảnh chính và thành tiền từng món). */
     public CartDto getCartDto(Long userId) {
         Cart cart = getOrCreateCart(userId);
         return CartDto.builder()
@@ -145,9 +137,7 @@ public class CartService {
                 .build();
     }
 
-    /**
-     * Update cart totals
-     */
+    /** Tính lại tổng số món và tổng tiền của giỏ (chỉ tính món chưa xóa). */
     private void updateCartTotals(Cart cart) {
         var items = cartItemRepository.findItemsByCartId(cart.getCartId());
         var activeItems = items.stream()

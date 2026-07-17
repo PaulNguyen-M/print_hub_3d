@@ -4,6 +4,7 @@ import { CheckCircle2 } from 'lucide-react';
 import { useOrder } from '../../hooks/useOrder';
 import { useTranslation } from '../../i18n/useTranslation';
 
+/** CheckoutSuccessPage — Trang báo thanh toán thành công (tải lại đơn theo orderId trên URL). */
 export const CheckoutSuccessPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();

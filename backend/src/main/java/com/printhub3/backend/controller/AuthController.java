@@ -19,8 +19,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Authentication Controller
- * Handles user authentication endpoints: login, register, refresh token, logout
+ * AuthController — Các endpoint xác thực người dùng.
+ * Gồm: đăng ký, đăng nhập, làm mới token, đăng xuất (một thiết bị / tất cả thiết bị)
+ * và lấy thông tin người dùng đang đăng nhập.
  */
 @Slf4j
 @RestController
@@ -31,10 +32,7 @@ public class AuthController {
     @Autowired
     private AuthenticationService authenticationService;
 
-    /**
-     * Register a new user account
-     * POST /api/v1/auth/register
-     */
+    /** Đăng ký tài khoản mới. POST /api/v1/auth/register */
     @PostMapping("/register")
     @Operation(
             summary = "Register a new user",
@@ -70,10 +68,7 @@ public class AuthController {
                 ));
     }
 
-    /**
-     * User login - Authenticate and return JWT tokens
-     * POST /api/v1/auth/login
-     */
+    /** Đăng nhập: xác thực và trả về JWT (access + refresh token). POST /api/v1/auth/login */
     @PostMapping("/login")
     @Operation(
             summary = "User login",
@@ -112,10 +107,7 @@ public class AuthController {
                 ));
     }
 
-    /**
-     * Refresh access token using refresh token
-     * POST /api/v1/auth/refresh-token
-     */
+    /** Cấp access token mới bằng refresh token. POST /api/v1/auth/refresh-token */
     @PostMapping("/refresh-token")
     @Operation(
             summary = "Refresh access token",
@@ -154,10 +146,7 @@ public class AuthController {
                 ));
     }
 
-    /**
-     * User logout - Revoke current session
-     * POST /api/v1/auth/logout
-     */
+    /** Đăng xuất: thu hồi phiên hiện tại. POST /api/v1/auth/logout */
     @PostMapping("/logout")
     @Operation(
             summary = "User logout",
@@ -187,10 +176,7 @@ public class AuthController {
                 .ok(ApiResponse.success(null, "User logged out successfully"));
     }
 
-    /**
-     * Check if user is authenticated
-     * GET /api/v1/auth/me
-     */
+    /** Lấy thông tin người dùng đang đăng nhập. GET /api/v1/auth/me */
     @GetMapping("/me")
     @Operation(
             summary = "Get current authenticated user",
@@ -213,10 +199,7 @@ public class AuthController {
                 ));
     }
 
-    /**
-     * Logout from all devices
-     * POST /api/v1/auth/logout-all
-     */
+    /** Đăng xuất khỏi mọi thiết bị (thu hồi tất cả refresh token). POST /api/v1/auth/logout-all */
     @PostMapping("/logout-all")
     @Operation(
             summary = "Logout from all devices",

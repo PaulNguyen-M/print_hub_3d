@@ -20,6 +20,8 @@ import com.printhub3.backend.repository.PrintingRequestRepository;
 import com.printhub3.backend.repository.ProductRepository;
 import com.printhub3.backend.repository.RoleRepository;
 import com.printhub3.backend.repository.UserRepository;
+import com.printhub3.backend.dto.response.ShopFulfillmentDto;
+import com.printhub3.backend.entity.OrderItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -38,6 +40,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * AdminService — Nghiệp vụ quản trị: dashboard, duyệt sản phẩm, quản lý đơn/người dùng,
+ * yêu cầu in 3D và thống kê doanh thu.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -51,6 +57,7 @@ public class AdminService {
     private final PrintingRequestRepository printingRequestRepository;
     private final RoleRepository roleRepository;
 
+    /** Tổng hợp số liệu tổng quan (người dùng, sản phẩm, đơn, doanh thu, đơn/yêu cầu chờ). */
     @Transactional(readOnly = true)
     public AdminDashboardDto getDashboardOverview() {
         long totalUsers = userRepository.count();
@@ -79,6 +86,7 @@ public class AdminService {
                 .build();
     }
 
+    /** Danh sách sản phẩm cho admin duyệt, lọc theo trạng thái (phân trang). */
     @Transactional(readOnly = true)
     public Page<AdminProductDto> getProducts(int page, int size, String sortBy, Sort.Direction direction, String status) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
@@ -89,6 +97,7 @@ public class AdminService {
         return productRepository.findAll(pageable).map(this::mapToAdminProductDto);
     }
 
+    /** Danh sách tất cả đơn hàng (phân trang). */
     @Transactional(readOnly = true)
     public Page<AdminOrderDto> getOrders(int page, int size, String sortBy, Sort.Direction direction) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
@@ -96,6 +105,7 @@ public class AdminService {
                 .map(this::mapToAdminOrderDto);
     }
 
+    /** Danh sách người dùng, có tìm kiếm theo tên/email (phân trang). */
     @Transactional(readOnly = true)
     public Page<AdminUserDto> getUsers(int page, int size, String sortBy, Sort.Direction direction, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
@@ -105,6 +115,7 @@ public class AdminService {
         return users.map(this::mapToAdminUserDto);
     }
 
+    /** Danh sách yêu cầu in 3D (phân trang). */
     @Transactional(readOnly = true)
     public Page<AdminPrintingRequestDto> getPrintingRequests(int page, int size, String sortBy, Sort.Direction direction) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
@@ -112,6 +123,7 @@ public class AdminService {
                 .map(this::mapToAdminPrintingRequestDto);
     }
 
+    /** Bật/tắt hiển thị (active) một sản phẩm. */
     @Transactional
     public void setProductActive(Long productId, boolean active) {
         Product product = productRepository.findById(productId)
@@ -120,6 +132,7 @@ public class AdminService {
         productRepository.save(product);
     }
 
+    /** Duyệt sản phẩm: đặt trạng thái ACTIVE + hiển thị. */
     @Transactional
     public AdminProductDto approveProduct(Long productId) {
         Product product = productRepository.findById(productId)
@@ -130,6 +143,7 @@ public class AdminService {
         return mapToAdminProductDto(productRepository.save(product));
     }
 
+    /** Từ chối sản phẩm kèm lý do (đặt REJECTED + ẩn). */
     @Transactional
     public AdminProductDto rejectProduct(Long productId, String reason) {
         Product product = productRepository.findById(productId)
@@ -140,6 +154,7 @@ public class AdminService {
         return mapToAdminProductDto(productRepository.save(product));
     }
 
+    /** Khóa/mở khóa (active) một tài khoản. */
     @Transactional
     public void setUserActive(Long userId, boolean active) {
         User user = userRepository.findById(userId)
@@ -148,6 +163,7 @@ public class AdminService {
         userRepository.save(user);
     }
 
+    /** Đổi vai trò (role) của một người dùng. */
     @Transactional
     public void updateUserRole(Long userId, String roleName) {
         User user = userRepository.findById(userId)
@@ -158,6 +174,7 @@ public class AdminService {
         userRepository.save(user);
     }
 
+    /** Cập nhật trạng thái một yêu cầu in 3D. */
     @Transactional
     public void updatePrintingRequestStatus(Long requestId, String status) {
         PrintingRequest request = printingRequestRepository.findById(requestId)
@@ -166,6 +183,7 @@ public class AdminService {
         printingRequestRepository.save(request);
     }
 
+    /** Cập nhật trạng thái một đơn (chấp nhận mọi trạng thái hợp lệ); ghi mốc giao khi DELIVERED. */
     @Transactional
     public void updateOrderStatus(Long orderId, String status) {
         Order order = orderRepository.findById(orderId)
@@ -180,6 +198,7 @@ public class AdminService {
         orderRepository.save(order);
     }
 
+    /** Thống kê doanh thu: tổng, giá trị đơn trung bình, số đơn, doanh thu theo tháng. */
     @Transactional(readOnly = true)
     public RevenueStatsDto getRevenueStats() {
         LocalDateTime today = LocalDateTime.now();
@@ -200,6 +219,7 @@ public class AdminService {
                 .build();
     }
 
+    /** Dựng danh sách doanh thu theo từng tháng (cho biểu đồ). */
     private List<RevenuePointDto> getRevenuePoints() {
         LocalDate startMonth = LocalDate.now().minusMonths(5).withDayOfMonth(1);
         LocalDateTime windowStart = startMonth.atStartOfDay();
@@ -227,6 +247,7 @@ public class AdminService {
         return points;
     }
 
+    /** Chuyển Product sang DTO cho màn admin. */
     private AdminProductDto mapToAdminProductDto(Product product) {
         String thumbnail = (product.getImages() != null && !product.getImages().isEmpty())
                 ? product.getImages().iterator().next().getImageUrl() : null;
@@ -246,8 +267,29 @@ public class AdminService {
                 .build();
     }
 
+    /** Chuyển Order sang DTO cho màn admin (kèm trạng thái xử lý của từng sạp). */
     private AdminOrderDto mapToAdminOrderDto(Order order) {
+        // Gom các món theo sạp → mỗi sạp một dòng trạng thái để admin duyệt riêng
+        List<ShopFulfillmentDto> shops = order.getItems() == null ? List.of()
+                : order.getItems().stream()
+                    .filter(it -> it.getDeletedAt() == null
+                            && it.getProduct() != null && it.getProduct().getShop() != null)
+                    .collect(Collectors.groupingBy(it -> it.getProduct().getShop().getShopId()))
+                    .values().stream()
+                    .map(list -> {
+                        OrderItem first = list.get(0);
+                        var shop = first.getProduct().getShop();
+                        var st = first.getFulfillmentStatus();
+                        return ShopFulfillmentDto.builder()
+                                .shopId(shop.getShopId())
+                                .shopName(shop.getName())
+                                .fulfillmentStatus(st != null ? st.name() : "PENDING")
+                                .build();
+                    })
+                    .toList();
+
         return AdminOrderDto.builder()
+                .shops(shops)
                 .orderId(order.getOrderId())
                 .orderNumber(order.getOrderNumber())
                 .customerName(Optional.ofNullable(order.getUser()).map(User::getFullName).orElse("Unknown"))
@@ -259,6 +301,7 @@ public class AdminService {
                 .build();
     }
 
+    /** Chuyển User sang DTO cho màn admin. */
     private AdminUserDto mapToAdminUserDto(User user) {
         return AdminUserDto.builder()
                 .userId(user.getUserId())
@@ -271,6 +314,7 @@ public class AdminService {
                 .build();
     }
 
+    /** Chuyển PrintingRequest sang DTO cho màn admin. */
     private AdminPrintingRequestDto mapToAdminPrintingRequestDto(PrintingRequest request) {
         return AdminPrintingRequestDto.builder()
                 .requestId(request.getRequestId())

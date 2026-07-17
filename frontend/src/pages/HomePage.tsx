@@ -52,6 +52,7 @@ const formatPrice = (p: number) =>
 
 const PLACEHOLDER = 'https://placehold.co/600x450/1e293b/64748b?text=3D+Model'
 
+/** HomePage — Trang chủ: hero 3D, khu "khám phá" (chợ / dịch vụ in / mở sạp) và các mục nổi bật. */
 export default function HomePage() {
   const { t } = useTranslation()
   const user = useAuthStore((s) => s.user)

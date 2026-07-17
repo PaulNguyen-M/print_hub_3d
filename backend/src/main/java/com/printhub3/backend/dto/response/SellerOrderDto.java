@@ -37,4 +37,8 @@ public class SellerOrderDto {
 
     /** Whether this shop has already been paid out for this order. */
     private Boolean paidOut;
+
+    /** Trạng thái xử lý theo sạp: CONFIRMED/PRINTING/.../AWAITING_APPROVAL/COMPLETED. */
+    private String fulfillmentStatus;
+
 }

@@ -54,6 +54,7 @@ export interface Paged<T> {
   size: number
 }
 
+/** shopService — Gọi API sạp: thông tin, sản phẩm, đánh giá, theo dõi và sản phẩm nổi bật. */
 const shopService = {
   getShop: async (slug: string) => {
     const res = await apiClient.get(`/shops/${slug}`)

@@ -33,7 +33,8 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * ShopService - Public shop ("sạp") profiles, plus follow and shop-level reviews.
+ * ShopService — Hồ sơ sạp công khai + theo dõi sạp + đánh giá cấp sạp.
+ * Tính các cờ theo người xem (đang theo dõi, được đánh giá không) và phân bố sao.
  */
 @Service
 @RequiredArgsConstructor
@@ -47,13 +48,14 @@ public class ShopService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
+    /** Lấy hồ sơ sạp công khai theo slug (viewerId để tính cờ theo dõi / được đánh giá). */
     public ShopDto getShopBySlug(String slug, Long viewerId) {
         Shop shop = shopRepository.findBySlug(slug)
                 .orElseThrow(() -> new ResourceNotFoundException("Shop", "slug", slug));
         return toDto(shop, viewerId);
     }
 
-    /** The shop owned by the given user, or null if they don't have one. Includes balance. */
+    /** Sạp thuộc về một người dùng (null nếu chưa có). Kèm số dư ví. */
     public ShopDto getShopByOwner(Long userId) {
         return shopRepository.findByOwner_UserId(userId).map(shop -> {
             ShopDto dto = toDto(shop, null);
@@ -62,12 +64,13 @@ public class ShopService {
         }).orElse(null);
     }
 
+    /** Lấy entity Shop theo slug, ném lỗi nếu không tồn tại. */
     public Shop requireShopBySlug(String slug) {
         return shopRepository.findBySlug(slug)
                 .orElseThrow(() -> new ResourceNotFoundException("Shop", "slug", slug));
     }
 
-    /** Update the shop owned by the given user. Null fields are left unchanged. */
+    /** Cập nhật sạp của người dùng; field nào null thì giữ nguyên (tối đa 6 sản phẩm nổi bật). */
     @Transactional
     public ShopDto updateMyShop(Long userId, UpdateShopRequest request) {
         Shop shop = shopRepository.findByOwner_UserId(userId)
@@ -95,7 +98,7 @@ public class ShopService {
 
     // ── Follow ──────────────────────────────────────────────────────────
 
-    /** Follow or unfollow a shop; returns the new following state. */
+    /** Theo dõi/bỏ theo dõi một sạp (không cho theo dõi sạp của chính mình); trả trạng thái mới. */
     @Transactional
     public boolean toggleFollow(String slug, Long userId) {
         Shop shop = requireShopBySlug(slug);
@@ -119,6 +122,7 @@ public class ShopService {
 
     // ── Shop reviews ────────────────────────────────────────────────────
 
+    /** Tạo/sửa đánh giá sạp; chỉ cho phép người đã mua hàng và không phải chủ sạp; tính lại điểm sạp. */
     @Transactional
     public ShopReviewDto addOrUpdateReview(String slug, Long userId, CreateReviewRequest request) {
         Shop shop = requireShopBySlug(slug);
@@ -143,12 +147,14 @@ public class ShopService {
         return toReviewDto(review);
     }
 
+    /** Danh sách đánh giá của một sạp (phân trang). */
     public Page<ShopReviewDto> getShopReviews(String slug, int page, int size) {
         Shop shop = requireShopBySlug(slug);
         return shopReviewRepository.findReviewsByShop(shop.getShopId(), PageRequest.of(page, size))
                 .map(this::toReviewDto);
     }
 
+    /** Tính lại điểm trung bình + số lượng đánh giá của sạp rồi lưu. */
     private void recalcShopRating(Shop shop) {
         ShopRatingAggregate agg = shopReviewRepository.aggregateForShop(shop.getShopId());
         BigDecimal avg = (agg != null && agg.getAvg() != null)
@@ -161,6 +167,7 @@ public class ShopService {
 
     // ── Mapping ─────────────────────────────────────────────────────────
 
+    /** Chuyển ShopReview sang DTO (kèm cờ "đã mua hàng"). */
     private ShopReviewDto toReviewDto(ShopReview r) {
         User u = r.getUser();
         boolean verified = u != null
@@ -177,6 +184,7 @@ public class ShopService {
                 .build();
     }
 
+    /** Chuyển Shop sang DTO công khai; tính cờ theo dõi, được đánh giá và phân bố sao theo người xem. */
     private ShopDto toDto(Shop shop, Long viewerId) {
         User owner = shop.getOwner();
         int liveProductCount = (int) productRepository.countActiveByShop(shop.getShopId());
@@ -217,7 +225,7 @@ public class ShopService {
                 .build();
     }
 
-    /** Returns the featured products for a shop in pinned order. */
+    /** Danh sách sản phẩm nổi bật của sạp theo đúng thứ tự đã ghim. */
     public List<ProductDto> getFeaturedProducts(String slug) {
         Shop shop = requireShopBySlug(slug);
         List<Long> ids = shop.getFeaturedProductIds();

@@ -6,6 +6,7 @@ interface ProtectedRouteProps {
   children: JSX.Element
 }
 
+/** ProtectedRoute — Route guard: yêu cầu đăng nhập; chưa đăng nhập thì chuyển về trang login. */
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isAuthenticated } = useAuth()
 

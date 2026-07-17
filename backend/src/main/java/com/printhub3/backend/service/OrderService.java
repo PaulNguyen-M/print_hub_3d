@@ -23,6 +23,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * OrderService — Nghiệp vụ đơn hàng: tạo đơn từ giỏ (tính tiền ở server), dựng DTO
+ * đơn kèm timeline, danh sách/lịch sử đơn, cập nhật trạng thái & mã vận đơn.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -38,9 +42,7 @@ public class OrderService {
     private final PaymentRepository paymentRepository;
     private final PaymentDtoMapper paymentDtoMapper;
 
-    /**
-     * Create order from cart
-     */
+    /** Tạo đơn từ giỏ hàng: tính tiền ở server (tạm tính + ship + thuế 10%), tạo order-item và dọn giỏ. */
     public Order createOrderFromCart(Long userId, CreateOrderRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -106,9 +108,7 @@ public class OrderService {
         return savedOrder;
     }
 
-    /**
-     * Get order by ID with DTO
-     */
+    /** Dựng DTO chi tiết đơn theo id (kèm danh sách món, timeline trạng thái, thanh toán). */
     @Transactional(readOnly = true)
     public OrderDto getOrderDto(Long orderId) {
         Order order = orderRepository.findById(orderId)
@@ -145,9 +145,7 @@ public class OrderService {
                 .build();
     }
 
-    /**
-     * Overload: build OrderDto from Order entity (convenience for mapping)
-     */
+    /** Nạp chồng: dựng DTO từ entity Order (tiện khi đã có sẵn order). */
     @Transactional(readOnly = true)
     public OrderDto getOrderDto(Order order) {
         return getOrderDto(order.getOrderId());
@@ -156,15 +154,14 @@ public class OrderService {
     /**
      * Get user orders with pagination
      */
+    /** Danh sách đơn của một người dùng (phân trang). */
     @Transactional(readOnly = true)
     public Page<OrderDto> getUserOrders(Long userId, Pageable pageable) {
         return orderRepository.findOrdersByUserId(userId, pageable)
             .map(this::getOrderDto);
     }
 
-    /**
-     * Update order status
-     */
+    /** Cập nhật trạng thái đơn; tự đặt ngày giao dự kiến (PROCESSING) và ngày giao thật (DELIVERED). */
     public Order updateOrderStatus(Long orderId, String status) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
@@ -186,9 +183,7 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    /**
-     * Update tracking number
-     */
+    /** Cập nhật mã vận đơn (tracking number). */
     public Order updateTrackingNumber(Long orderId, String trackingNumber) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
@@ -196,9 +191,7 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    /**
-     * Get order history for user
-     */
+    /** Toàn bộ lịch sử đơn của người dùng (không phân trang). */
     @Transactional(readOnly = true)
     public List<OrderDto> getUserOrderHistory(Long userId) {
         return orderRepository.findOrdersByUserIdDesc(userId)
@@ -207,64 +200,48 @@ public class OrderService {
             .collect(Collectors.toList());
     }
 
-    /**
-     * Build order timeline based on status changes
-     */
+    /** Dựng dòng thời gian (timeline) của đơn dựa trên trạng thái hiện tại. */
     private List<OrderTimelineDto> buildOrderTimeline(Order order) {
         List<OrderTimelineDto> timeline = new ArrayList<>();
 
         timeline.add(OrderTimelineDto.builder()
                 .status("PENDING")
-                .title("Order Placed")
-                .description("Your order has been confirmed")
+                .title("Đơn hàng đã được đặt.")
+                .description("Đơn hàng của bạn đã được xác nhận.")
                 .timestamp(order.getCreatedAt())
                 .build());
 
         if (order.getOrderStatus().ordinal() >= Order.OrderStatus.PROCESSING.ordinal()) {
             timeline.add(OrderTimelineDto.builder()
                     .status("PROCESSING")
-                    .title("Order Processing")
-                    .description("Your order is being processed")
+                    .title("Xử lý đơn hàng.")
+                    .description("Đơn hàng của bạn đang được xử lý.")
                     .timestamp(order.getUpdatedAt())
                     .build());
         }
 
-        if (order.getOrderStatus().ordinal() >= Order.OrderStatus.PRINTING.ordinal()) {
+        // Tiến trình chi tiết (in ấn / hoàn thiện / giao hàng) giờ theo dõi RIÊNG cho từng sạp
+        // (order.orderStatus không còn đi qua PRINTING/FINISHING/SHIPPING/DELIVERED nữa —
+        // xem khối "Tiến trình theo sạp" ở OrderItemDto.fulfillmentStatus).
+        if (order.getOrderStatus() == Order.OrderStatus.CONFIRMED
+                || order.getOrderStatus() == Order.OrderStatus.COMPLETED) {
             timeline.add(OrderTimelineDto.builder()
-                    .status("PRINTING")
-                    .title("Printing in Progress")
-                    .description("Your 3D model is being printed")
+                    .status("CONFIRMED")
+                    .title("Đã xác nhận — Đang được hoàn thành.")
+                    .description("Người bán đang xử lý đơn hàng của bạn. Xem tiến độ theo từng cửa hàng bên dưới.")
                     .timestamp(order.getUpdatedAt())
                     .build());
         }
 
-        if (order.getOrderStatus().ordinal() >= Order.OrderStatus.FINISHING.ordinal()) {
+        if (order.getOrderStatus() == Order.OrderStatus.COMPLETED) {
             timeline.add(OrderTimelineDto.builder()
-                    .status("FINISHING")
-                    .title("Post-Processing")
-                    .description("Your print is being finished and prepared for shipping")
+                    .status("COMPLETED")
+                    .title("Hoàn thành.")
+                    .description("Đơn hàng của bạn đã được hoàn tất. Cảm ơn bạn đã mua sắm!")
                     .timestamp(order.getUpdatedAt())
                     .build());
         }
 
-        if (order.getOrderStatus().ordinal() >= Order.OrderStatus.SHIPPING.ordinal()) {
-            timeline.add(OrderTimelineDto.builder()
-                    .status("SHIPPING")
-                    .title("Shipped")
-                    .description("Your order is on its way. Tracking: " + order.getTrackingNumber())
-                    .timestamp(order.getUpdatedAt())
-                    .build());
-        }
-
-        if (order.getOrderStatus() == Order.OrderStatus.DELIVERED) {
-            timeline.add(OrderTimelineDto.builder()
-                    .status("DELIVERED")
-                    .title("Delivered")
-                    .description("Your order has been delivered")
-                    // deliveredAt có thể null với đơn cũ → fallback về updatedAt để tránh timestamp null
-                    .timestamp(order.getDeliveredAt() != null ? order.getDeliveredAt() : order.getUpdatedAt())
-                    .build());
-        }
 
         if (order.getOrderStatus() == Order.OrderStatus.CANCELLED) {
             timeline.add(OrderTimelineDto.builder()
@@ -278,9 +255,7 @@ public class OrderService {
         return timeline;
     }
 
-    /**
-     * Map OrderItem to DTO
-     */
+    /** Chuyển OrderItem sang DTO (kèm ảnh chính của sản phẩm). */
     private OrderItemDto mapOrderItemToDto(OrderItem item) {
         return OrderItemDto.builder()
                 .orderItemId(item.getOrderItemId())
@@ -294,9 +269,14 @@ public class OrderService {
                 .quantity(item.getQuantity())
                 .unitPrice(item.getUnitPrice())
                 .subtotal(item.getSubtotal())
+                .shopId(item.getProduct().getShop() != null ? item.getProduct().getShop().getShopId() : null)
+                .shopName(item.getProduct().getShop() != null ? item.getProduct().getShop().getName() : null)
+                .fulfillmentStatus(item.getFulfillmentStatus() != null ? item.getFulfillmentStatus().name() : "PENDING")
                 .build();
     }
 
+
+    /** Chuyển Payment sang DTO (ủy quyền cho PaymentDtoMapper). */
     private PaymentDto mapPaymentToDto(Payment payment) {
         return paymentDtoMapper.mapPaymentToDto(payment);
     }
@@ -314,6 +294,7 @@ public class OrderService {
     /**
      * Generate unique order number
      */
+    /** Sinh mã đơn duy nhất dạng ORD-<timestamp>-<số ngẫu nhiên>. */
     private String generateOrderNumber() {
         return "ORD-" + System.currentTimeMillis() + "-" + new Random().nextInt(10000);
     }

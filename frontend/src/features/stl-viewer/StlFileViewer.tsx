@@ -63,6 +63,10 @@ function StlMesh({ geometry, autoRotate }: { geometry: THREE.BufferGeometry; aut
   )
 }
 
+/**
+ * StlFileViewer — Xem trước 3D một file STL: parse (ASCII/binary), dựng mesh, tự canh camera
+ * và nút bật/tắt xoay 360°. Chỉ hỗ trợ định dạng .stl.
+ */
 export default function StlFileViewer({ file }: { file: File }) {
   const [geometry, setGeometry] = useState<THREE.BufferGeometry | null>(null)
   const [loading, setLoading] = useState(true)

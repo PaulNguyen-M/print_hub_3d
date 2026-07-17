@@ -14,6 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
+/**
+ * PrintingRequestController — Dịch vụ in 3D theo yêu cầu.
+ * Nhận file mô hình + cấu hình in (vật liệu, màu, infill, layer, số lượng) từ người dùng,
+ * lưu file và tạo yêu cầu in ở trạng thái chờ báo giá. Yêu cầu đăng nhập.
+ */
 @RestController
 @RequestMapping("/api/v1/printing-requests")
 @RequiredArgsConstructor
@@ -21,6 +26,7 @@ public class PrintingRequestController {
 
     private final PrintingRequestService printingRequestService;
 
+    /** Tạo yêu cầu in 3D từ file + cấu hình (multipart). POST /api/v1/printing-requests */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Map<String, Object>>> create(

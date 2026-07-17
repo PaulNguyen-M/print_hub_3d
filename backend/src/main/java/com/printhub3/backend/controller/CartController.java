@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 import com.printhub3.backend.security.service.UserDetailsImpl;
 
+/**
+ * CartController — API giỏ hàng của người dùng đang đăng nhập.
+ * Gồm: xem giỏ, thêm sản phẩm, xoá món, đổi số lượng và dọn sạch giỏ.
+ * Mọi endpoint đều yêu cầu đăng nhập (@PreAuthorize ở cấp lớp).
+ */
 @RestController
 @RequestMapping("/api/v1/cart")
 @RequiredArgsConstructor
@@ -22,9 +27,7 @@ public class CartController {
 
     private final CartService cartService;
 
-    /**
-     * Get user's cart
-     */
+    /** Lấy giỏ hàng của người dùng hiện tại. */
     @GetMapping
     public ResponseEntity<ApiResponse<CartDto>> getCart() {
         Long userId = getCurrentUserId();
@@ -32,9 +35,7 @@ public class CartController {
         return ResponseEntity.ok(ApiResponse.success(cart, "Cart retrieved successfully"));
     }
 
-    /**
-     * Add product to cart
-     */
+    /** Thêm một sản phẩm vào giỏ, trả về giỏ sau khi cập nhật. */
     @PostMapping("/add")
     public ResponseEntity<ApiResponse<CartDto>> addToCart(@RequestBody AddToCartRequest request) {
         Long userId = getCurrentUserId();
@@ -44,9 +45,7 @@ public class CartController {
             .body(ApiResponse.success(cart, "Item added to cart"));
     }
 
-    /**
-     * Remove item from cart
-     */
+    /** Xoá một món (theo productId) khỏi giỏ. */
     @DeleteMapping("/item/{productId}")
     public ResponseEntity<ApiResponse<CartDto>> removeFromCart(@PathVariable Long productId) {
         Long userId = getCurrentUserId();
@@ -55,9 +54,7 @@ public class CartController {
         return ResponseEntity.ok(ApiResponse.success(cart, "Item removed from cart"));
     }
 
-    /**
-     * Update cart item quantity
-     */
+    /** Cập nhật số lượng của một món trong giỏ. */
     @PutMapping("/item/{productId}/quantity")
     public ResponseEntity<ApiResponse<CartDto>> updateQuantity(
             @PathVariable Long productId,
@@ -68,9 +65,7 @@ public class CartController {
         return ResponseEntity.ok(ApiResponse.success(cart, "Item quantity updated"));
     }
 
-    /**
-     * Clear cart
-     */
+    /** Dọn sạch toàn bộ giỏ hàng. */
     @DeleteMapping("/clear")
     public ResponseEntity<ApiResponse<?>> clearCart() {
         Long userId = getCurrentUserId();
@@ -78,9 +73,7 @@ public class CartController {
         return ResponseEntity.ok(ApiResponse.success(null, "Cart cleared successfully"));
     }
 
-    /**
-     * Get current user ID from security context
-     */
+    /** Lấy id người dùng hiện tại từ SecurityContext (ném lỗi nếu chưa đăng nhập). */
     private Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {

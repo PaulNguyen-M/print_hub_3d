@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
+    /** Ánh xạ URL /uploads/** tới thư mục local 'uploads/'. */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String uploadPath = Paths.get("uploads").toAbsolutePath().toUri().toString();

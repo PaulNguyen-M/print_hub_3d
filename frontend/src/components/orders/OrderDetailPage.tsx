@@ -5,7 +5,9 @@ import { ArrowLeft } from 'lucide-react';
 import { useOrder } from '../../hooks/useOrder';
 import { OrderTimeline } from './OrderTimeline';
 import { useTranslation } from '../../i18n/useTranslation';
+import { Store } from 'lucide-react'
 
+/** OrderDetailPage — Chi tiết một đơn: thông tin, danh sách món, timeline trạng thái. */
 export const OrderDetailPage: React.FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const navigate = useNavigate();
@@ -51,6 +53,32 @@ export const OrderDetailPage: React.FC = () => {
     DELIVERED: 'bg-green-100 text-green-800',
     CANCELLED: 'bg-red-100 text-red-800',
   };
+
+    /** Nhãn hiển thị cho trạng thái xử lý theo sạp — dùng chung key i18n với trang seller/admin. */
+  const FF_LABEL: Record<string, string> = {
+    PENDING: t('ff.pending'),
+    CONFIRMED: t('ff.confirmed'),
+    PRINTING: t('ff.printing'),
+    FINISHING: t('ff.finishing'),
+    SHIPPING: t('ff.shipping'),
+    DELIVERED: t('ff.delivered'),
+    AWAITING_APPROVAL: t('ff.awaiting'),
+    COMPLETED: t('ff.completed'),
+  };
+
+  // Gom các món theo sạp để hiện tiến trình riêng cho từng sạp trong đơn
+  const itemsByShop = (currentOrder.items ?? []).reduce<Record<string, { shopName: string; fulfillmentStatus: string; items: typeof currentOrder.items }>>(
+    (acc, item) => {
+      const key = String(item.shopId ?? 'other');
+      if (!acc[key]) {
+        acc[key] = { shopName: item.shopName ?? t('order.otherItems'), fulfillmentStatus: item.fulfillmentStatus ?? 'PENDING', items: [] };
+      }
+      acc[key].items.push(item);
+      return acc;
+    },
+    {}
+  );
+
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -169,6 +197,26 @@ export const OrderDetailPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Tiến trình xử lý theo từng sạp */}
+      {Object.keys(itemsByShop).length > 0 && (
+        <div className="bg-white rounded-lg p-6 mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('order.shopProgress')}</h2>
+          <div className="space-y-3">
+            {Object.entries(itemsByShop).map(([shopId, group]) => (
+              <div key={shopId} className="flex items-center justify-between gap-3 rounded-lg border border-gray-100 px-4 py-3">
+                <div className="flex items-center gap-2 min-w-0">
+                  <Store size={16} className="shrink-0 text-gray-400" />
+                  <span className="truncate font-medium text-gray-900">{group.shopName}</span>
+                </div>
+                <span className="shrink-0 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                  {FF_LABEL[group.fulfillmentStatus] ?? group.fulfillmentStatus}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Order Items */}
       <div className="bg-white rounded-lg p-6 mb-8">

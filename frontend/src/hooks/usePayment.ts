@@ -13,10 +13,12 @@ export interface RefundResult {
   paymentStatus: string;
 }
 
+/** usePayment — Hook thanh toán: tạo phiên checkout và yêu cầu hoàn tiền. */
 export const usePayment = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  /** Tạo phiên thanh toán (checkout) cho một đơn, trả về URL/thông tin phiên. */
   const createCheckoutSession = async (
     orderId: number,
     successUrl: string,
@@ -43,6 +45,7 @@ export const usePayment = () => {
     }
   };
 
+  /** Yêu cầu hoàn tiền cho một khoản thanh toán. */
   const refundPayment = async (
     paymentId: number,
     amount: number,

@@ -8,6 +8,7 @@ interface LanguageState {
   toggleLang: () => void
 }
 
+/** languageStore — Ngôn ngữ hiện tại (vi/en), lưu bền qua localStorage. */
 const useLanguageStore = create<LanguageState>()(
   persist(
     (set) => ({

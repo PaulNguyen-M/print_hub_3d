@@ -1,7 +1,7 @@
 package com.printhub3.backend.exception;
 
 /**
- * Exception thrown when authentication fails
+ * AuthenticationException — Ném khi xác thực thất bại (sai email/mật khẩu, token hỏng...).
  */
 public class AuthenticationException extends RuntimeException {
 

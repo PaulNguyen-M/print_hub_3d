@@ -72,6 +72,11 @@ function ProductCard({ p, idx }: { p: ShopProduct; idx: number }) {
   )
 }
 
+/**
+ * ShopPage — Trang sạp công khai: banner + thông tin, tab Trang chủ (nổi bật/theo danh mục),
+ * tab Sản phẩm (tìm kiếm/sắp xếp/xem thêm) và tab Đánh giá (phân bố sao, lọc, viết đánh giá);
+ * kèm nút theo dõi & nhắn tin.
+ */
 export default function ShopPage() {
   const { slug } = useParams<{ slug: string }>()
   const { t, lang } = useTranslation()

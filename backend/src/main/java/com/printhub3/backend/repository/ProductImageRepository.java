@@ -9,14 +9,16 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * ProductImage Repository - Data access for ProductImage entity
+ * ProductImageRepository — Truy vấn ảnh sản phẩm.
  */
 @Repository
 public interface ProductImageRepository extends JpaRepository<ProductImage, Long> {
-    
+
+    /** Ảnh của một sản phẩm, sắp theo thứ tự hiển thị. */
     @Query("SELECT pi FROM ProductImage pi WHERE pi.product.productId = ?1 AND pi.deletedAt IS NULL ORDER BY pi.displayOrder ASC")
     List<ProductImage> findImagesByProductId(Long productId);
-    
+
+    /** Ảnh chính (primary) của một sản phẩm. */
     @Query("SELECT pi FROM ProductImage pi WHERE pi.product.productId = ?1 AND pi.isPrimary = true AND pi.deletedAt IS NULL")
     Optional<ProductImage> findPrimaryImageByProductId(Long productId);
 }

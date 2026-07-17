@@ -35,6 +35,10 @@ const VN_PROVINCES = [
   'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Khánh Hòa', 'Lâm Đồng',
 ]
 
+/**
+ * CheckoutPage — Trang thanh toán: nhập địa chỉ, chọn phương thức ship & thanh toán,
+ * tóm tắt đơn và tạo đơn; hiện bước QR cho MoMo/chuyển khoản.
+ */
 export const CheckoutPage = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()

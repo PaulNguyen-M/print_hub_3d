@@ -16,11 +16,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 /**
- * Authenticates STOMP connections from the JWT sent in the CONNECT frame's
- * Authorization header. Sets the session principal so that
- * {@code convertAndSendToUser(userId, ...)} routes correctly — the principal's
- * name is the user's id (string), while its principal object is the
- * {@link UserDetailsImpl} so message handlers can read the user id.
+ * StompAuthChannelInterceptor — Xác thực kết nối STOMP bằng JWT gửi trong header
+ * Authorization của khung CONNECT. Đặt principal cho phiên sao cho
+ * {@code convertAndSendToUser(userId, ...)} định tuyến đúng — tên principal là id
+ * người dùng (chuỗi), còn object principal là {@link UserDetailsImpl} để handler đọc id.
  */
 @Component
 @RequiredArgsConstructor
@@ -30,6 +29,7 @@ public class StompAuthChannelInterceptor implements ChannelInterceptor {
     private final JwtTokenProvider tokenProvider;
     private final UserDetailsService userDetailsService;
 
+    /** Với khung CONNECT: đọc & xác thực JWT rồi gắn principal (id người dùng) cho phiên. */
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor =

@@ -9,6 +9,7 @@ import { useTranslation } from '../../i18n/useTranslation'
 const formatPrice = (p: number) =>
   (p ?? 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
 
+/** OpenShopPage — Trang đăng ký mở sạp: nộp đơn (tên sạp + mô tả) và theo dõi trạng thái duyệt. */
 export default function OpenShopPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()

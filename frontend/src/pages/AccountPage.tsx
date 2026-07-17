@@ -45,8 +45,6 @@ const STATUS_MAP: Record<string, { color: string }> = {
 }
 
 const PLACEHOLDER = 'https://placehold.co/400x400/1e293b/64748b?text=3D'
-const formatPrice = (p: number) =>
-  (p ?? 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
 
 
 const NAV_ITEMS = [
@@ -60,6 +58,10 @@ const NAV_ITEMS = [
   { id: 'settings',  key: 'account.nav.settings',  icon: Settings },
 ]
 
+/**
+ * AccountPage — Trang tài khoản người dùng với các tab: hồ sơ, đơn hàng, yêu thích,
+ * tải xuống, yêu cầu in, địa chỉ, thông báo, cài đặt.
+ */
 export default function AccountPage() {
   const { t } = useTranslation()
   const [tab, setTab] = useState('profile')

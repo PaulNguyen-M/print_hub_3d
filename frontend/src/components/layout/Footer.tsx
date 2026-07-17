@@ -41,6 +41,7 @@ const footerGroups = [
   },
 ] as const
 
+/** Footer — Chân trang: các nhóm liên kết (chợ, dịch vụ, hỗ trợ...) và thông tin thương hiệu. */
 export default function Footer() {
   const { t, lang } = useTranslation()
 

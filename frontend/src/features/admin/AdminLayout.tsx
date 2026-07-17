@@ -13,6 +13,7 @@ const menuItems = [
   { key: 'admin.menu.stl', path: '/admin/stl-requests' }
 ]
 
+/** AdminLayout — Bố cục khu quản trị: header (tài khoản, đăng xuất) + menu trái + vùng nội dung. */
 export default function AdminLayout() {
   const { t } = useTranslation()
   const { user, clearSession } = useAuth()

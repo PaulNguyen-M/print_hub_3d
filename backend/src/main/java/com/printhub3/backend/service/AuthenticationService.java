@@ -27,8 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 /**
- * Authentication Service
- * Handles user authentication, registration, token refresh, and logout
+ * AuthenticationService — Xác thực người dùng: đăng nhập, đăng ký, làm mới token
+ * và đăng xuất (thu hồi refresh token).
  */
 @Slf4j
 @Service
@@ -53,9 +53,7 @@ public class AuthenticationService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /**
-     * User login - Authenticate and return JWT tokens
-     */
+    /** Đăng nhập: xác thực email/mật khẩu, cấp JWT + refresh token, cập nhật lần đăng nhập cuối. */
     public AuthTokenResponse login(LoginRequest request) {
         log.info("Attempting user login for email: {}", request.getEmail());
 
@@ -93,9 +91,7 @@ public class AuthenticationService {
         }
     }
 
-    /**
-     * User registration - Create new user account
-     */
+    /** Đăng ký: tạo tài khoản mới (mặc định vai trò BUYER) và cấp token. */
     public AuthTokenResponse register(RegisterRequest request) {
         log.info("Attempting user registration for email: {}", request.getEmail());
 
@@ -134,9 +130,7 @@ public class AuthenticationService {
         return buildAuthTokenResponse(accessToken, refreshTokenValue, savedUser);
     }
 
-    /**
-     * Refresh access token using refresh token
-     */
+    /** Làm mới access token bằng refresh token hợp lệ (kiểm tra tồn tại + chưa thu hồi). */
     public AuthTokenResponse refreshToken(String refreshToken) {
         log.info("Attempting to refresh access token");
 
@@ -176,9 +170,7 @@ public class AuthenticationService {
         }
     }
 
-    /**
-     * User logout - Revoke all refresh tokens
-     */
+    /** Đăng xuất: thu hồi tất cả refresh token của người dùng. */
     public void logout(String email) {
         log.info("User logout initiated for email: {}", email);
 
@@ -195,17 +187,13 @@ public class AuthenticationService {
         log.info("User successfully logged out: {}", email);
     }
 
-    /**
-     * Logout from all devices - Revoke all refresh tokens
-     */
+    /** Đăng xuất khỏi mọi thiết bị (hiện tương đương thu hồi toàn bộ refresh token). */
     public void logoutFromAllDevices(String email) {
         log.info("Logout from all devices initiated for email: {}", email);
         logout(email);
     }
 
-    /**
-     * Save refresh token in database
-     */
+    /** Lưu refresh token vào DB (hạn 7 ngày). */
     private void saveRefreshToken(User user, String refreshToken) {
         try {
             // Hash the refresh token before saving (in production, you should hash this)
@@ -223,9 +211,7 @@ public class AuthenticationService {
         }
     }
 
-    /**
-     * Build AuthTokenResponse DTO
-     */
+    /** Dựng DTO phản hồi token (access + refresh + thông tin người dùng). */
     private AuthTokenResponse buildAuthTokenResponse(String accessToken, String refreshToken, User user) {
         long expiresIn = jwtTokenProvider.getTokenTtl(accessToken);
 

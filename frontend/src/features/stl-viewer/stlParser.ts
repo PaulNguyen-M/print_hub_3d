@@ -55,6 +55,7 @@ function parseAsciiStl(data: string): THREE.BufferGeometry {
 const hasData = (g: THREE.BufferGeometry) => (g.getAttribute('position')?.count ?? 0) > 0;
 
 /** Decide ASCII vs binary and parse; tries both and uses whichever yields data. */
+/** Tự nhận diện ASCII hay binary rồi parse STL thành BufferGeometry (thử cả hai để chắc chắn). */
 export function parseStl(buffer: ArrayBuffer): THREE.BufferGeometry {
   if (buffer.byteLength >= 84) {
     const dv = new DataView(buffer);

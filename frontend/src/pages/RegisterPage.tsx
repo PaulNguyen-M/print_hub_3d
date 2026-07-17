@@ -39,6 +39,7 @@ interface RegisterResponse {
   }
 }
 
+/** RegisterPage — Trang đăng ký tài khoản mới (mặc định vai trò người mua). */
 export default function RegisterPage() {
   const navigate = useNavigate()
   const setSession = useAuthStore(s => s.setSession)

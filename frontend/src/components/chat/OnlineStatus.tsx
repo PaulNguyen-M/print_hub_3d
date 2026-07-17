@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useChat } from '../../hooks/useChat';
 
+/** OnlineStatus — Danh sách người dùng đang online (dùng để thử tính năng presence). */
 export const OnlineStatus: React.FC = () => {
   const { connect, disconnect, onlineUsers } = useChat();
 

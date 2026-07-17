@@ -2,7 +2,8 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 
-// StrictMode removed: causes WebGL Context Lost in dev due to double-mounting R3F Canvas
+// Điểm khởi động ứng dụng: mount <App /> vào #root.
+// Bỏ StrictMode: gây "WebGL Context Lost" ở dev do R3F Canvas bị mount 2 lần.
 createRoot(document.getElementById('root')!).render(
   <App />
 )

@@ -29,9 +29,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * SellerService - Handles the "open a shop" application flow: buyers apply,
- * admins approve/reject. On approval a {@link Shop} is created and the applicant
- * is upgraded to the SELLER role.
+ * SellerService — Xử lý luồng "mở sạp": người mua nộp đơn, admin duyệt/từ chối.
+ * Khi duyệt sẽ tạo một {@link Shop} và nâng vai trò người nộp lên SELLER.
  */
 @Service
 @RequiredArgsConstructor
@@ -48,9 +47,7 @@ public class SellerService {
 
     // ── Buyer-facing ────────────────────────────────────────────────────
 
-    /**
-     * Submit an application to open a shop.
-     */
+    /** Nộp đơn xin mở sạp (chặn nếu đã có sạp hoặc đang có đơn chờ duyệt); báo cho admin. */
     public SellerApplicationDto applyForShop(Long userId, SellerApplicationRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
@@ -86,13 +83,14 @@ public class SellerService {
         return toDto(application);
     }
 
+    /** Tất cả đơn mở sạp của người dùng, mới nhất trước. */
     @Transactional(readOnly = true)
     public List<SellerApplicationDto> getMyApplications(Long userId) {
         return applicationRepository.findByApplicant_UserIdOrderByCreatedAtDesc(userId)
                 .stream().map(this::toDto).toList();
     }
 
-    /** The most recent application for the user, or null if none. */
+    /** Đơn gần nhất của người dùng, hoặc null nếu chưa có. */
     @Transactional(readOnly = true)
     public SellerApplicationDto getMyLatestApplication(Long userId) {
         return applicationRepository.findByApplicant_UserIdOrderByCreatedAtDesc(userId)
@@ -101,6 +99,7 @@ public class SellerService {
 
     // ── Admin-facing ────────────────────────────────────────────────────
 
+    /** (Admin) Danh sách đơn mở sạp, lọc theo trạng thái nếu có (phân trang). */
     @Transactional(readOnly = true)
     public Page<SellerApplicationDto> listApplications(ApplicationStatus status, Pageable pageable) {
         Page<SellerApplication> page = (status == null)
@@ -109,9 +108,7 @@ public class SellerService {
         return page.map(this::toDto);
     }
 
-    /**
-     * Approve an application: create the shop and upgrade the applicant to SELLER.
-     */
+    /** (Admin) Duyệt đơn: tạo sạp, nâng người nộp lên vai trò SELLER và báo cho họ. */
     public SellerApplicationDto approveApplication(Long applicationId, Long adminId) {
         SellerApplication application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("SellerApplication", "id", applicationId));
@@ -162,9 +159,7 @@ public class SellerService {
         return toDto(application);
     }
 
-    /**
-     * Reject an application with a reason.
-     */
+    /** (Admin) Từ chối đơn kèm lý do và báo cho người nộp. */
     public SellerApplicationDto rejectApplication(Long applicationId, Long adminId, String reason) {
         SellerApplication application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("SellerApplication", "id", applicationId));
@@ -190,10 +185,12 @@ public class SellerService {
 
     // ── Helpers ─────────────────────────────────────────────────────────
 
+    /** Lấy entity admin theo id (null nếu không có). */
     private User resolveAdmin(Long adminId) {
         return adminId == null ? null : userRepository.findById(adminId).orElse(null);
     }
 
+    /** Gửi một thông báo hệ thống cho một người dùng. */
     private void notify(User user, String title, String message, Long relatedId) {
         notificationRepository.save(Notification.builder()
                 .user(user)
@@ -206,7 +203,7 @@ public class SellerService {
                 .build());
     }
 
-    /** Notify every active admin (e.g. a new application that needs review). */
+    /** Gửi thông báo cho tất cả admin (vd có đơn mới cần duyệt). */
     private void notifyAdmins(String title, String message, String relatedType, Long relatedId) {
         userRepository.findUsersByRole("ADMIN", org.springframework.data.domain.Pageable.unpaged())
                 .forEach(admin -> notificationRepository.save(Notification.builder()
@@ -220,6 +217,7 @@ public class SellerService {
                         .build()));
     }
 
+    /** Tạo slug duy nhất cho sạp (thêm hậu tố -1, -2... nếu trùng). */
     private String uniqueSlug(String base) {
         String slug = base;
         int suffix = 1;
@@ -229,6 +227,7 @@ public class SellerService {
         return slug;
     }
 
+    /** Chuyển entity SellerApplication sang DTO trả về frontend. */
     private SellerApplicationDto toDto(SellerApplication a) {
         Shop shop = a.getShop();
         return SellerApplicationDto.builder()

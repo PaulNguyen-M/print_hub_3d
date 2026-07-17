@@ -1,7 +1,7 @@
 package com.printhub3.backend.exception;
 
 /**
- * Base exception for payment-related errors
+ * PaymentException — Ngoại lệ gốc cho các lỗi liên quan đến thanh toán (kèm mã lỗi).
  */
 public class PaymentException extends RuntimeException {
     private String errorCode;

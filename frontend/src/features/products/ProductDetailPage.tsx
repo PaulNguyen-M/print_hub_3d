@@ -56,6 +56,7 @@ async function fetchRelated(): Promise<RelatedProduct[]> {
   return res.data.data?.content ?? []
 }
 
+/** ProductDetailPage — Chi tiết sản phẩm: ảnh, mô tả, giá, xem STL, đánh giá và thêm giỏ / mua. */
 export default function ProductDetailPage() {
   const { productId } = useParams<{ productId: string }>()
   const navigate = useNavigate()

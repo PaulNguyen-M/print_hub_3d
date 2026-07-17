@@ -8,17 +8,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
- * Notification Repository - Data access for Notification entity
+ * NotificationRepository — Truy vấn thông báo trong ứng dụng.
  */
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
-    
+
+    /** Thông báo của người dùng, mới nhất trước (phân trang). */
     @Query("SELECT n FROM Notification n WHERE n.user.userId = ?1 AND n.deletedAt IS NULL ORDER BY n.createdAt DESC")
     Page<Notification> findNotificationsByUserId(Long userId, Pageable pageable);
-    
+
+    /** Đếm số thông báo chưa đọc của người dùng. */
     @Query("SELECT COUNT(n) FROM Notification n WHERE n.user.userId = ?1 AND n.isRead = false AND n.deletedAt IS NULL")
     long countUnreadNotifications(Long userId);
-    
+
+    /** Thông báo của người dùng theo loại (phân trang). */
     @Query("SELECT n FROM Notification n WHERE n.user.userId = ?1 AND n.notificationType = ?2 AND n.deletedAt IS NULL ORDER BY n.createdAt DESC")
     Page<Notification> findNotificationsByType(Long userId, Notification.NotificationType type, Pageable pageable);
 }

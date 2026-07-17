@@ -11,6 +11,7 @@ interface CartItemComponentProps {
 const formatPrice = (p: number) =>
   (p ?? 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 
+/** CartItemComponent — Một dòng sản phẩm trong giỏ: ảnh, tên, tăng/giảm số lượng, xóa. */
 export const CartItemComponent: React.FC<CartItemComponentProps> = ({
   item,
   onRemove,

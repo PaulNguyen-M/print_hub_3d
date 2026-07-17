@@ -24,8 +24,8 @@ import com.printhub3.backend.security.jwt.JwtAuthenticationFilter;
 import java.util.Arrays;
 
 /**
- * Security Configuration for the application
- * Handles JWT authentication, CORS, and authorization rules
+ * WebSecurityConfig — Cấu hình bảo mật: xác thực JWT, CORS và luật phân quyền theo URL.
+ * Định nghĩa route công khai/yêu cầu đăng nhập/chỉ ADMIN, và gắn JwtAuthenticationFilter.
  */
 @Configuration
 @EnableWebSecurity
@@ -50,33 +50,27 @@ public class WebSecurityConfig {
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
-    /**
-     * Password Encoder Bean - Using BCrypt for password hashing
-     */
+    /** Bean mã hóa mật khẩu — dùng BCrypt (độ mạnh 12). */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
 
-    /**
-     * Authentication Manager Bean
-     */
+    /** Bean AuthenticationManager (dùng khi đăng nhập). */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    /**
-     * JWT Authentication Filter Bean
-     */
+    /** Bean bộ lọc xác thực JWT (đọc token từ mỗi request). */
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
     }
 
     /**
-     * Security Filter Chain Configuration
-     * Defines URL patterns, authentication, and authorization rules
+     * Chuỗi filter bảo mật: khai báo mẫu URL công khai / cần đăng nhập / theo vai trò,
+     * dùng session stateless và chèn JwtAuthenticationFilter trước filter mặc định.
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -143,9 +137,7 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    /**
-     * CORS Configuration Source
-     */
+    /** Nguồn cấu hình CORS (origin/method/header cho phép, nạp từ application.properties). */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

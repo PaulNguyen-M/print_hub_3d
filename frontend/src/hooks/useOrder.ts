@@ -1,5 +1,6 @@
 import { useOrderStore } from '../store/orderStore';
 
+/** useOrder — Hook tiện truy cập orderStore (đơn hàng phía người mua). */
 export const useOrder = () => {
   const {
     orders,

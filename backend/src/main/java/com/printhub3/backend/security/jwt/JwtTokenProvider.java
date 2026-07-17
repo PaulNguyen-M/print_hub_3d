@@ -16,8 +16,8 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 /**
- * JWT (JSON Web Token) Service
- * Handles generation, validation, and token extraction for JWT authentication
+ * JwtTokenProvider — Dịch vụ JWT: sinh token (access/refresh), kiểm tra hợp lệ,
+ * và trích xuất thông tin (username, hạn dùng) từ token.
  */
 @Slf4j
 @Component
@@ -32,23 +32,17 @@ public class JwtTokenProvider {
     @Value("${jwt.refresh-expiration:604800000}")
     private long jwtRefreshExpirationMs;
 
-    /**
-     * Get signing key from secret
-     */
+    /** Tạo khóa ký từ chuỗi bí mật (jwt.secret). */
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 
-    /**
-     * Generate JWT token from Authentication
-     */
+    /** Sinh access token từ Authentication (lấy username). */
     public String generateAccessToken(Authentication authentication) {
         return generateAccessToken(authentication.getName());
     }
 
-    /**
-     * Generate JWT access token for username
-     */
+    /** Sinh access token cho một username (hạn theo jwt.expiration). */
     public String generateAccessToken(String username) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
@@ -61,9 +55,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    /**
-     * Generate JWT refresh token for username
-     */
+    /** Sinh refresh token cho một username (hạn dài hơn access token). */
     public String generateRefreshToken(String username) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtRefreshExpirationMs);
@@ -76,9 +68,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    /**
-     * Extract username from JWT token
-     */
+    /** Lấy username (subject) từ token. */
     public String getUserNameFromJwt(String token) {
         Claims claims = Jwts.parser()
             .verifyWith(getSigningKey())
@@ -89,9 +79,7 @@ public class JwtTokenProvider {
         return claims.getSubject();
     }
 
-    /**
-     * Get all claims from JWT token
-     */
+    /** Lấy toàn bộ claims từ token. */
     public Claims getClaims(String token) {
         return Jwts.parser()
             .verifyWith(getSigningKey())
@@ -100,16 +88,12 @@ public class JwtTokenProvider {
             .getPayload();
     }
 
-    /**
-     * Get expiration date from JWT token
-     */
+    /** Lấy ngày hết hạn của token. */
     public Date getExpirationDate(String token) {
         return getClaims(token).getExpiration();
     }
 
-    /**
-     * Check if JWT token is expired
-     */
+    /** Token đã hết hạn chưa. */
     public boolean isTokenExpired(String token) {
         try {
             Date expiration = getExpirationDate(token);
@@ -119,10 +103,7 @@ public class JwtTokenProvider {
         }
     }
 
-    /**
-     * Validate JWT token
-     * Returns true if token is valid, false otherwise
-     */
+    /** Kiểm tra token hợp lệ (chữ ký + chưa hết hạn); trả false nếu lỗi/không hợp lệ. */
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
@@ -150,10 +131,7 @@ public class JwtTokenProvider {
         return false;
     }
 
-    /**
-     * Extract token from Bearer string
-     * Expects format: "Bearer <token>"
-     */
+    /** Tách token khỏi chuỗi "Bearer &lt;token&gt;". */
     public String extractTokenFromBearer(String bearerToken) {
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
@@ -161,9 +139,7 @@ public class JwtTokenProvider {
         return bearerToken;
     }
 
-    /**
-     * Get token TTL (Time To Live) in seconds
-     */
+    /** Thời gian còn lại của token (TTL) tính bằng giây. */
     public long getTokenTtl(String token) {
         try {
             Date expirationDate = getExpirationDate(token);

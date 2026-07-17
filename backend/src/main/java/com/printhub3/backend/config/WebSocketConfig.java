@@ -11,8 +11,8 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 /**
- * WebSocket Configuration for real-time messaging
- * Handles chat messages and real-time notifications
+ * WebSocketConfig — Cấu hình WebSocket/STOMP cho realtime (chat & thông báo).
+ * Khai báo message broker, endpoint /ws và gắn interceptor xác thực JWT.
  */
 @Configuration
 @EnableWebSocketMessageBroker
@@ -24,15 +24,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         this.stompAuthChannelInterceptor = stompAuthChannelInterceptor;
     }
 
+    /** Gắn interceptor xác thực JWT vào kênh tin nhắn đến từ client. */
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(stompAuthChannelInterceptor);
     }
 
     /**
-     * Configure the message broker
-     * - Enables simple message broker with /topic for broadcasting
-     * - Allows /app for incoming messages
+     * Cấu hình message broker:
+     * - Bật broker đơn giản với /topic và /queue để phát tin.
+     * - Prefix /app cho tin nhắn gửi lên từ client.
      */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -45,9 +46,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     }
 
     /**
-     * Register WebSocket STOMP endpoint
-     * - Endpoint: /ws for WebSocket connections
-     * - Allowed origins for cross-origin connections
+     * Đăng ký endpoint STOMP /ws (kèm SockJS) và các origin được phép kết nối.
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -60,6 +59,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .withSockJS();
     }
 
+    /** Bộ lập lịch cho heartbeat của WebSocket. */
     @Bean
     public TaskScheduler taskScheduler() {
 

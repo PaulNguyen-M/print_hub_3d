@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * UserController — Hồ sơ người dùng và thống kê của creator.
+ * Gồm: xem/cập nhật hồ sơ cá nhân và lấy số liệu tổng quan cho người bán (creator).
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/users")
@@ -23,6 +27,7 @@ public class UserController {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
+    /** Thống kê tổng quan cho creator (doanh thu, đơn, lượt tải, số sản phẩm). */
     @GetMapping("/creator/stats")
     public ResponseEntity<?> getCreatorStats(Authentication auth) {
         User user = userRepository.findByEmail(auth.getName()).orElse(null);
@@ -39,6 +44,7 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success(stats, "Creator stats retrieved"));
     }
 
+    /** Lấy hồ sơ của người dùng đang đăng nhập. GET /api/v1/users/me */
     @GetMapping("/me")
     public ResponseEntity<?> getProfile(Authentication auth) {
         return userRepository.findByEmail(auth.getName())
@@ -46,6 +52,7 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /** Cập nhật hồ sơ (tên, số điện thoại, ảnh đại diện). PUT /api/v1/users/profile */
     @PutMapping("/profile")
     public ResponseEntity<?> updateProfile(
             @RequestBody Map<String, String> body, Authentication auth) {
@@ -58,6 +65,7 @@ public class UserController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
+    /** Chuyển entity User sang map hồ sơ công khai trả về cho frontend. */
     private Map<String, Object> toDto(User u) {
         Map<String, Object> dto = new java.util.HashMap<>();
         dto.put("id", u.getUserId());

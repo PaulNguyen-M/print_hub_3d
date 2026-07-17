@@ -24,6 +24,7 @@ interface LoginResponse {
   }
 }
 
+/** LoginPage — Trang đăng nhập (email + mật khẩu), lưu phiên rồi điều hướng về trang trước. */
 export default function LoginPage() {
   const navigate = useNavigate()
   const setSession = useAuthStore(s => s.setSession)

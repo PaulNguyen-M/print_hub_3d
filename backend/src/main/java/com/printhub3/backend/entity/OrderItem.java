@@ -53,6 +53,12 @@ public class OrderItem {
     @Column(name = "seller_confirmed_at")
     private LocalDateTime sellerConfirmedAt;
 
+    /** Trạng thái xử lý của SẠP cho món này (các món cùng sạp trong 1 đơn chia sẻ chung) */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "fulfillment_status", length = 30)
+    @Builder.Default
+    private FulfillmentStatus fulfillmentStatus = FulfillmentStatus.PENDING;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -63,4 +69,22 @@ public class OrderItem {
     
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    /**
+     * Vòng đời xử lý theo từng sạp trong một đơn:
+     * PENDING (chờ admin) → CONFIRMED (admin xác nhận) → PRINTING → FINISHING →
+     * SHIPPING → DELIVERED (seller tự chạy) → AWAITING_APPROVAL (seller xin hoàn tất)
+     * → COMPLETED (admin duyệt & đã chi tiền cho sạp).
+     */
+    public enum FulfillmentStatus {
+        PENDING,
+        CONFIRMED,
+        PRINTING,
+        FINISHING,
+        SHIPPING,
+        DELIVERED,
+        AWAITING_APPROVAL,
+        COMPLETED
+    }
+
 }
