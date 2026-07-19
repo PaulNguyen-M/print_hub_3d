@@ -610,6 +610,7 @@ export const translations: Dict = {
   'ps.submitError':   { vi: 'Không gửi được yêu cầu, vui lòng thử lại.', en: 'Could not submit the request, please try again.' },
   'ps.errStlOnly':  { vi: 'Chỉ chấp nhận file .STL', en: 'Only .STL files are accepted' },
   'ps.errTooBig':   { vi: 'File vượt quá 50MB', en: 'File exceeds 50MB' },
+  'ps.weightFallbackNote': { vi: 'Không đọc được hình học file — khối lượng ước tính theo dung lượng file, có thể kém chính xác.', en: 'Could not read file geometry — weight estimated from file size, may be less accurate.' },
 
   // ── Hero trust badges ──
   'hero.badge1':       { vi: 'PLA / PETG / Resin', en: 'PLA / PETG / Resin' },

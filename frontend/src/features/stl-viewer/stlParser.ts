@@ -81,3 +81,29 @@ export function parseStl(buffer: ArrayBuffer): THREE.BufferGeometry {
 
   return parseAsciiStl(new TextDecoder('utf-8').decode(buffer));
 }
+/**
+ * Tính thể tích (mm³) của mesh từ hình học đã parse, dùng công thức tổng thể tích các
+ * tứ diện ký hiệu (divergence theorem) — cho kết quả đúng với mesh STL khép kín (watertight),
+ * bất kể mesh nằm ở vị trí nào trong không gian. Trả về 0 nếu mesh rỗng/không hợp lệ.
+ */
+export function computeMeshVolumeMm3(geometry: THREE.BufferGeometry): number {
+  const pos = geometry.getAttribute('position');
+  if (!pos || pos.count < 3) return 0;
+
+  let volume = 0;
+  const p1 = new THREE.Vector3();
+  const p2 = new THREE.Vector3();
+  const p3 = new THREE.Vector3();
+  const cross = new THREE.Vector3();
+
+  for (let i = 0; i < pos.count; i += 3) {
+    p1.fromBufferAttribute(pos, i);
+    p2.fromBufferAttribute(pos, i + 1);
+    p3.fromBufferAttribute(pos, i + 2);
+    cross.crossVectors(p2, p3);
+    volume += p1.dot(cross) / 6;
+  }
+
+  return Math.abs(volume);
+}
+

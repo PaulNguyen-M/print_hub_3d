@@ -479,7 +479,42 @@ CREATE TABLE audit_logs (
 );
 
 -- ============================================================================
--- 15. INDEXES — AUTHENTICATION & USERS
+-- 15. SELLER WALLET — WITHDRAWALS
+-- ============================================================================
+
+-- Seller requests to withdraw earned balance from their shop wallet.
+-- Amount is held (deducted) immediately on request; admin approves or rejects.
+CREATE TABLE withdrawals (
+    withdrawal_id       BIGSERIAL PRIMARY KEY,
+    shop_id             BIGINT        NOT NULL REFERENCES shops(shop_id)  ON DELETE CASCADE,
+    amount              DECIMAL(14,2) NOT NULL CHECK (amount > 0),
+    bank_name           VARCHAR(120),
+    bank_account_number VARCHAR(60),
+    bank_account_name   VARCHAR(150),
+    note                TEXT,
+    status              VARCHAR(20)   NOT NULL DEFAULT 'PENDING',
+    rejection_reason    TEXT,
+    processed_by        BIGINT REFERENCES users(user_id) ON DELETE SET NULL,
+    processed_at        TIMESTAMP,
+    created_at          TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CHECK (status IN ('PENDING', 'PAID', 'REJECTED'))
+);
+
+-- ============================================================================
+-- 16. WISHLIST
+-- ============================================================================
+
+-- Products saved to a user's wishlist (one record per product-user pair).
+CREATE TABLE wishlist (
+    wishlist_id BIGSERIAL PRIMARY KEY,
+    product_id  BIGINT NOT NULL REFERENCES products(product_id) ON DELETE CASCADE,
+    user_id     BIGINT NOT NULL REFERENCES users(user_id)       ON DELETE CASCADE,
+    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (product_id, user_id)
+);
+
+-- ============================================================================
+-- 17. INDEXES — AUTHENTICATION & USERS
 -- ============================================================================
 
 CREATE INDEX idx_users_email      ON users(email)     WHERE deleted_at IS NULL;
@@ -609,6 +644,17 @@ CREATE INDEX idx_audit_logs_entity_type_id ON audit_logs(entity_type, entity_id)
 CREATE INDEX idx_audit_logs_created_at     ON audit_logs(created_at);
 
 -- ============================================================================
+-- 23. INDEXES — WITHDRAWALS & WISHLIST
+-- ============================================================================
+
+CREATE INDEX idx_withdrawals_shop_id   ON withdrawals(shop_id);
+CREATE INDEX idx_withdrawals_status    ON withdrawals(status);
+CREATE INDEX idx_withdrawals_created_at ON withdrawals(created_at);
+
+CREATE INDEX idx_wishlist_user_id    ON wishlist(user_id);
+CREATE INDEX idx_wishlist_product_id ON wishlist(product_id);
+
+-- ============================================================================
 -- 23. AUTO-UPDATE updated_at TRIGGER FUNCTION
 -- ============================================================================
 
@@ -723,6 +769,8 @@ COMMENT ON TABLE messages             IS 'Messages inside a chat room';
 COMMENT ON TABLE chat_messages        IS 'WebSocket/STOMP direct messages (history store)';
 COMMENT ON TABLE notifications        IS 'In-app notifications (order, payment, printing updates)';
 COMMENT ON TABLE audit_logs           IS 'System-wide change log (CREATE/UPDATE/DELETE as JSONB)';
+COMMENT ON TABLE withdrawals          IS 'Seller wallet withdrawal requests; amount held on create, refunded on reject';
+COMMENT ON TABLE wishlist             IS 'Products saved to user wishlists (one row per product-user pair)';
 
 -- ============================================================================
 -- VERIFICATION (uncomment to check after running)
@@ -733,5 +781,5 @@ COMMENT ON TABLE audit_logs           IS 'System-wide change log (CREATE/UPDATE/
 -- SELECT * FROM roles;
 
 -- ============================================================================
--- END OF SCHEMA — 27 tables, 9 enums, 70+ indexes
+-- END OF SCHEMA — 29 tables, 9 enums, 75+ indexes
 -- ============================================================================

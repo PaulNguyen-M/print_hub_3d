@@ -9,6 +9,7 @@ import apiClient from '../api/axios'
 import { useTranslation } from '../i18n/useTranslation'
 import StlFileViewer from '../features/stl-viewer/StlFileViewer'
 import { useToast } from '../hooks/useToast'
+import { parseStl, computeMeshVolumeMm3 } from '../features/stl-viewer/stlParser'
 
 // react-dropzone may not be installed — provide a simple fallback
 const useSimpleDropzone = (onDrop: (files: File[]) => void) => {
@@ -33,12 +34,13 @@ const useSimpleDropzone = (onDrop: (files: File[]) => void) => {
 const MAX_FILE_MB = 50
 
 const MATERIALS = [
-  { id: 'PLA',   name: 'PLA',   descKey: 'mat.pla.desc',   price: 150, icon: '🌿', propKeys: ['mat.prop.easyPrint', 'mat.prop.richColor', 'mat.prop.cheap'] },
-  { id: 'PETG',  name: 'PETG',  descKey: 'mat.petg.desc',  price: 200, icon: '💎', propKeys: ['mat.prop.durable', 'mat.prop.heat', 'mat.prop.clear'] },
-  { id: 'ABS',   name: 'ABS',   descKey: 'mat.abs.desc',   price: 180, icon: '⚙️', propKeys: ['mat.prop.hard', 'mat.prop.impact', 'mat.prop.technical'] },
-  { id: 'TPU',   name: 'TPU',   descKey: 'mat.tpu.desc',   price: 250, icon: '🔋', propKeys: ['mat.prop.flexible', 'mat.prop.wear', 'mat.prop.special'] },
-  { id: 'RESIN', name: 'Resin', descKey: 'mat.resin.desc', price: 350, icon: '✨', propKeys: ['mat.prop.detail', 'mat.prop.smooth', 'mat.prop.sla'] },
+  { id: 'PLA',   name: 'PLA',   descKey: 'mat.pla.desc',   price: 320, density: 1.24, icon: '🌿', propKeys: ['mat.prop.easyPrint', 'mat.prop.richColor', 'mat.prop.cheap'] },
+  { id: 'PETG',  name: 'PETG',  descKey: 'mat.petg.desc',  price: 360, density: 1.27, icon: '💎', propKeys: ['mat.prop.durable', 'mat.prop.heat', 'mat.prop.clear'] },
+  { id: 'ABS',   name: 'ABS',   descKey: 'mat.abs.desc',   price: 380, density: 1.04, icon: '⚙️', propKeys: ['mat.prop.hard', 'mat.prop.impact', 'mat.prop.technical'] },
+  { id: 'TPU',   name: 'TPU',   descKey: 'mat.tpu.desc',   price: 650, density: 1.21, icon: '🔋', propKeys: ['mat.prop.flexible', 'mat.prop.wear', 'mat.prop.special'] },
+  { id: 'RESIN', name: 'Resin', descKey: 'mat.resin.desc', price: 700, density: 1.10, icon: '✨', propKeys: ['mat.prop.detail', 'mat.prop.smooth', 'mat.prop.sla'] },
 ]
+
 
 const COLORS = [
   { id: 'white',  hex: '#F8FAFC', nameKey: 'color.white' },
@@ -89,6 +91,8 @@ export default function PrintingServicePage() {
   const [qty, setQty] = useState(1)
   const [notes, setNotes] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [meshVolumeCm3, setMeshVolumeCm3] = useState<number | null>(null)
+  const [parsingFile, setParsingFile] = useState(false)
   const navigate = useNavigate()
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -103,7 +107,20 @@ export default function PrintingServicePage() {
       return
     }
     setFile(f)
+    setMeshVolumeCm3(null)
+    setParsingFile(true)
+    f.arrayBuffer()
+      .then((buffer) => {
+        const geometry = parseStl(buffer)
+        const volumeMm3 = computeMeshVolumeMm3(geometry)
+        // volumeMm3 > 0 → mesh khép kín hợp lệ, dùng thể tích thật.
+        // = 0 (mesh hở/lỗi) → giữ null, tự động rơi về công thức dự phòng theo dung lượng file.
+        if (volumeMm3 > 0) setMeshVolumeCm3(volumeMm3 / 1000) // mm³ → cm³
+      })
+      .catch(() => { /* parse lỗi → giữ null, dùng dự phòng */ })
+      .finally(() => setParsingFile(false))
   }, [showToast, t])
+
 
 
   const dropzone = useSimpleDropzone(onDrop)
@@ -111,9 +128,16 @@ export default function PrintingServicePage() {
   const selectedMat = MATERIALS.find(m => m.id === material)!
   const selectedColor = COLORS.find(c => c.id === color)!
 
-  // Simple estimate: weight ≈ file size / 10000 grams, price = weight * material price
-  const estimatedWeight = file ? Math.max(20, Math.round(file.size / 8000)) : 0
-  const materialCost = estimatedWeight * (selectedMat?.price ?? 150) / 1000
+  // Khối lượng ước tính = thể tích thật (từ mesh STL) × hệ số infill × khối lượng riêng vật liệu.
+  // Hệ số infill: 20% luôn đặc (vỏ/đáy/nắp) + phần còn lại theo % infill người dùng chọn.
+  // Nếu chưa tính được thể tích (mesh hở/lỗi) → dùng công thức dự phòng cũ theo dung lượng file.
+  const infillFactor = 0.2 + 0.8 * (infill / 100)
+  const estimatedWeight = !file ? 0
+    : meshVolumeCm3 != null
+      ? Math.max(1, Math.round(meshVolumeCm3 * infillFactor * selectedMat.density))
+      : Math.max(20, Math.round(file.size / 8000))
+
+  const materialCost = estimatedWeight * (selectedMat?.price ?? 150)
   const serviceFee = 50000
   const total = Math.round((materialCost + serviceFee) * qty)
 
@@ -229,7 +253,7 @@ export default function PrintingServicePage() {
                         </p>
                         <button
                           type="button"
-                          onClick={(e) => { e.stopPropagation(); setFile(null) }}
+                          onClick={(e) => { e.stopPropagation(); setFile(null); setMeshVolumeCm3(null) }}
                           className="mt-3 text-xs text-red-500 hover:text-red-700"
                         >
                           {t('ps.removeFile')}
@@ -265,7 +289,7 @@ export default function PrintingServicePage() {
                       <div className="grid grid-cols-3 gap-3 text-center">
                         <div>
                           <p className="text-lg font-bold text-slate-900 dark:text-white">
-                            ~{estimatedWeight}g
+                            {parsingFile ? <Loader2 size={18} className="mx-auto animate-spin" /> : `~${estimatedWeight}g`}
                           </p>
                           <p className="text-xs text-slate-400">{t('ps.estWeight')}</p>
                         </div>
@@ -282,6 +306,11 @@ export default function PrintingServicePage() {
                           <p className="text-xs text-slate-400">{t('ps.format')}</p>
                         </div>
                       </div>
+                      {!parsingFile && file && meshVolumeCm3 == null && (
+                        <p className="mt-2 text-center text-[11px] text-amber-600 dark:text-amber-400">
+                          {t('ps.weightFallbackNote')}
+                        </p>
+                      )}
                     </motion.div>
                   )}
 
