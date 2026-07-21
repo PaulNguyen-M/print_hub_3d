@@ -54,10 +54,12 @@ async function fetchProduct(productId: string): Promise<ProductDetail> {
   return res.data.data
 }
 
-async function fetchRelated(): Promise<RelatedProduct[]> {
-  const res = await apiClient.get<{ data: { content: RelatedProduct[] } }>('/products?page=0&size=8')
+async function fetchRelated(category?: string): Promise<RelatedProduct[]> {
+  const params = category ? `&category=${encodeURIComponent(category)}` : ''
+  const res = await apiClient.get<{ data: { content: RelatedProduct[] } }>(`/products?page=0&size=8${params}`)
   return res.data.data?.content ?? []
 }
+
 
 /** ProductDetailPage — Chi tiết sản phẩm: ảnh, mô tả, giá, xem STL, đánh giá và thêm giỏ / mua. */
 export default function ProductDetailPage() {
@@ -99,9 +101,11 @@ export default function ProductDetailPage() {
   })
 
   const { data: related } = useQuery({
-    queryKey: ['related-products'],
-    queryFn: fetchRelated,
+    queryKey: ['related-products', data?.category],
+    queryFn: () => fetchRelated(data?.category),
+    enabled: Boolean(data),
   })
+
 
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const { showToast } = useToast()
