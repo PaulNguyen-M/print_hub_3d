@@ -82,7 +82,13 @@ export default function LoginPage() {
               {t("auth.password")}
 
             </label>
-            <a href="#" className="text-xs text-brand-400 hover:text-brand-300">{t("auth.login.forgot")}</a>
+            <button
+              type="button"
+              onClick={() => showToast(t('auth.login.forgotComingSoon'))}
+              className="text-xs text-brand-400 hover:text-brand-300"
+            >
+              {t("auth.login.forgot")}
+            </button>
           </div>
           <div className="relative">
             <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />

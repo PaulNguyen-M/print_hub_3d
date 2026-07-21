@@ -107,6 +107,7 @@ export const translations: Dict = {
   'auth.register.termsLink': { vi: 'Điều khoản sử dụng', en: 'Terms of Service' },
   'auth.register.and':       { vi: 'và',               en: 'and' },
   'auth.register.privacyLink': { vi: 'Chính sách bảo mật', en: 'Privacy Policy' },
+  'auth.login.forgotComingSoon': { vi: 'Tính năng khôi phục mật khẩu đang được phát triển.', en: 'Password recovery is coming soon.' },
 
   'auth.hero.title.top':        { vi: 'Nền tảng mua bán', en: 'Vietnam leading' },
   'auth.hero.title.bottom':     { vi: 'hàng đẩu Việt Nam', en: 'trading platform' },
