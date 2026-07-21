@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -8,6 +8,9 @@ import {
 } from 'lucide-react'
 import apiClient from '../../api/axios'
 import { useCartStore } from '../../store/cartStore'
+import { useWishlistStore } from '../../store/wishlistStore'
+import useAuthStore from '../../store/authStore'
+import { useToast } from '../../hooks/useToast'
 import { useTranslation } from '../../i18n/useTranslation'
 import ProductReviews from './ProductReviews'
 
@@ -67,7 +70,6 @@ export default function ProductDetailPage() {
   const [tab, setTab] = useState<'overview' | 'reviews' | 'faqs'>('overview')
   const [adding, setAdding] = useState(false)
   const [added, setAdded] = useState(false)
-  const [saved, setSaved] = useState(false)
   const [downloading, setDownloading] = useState(false)
 
   // Download all STL files of the product bundled into a single ZIP
@@ -100,6 +102,15 @@ export default function ProductDetailPage() {
     queryKey: ['related-products'],
     queryFn: fetchRelated,
   })
+
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const { showToast } = useToast()
+  const wished = useWishlistStore((s) => (data ? s.ids.has(data.id) : false))
+  const toggleWish = useWishlistStore((s) => s.toggle)
+  const fetchWishlistIds = useWishlistStore((s) => s.fetchIds)
+
+  useEffect(() => { void fetchWishlistIds() }, [fetchWishlistIds])
+
 
   const formatPrice = (p: number) =>
     p.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
@@ -143,6 +154,20 @@ export default function ProductDetailPage() {
     await addToCart(data.id, 1)
     navigate('/checkout')
   }
+
+  const handleToggleWish = async () => {
+    if (!isAuthenticated) {
+      showToast(t('market.loginToWish'))
+      navigate('/auth/login')
+      return
+    }
+    try {
+      await toggleWish(data.id)
+    } catch {
+      showToast(t('market.wishError'))
+    }
+  }
+
 
   const relatedList = (related ?? []).filter((p) => p.id !== data.id).slice(0, 4)
 
@@ -284,11 +309,9 @@ export default function ProductDetailPage() {
               </div>
             )}
             {tab === 'reviews' && (
-              <div className="flex flex-col items-center rounded-2xl border-2 border-dashed border-slate-200 py-14 text-center dark:border-slate-700">
-                <Star size={36} className="mb-3 text-slate-300" />
-                <p className="font-semibold text-slate-500">{t('product.noReviews')}</p>
-              </div>
+              <ProductReviews productId={data.id} />
             )}
+
             {tab === 'faqs' && (
               <div className="flex flex-col items-center rounded-2xl border-2 border-dashed border-slate-200 py-14 text-center dark:border-slate-700">
                 <Box size={36} className="mb-3 text-slate-300" />
@@ -376,10 +399,10 @@ export default function ProductDetailPage() {
               </button>
               <button
                 type="button"
-                onClick={() => setSaved(!saved)}
+                onClick={() => void handleToggleWish()}
                 className="flex h-[46px] w-[46px] items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition hover:border-brand-300 hover:text-brand-600 dark:border-slate-700"
               >
-                <Bookmark size={17} className={saved ? 'fill-brand-600 text-brand-600' : ''} />
+                <Bookmark size={17} className={wished ? 'fill-brand-600 text-brand-600' : ''} />
               </button>
             </div>
 
@@ -429,9 +452,6 @@ export default function ProductDetailPage() {
           </div>
         </aside>
       </div>
-
-      {/* ── Reviews ── */}
-      <ProductReviews productId={data.id} />
 
       {/* ── Related products ── */}
       {relatedList.length > 0 && (
