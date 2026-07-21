@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import com.printhub3.backend.dto.response.PrintingRequestDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -84,4 +87,30 @@ public class PrintingRequestService {
 
         return printingRequestRepository.save(req).getRequestId();
     }
+        /** Danh sách yêu cầu in của chính người dùng, mới nhất trước (phân trang). */
+    @Transactional(readOnly = true)
+    public Page<PrintingRequestDto> getMyRequests(String username, int page, int size) {
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", username));
+        return printingRequestRepository
+                .findRequestsByUserId(user.getUserId(), PageRequest.of(page, size))
+                .map(this::toDto);
+    }
+
+    /** Chuyển entity sang DTO cho khách xem. */
+    private PrintingRequestDto toDto(PrintingRequest r) {
+        return PrintingRequestDto.builder()
+                .requestId(r.getRequestId())
+                .fileName(r.getFileName())
+                .fileUrl(r.getFileUrl())
+                .fileFormat(r.getFileFormat())
+                .fileSize(r.getFileSize())
+                .modelStatus(r.getModelStatus().name())
+                .quoteAmount(r.getQuoteAmount())
+                .quoteNotes(r.getQuoteNotes())
+                .requirements(r.getRequirements())
+                .createdAt(r.getCreatedAt())
+                .build();
+    }
+
 }

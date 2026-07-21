@@ -34,6 +34,19 @@ interface Order {
   items?: { quantity: number }[]
 }
 
+interface PrintingRequestItem {
+  requestId: number
+  fileName: string
+  fileFormat?: string
+  fileSize: number
+  modelStatus: string
+  quoteAmount?: number
+  quoteNotes?: string
+  requirements?: string
+  createdAt: string
+}
+
+
 const STATUS_MAP: Record<string, { color: string }> = {
   PENDING:    { color: 'badge-amber' },
   CONFIRMED:  { color: 'badge-blue' },
@@ -95,6 +108,16 @@ export default function AccountPage() {
     },
     enabled: tab === 'orders',
   })
+
+    const { data: printingRequests, isLoading: printingLoading } = useQuery<PrintingRequestItem[]>({
+    queryKey: ['my-printing-requests'],
+    queryFn: async () => {
+      const res = await apiClient.get('/printing-requests/my', { params: { page: 0, size: 20 } })
+      return res.data.data?.content ?? []
+    },
+    enabled: tab === 'printing',
+  })
+
 
   const toggleWish = useWishlistStore((s) => s.toggle)
   const { data: wishlist, isLoading: wishlistLoading } = useQuery<WishlistProduct[]>({
@@ -470,13 +493,42 @@ export default function AccountPage() {
                 {tab === 'printing' && (
                   <div className="card p-6">
                     <h2 className="mb-6 text-lg font-semibold text-slate-900 dark:text-white">{t('account.printingTitle')}</h2>
-                    <div className="flex flex-col items-center py-12 text-center">
-                      <Printer size={40} className="mb-3 text-slate-300" />
-                      <p className="font-semibold text-slate-500">{t('account.noPrinting')}</p>
-                      <Link to="/printing-service" className="btn-primary mt-4">{t('account.orderNow')}</Link>
-                    </div>
+                    {printingLoading ? (
+                      <div className="flex justify-center py-12 text-slate-400"><Loader2 className="animate-spin" /></div>
+                    ) : !printingRequests?.length ? (
+                      <div className="flex flex-col items-center py-12 text-center">
+                        <Printer size={40} className="mb-3 text-slate-300" />
+                        <p className="font-semibold text-slate-500">{t('account.noPrinting')}</p>
+                        <Link to="/printing-service" className="btn-primary mt-4">{t('account.orderNow')}</Link>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {printingRequests.map((r) => (
+                          <div key={r.requestId} className="rounded-2xl border border-slate-100 p-4 dark:border-slate-800">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <div className="min-w-0">
+                                <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{r.fileName}</p>
+                                <p className="text-xs text-slate-400">
+                                  {(r.fileSize / 1024 / 1024).toFixed(2)} MB · {new Date(r.createdAt).toLocaleDateString('vi-VN')}
+                                </p>
+                              </div>
+                              <span className="badge badge-blue shrink-0">{t(`status.${r.modelStatus}`)}</span>
+                            </div>
+                            {r.quoteAmount != null && (
+                              <p className="mt-2 text-sm font-bold text-brand-600">
+                                {t('ps.quote') ?? 'Báo giá'}: {(r.quoteAmount ?? 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                              </p>
+                            )}
+                            {r.quoteNotes && (
+                              <p className="mt-1 text-xs text-slate-500">{r.quoteNotes}</p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
+
 
                 {/* ── Addresses ── */}
                 {tab === 'addresses' && (

@@ -37,7 +37,9 @@
       "Bash(python -c ' *)",
       "Bash(python -c \"import docx; print\\('python-docx OK', docx.__version__\\)\")",
       "Bash(pip install *)",
-      "Bash(PYTHONIOENCODING=utf-8 python -c ' *)"
+      "Bash(PYTHONIOENCODING=utf-8 python -c ' *)",
+      "Bash(mvn -q -DskipTests compile)",
+      "Bash(echo \"EXIT:$?\")"
     ],
     "additionalDirectories": [
       "d:\\LEARN\\print_hub_3d"

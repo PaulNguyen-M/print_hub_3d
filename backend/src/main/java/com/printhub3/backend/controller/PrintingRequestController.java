@@ -11,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import com.printhub3.backend.dto.response.PrintingRequestDto;
+import org.springframework.data.domain.Page;
 
 import java.util.Map;
 
@@ -49,4 +51,16 @@ public class PrintingRequestController {
                 .body(ApiResponse.created(Map.of("requestId", id, "status", "REVIEWING"),
                         "Đã gửi yêu cầu in, đang chờ báo giá"));
     }
+/** Danh sách yêu cầu in của người dùng hiện tại (phân trang). GET /api/v1/printing-requests/my */
+    @GetMapping("/my")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<Page<PrintingRequestDto>>> myRequests(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Authentication authentication
+    ) {
+        Page<PrintingRequestDto> result = printingRequestService.getMyRequests(authentication.getName(), page, size);
+        return ResponseEntity.ok(ApiResponse.success(result, "Lấy danh sách yêu cầu in thành công"));
+    }
+
 }

@@ -34,8 +34,10 @@ public class User {
     @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
     
+    /** Mật khẩu — hiện lưu dạng chữ thường (chưa hash), xem ghi chú tại WebSecurityConfig.passwordEncoder(). */
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
+
     
     @Column(name = "full_name", nullable = false, length = 255)
     private String fullName;
