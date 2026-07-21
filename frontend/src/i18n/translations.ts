@@ -303,6 +303,9 @@ export const translations: Dict = {
   'creator.form.stlMultiHint': { vi: 'Có thể chọn nhiều file — mỗi bộ phận một file (STL, OBJ, FBX, GLTF, GLB)', en: 'Select multiple — one file per part (STL, OBJ, FBX, GLTF, GLB)' },
   'creator.form.cancel': { vi: 'Hủy',            en: 'Cancel' },
   'creator.form.submit': { vi: 'Đăng Sản Phẩm',  en: 'Publish Product' },
+  'creator.form.material':       { vi: 'Vật liệu', en: 'Material' },
+  'creator.form.selectMaterial': { vi: 'Chọn vật liệu', en: 'Select material' },
+
 
   // ── NotFound ──
   'notfound.label':    { vi: 'Không tìm thấy trang', en: 'Page Not Found' },

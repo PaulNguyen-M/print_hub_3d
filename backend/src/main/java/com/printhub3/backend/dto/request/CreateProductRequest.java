@@ -27,6 +27,9 @@ public class CreateProductRequest {
 
     private String category;
 
+    /** Vật liệu in (PLA, ABS, Resin...). */
+    private String materialType;
+
     private Boolean isDigital;
 
     private String thumbnailUrl;

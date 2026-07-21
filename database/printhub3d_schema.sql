@@ -159,6 +159,7 @@ CREATE TABLE products (
     seller_id        BIGINT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     shop_id          BIGINT REFERENCES shops(shop_id) ON DELETE SET NULL,
     stock_quantity   INTEGER       NOT NULL DEFAULT 0 CHECK (stock_quantity >= 0),
+    material_type    VARCHAR(50) CHECK (material_type IN ('PLA', 'PETG', 'ABS', 'TPU', 'RESIN')),
     stl_file_url     TEXT,
     rating           DECIMAL(3,2)  DEFAULT 0 CHECK (rating >= 0 AND rating <= 5),
     total_reviews    INTEGER       DEFAULT 0,

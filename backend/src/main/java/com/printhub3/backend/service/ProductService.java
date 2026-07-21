@@ -68,6 +68,7 @@ public class ProductService {
                 .description(request.getDescription())
                 .price(request.getPrice())
                 .category(category)
+                .materialType(request.getMaterialType())
                 .seller(seller)
                 .shop(shop)
                 .stockQuantity(request.getStockQuantity() != null ? request.getStockQuantity() : 99)
@@ -230,6 +231,8 @@ public class ProductService {
             product.setPrice(request.getPrice());
         if (request.getCategory() != null && !request.getCategory().isBlank())
             product.setCategory(resolveCategory(request.getCategory()));
+        if (request.getMaterialType() != null)
+            product.setMaterialType(request.getMaterialType().isBlank() ? null : request.getMaterialType());
         if (request.getStockQuantity() != null)
             product.setStockQuantity(request.getStockQuantity());
 
@@ -380,7 +383,7 @@ public class ProductService {
                 .price(product.getPrice() != null ? product.getPrice().doubleValue() : 0.0)
                 .thumbnailUrl(imageUrl)
                 .imageUrl(imageUrl)
-                .material(categoryName)
+                .material(product.getMaterialType())
                 .category(categoryName)
                 .sellerName(Optional.ofNullable(product.getSeller()).map(User::getFullName).orElse("Print Hub Creator"))
                 .shopId(Optional.ofNullable(product.getShop()).map(com.printhub3.backend.entity.Shop::getShopId).orElse(null))

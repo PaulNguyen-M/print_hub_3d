@@ -228,12 +228,14 @@ export default function CreatorDashboardPage() {
         description: uploadForm.description,
         price: Number(uploadForm.price),
         category: uploadForm.category || null,
+        materialType: uploadForm.material || null,
         isDigital: uploadForm.isDigital,
         thumbnailUrl: cleanImages[0] || null,
         images: cleanImages,
         stlFileUrl: uploaded[0]?.url ?? null,
         stlFiles: uploaded,
       })
+
       setSubmitMsg({ type: 'ok', text: 'Đăng sản phẩm thành công!' })
       setUploadForm({ title: '', description: '', price: '', category: '', isDigital: true, material: '' })
       setImages([])
@@ -1178,6 +1180,37 @@ export default function CreatorDashboardPage() {
                           <option>Mechanical</option>
                           <option>Architecture</option>
                           <option>Collectibles</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">{t('creator.form.category')}</label>
+                        <select
+                          value={uploadForm.category}
+                          onChange={e => setUploadForm(f => ({ ...f, category: e.target.value }))}
+                          className="input"
+                        >
+                          <option value="">{t('creator.form.selectCategory')}</option>
+                          <option>Anime & Figures</option>
+                          <option>Miniatures</option>
+                          <option>Mechanical</option>
+                          <option>Architecture</option>
+                          <option>Collectibles</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">{t('creator.form.material')}</label>
+                        <select
+                          value={uploadForm.material}
+                          onChange={e => setUploadForm(f => ({ ...f, material: e.target.value }))}
+                          className="input"
+                        >
+                          <option value="">{t('creator.form.selectMaterial')}</option>
+                          <option value="PLA">PLA</option>
+                          <option value="PETG">PETG</option>
+                          <option value="ABS">ABS</option>
+                          <option value="TPU">TPU</option>
+                          <option value="RESIN">Resin</option>
                         </select>
                       </div>
 

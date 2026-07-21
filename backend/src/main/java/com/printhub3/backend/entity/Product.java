@@ -61,6 +61,11 @@ public class Product {
     @Column(name = "stock_quantity", nullable = false)
     private Integer stockQuantity = 0;
 
+    /** Vật liệu in (PLA, ABS, Resin...) — chỉ áp dụng cho sản phẩm in vật lý. */
+    @Column(name = "material_type", length = 50)
+    private String materialType;
+
+
     @Column(name = "stl_file_url", columnDefinition = "TEXT")
     private String stlFileUrl;
 
