@@ -17,6 +17,8 @@ const PAGE_SIZE = 12
 const formatPrice = (p: number) =>
   (p ?? 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
 
+const fmtCompact = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1).replace(/\.0$/, '')}K` : `${n}`)
+
 const formatJoined = (dateStr: string | undefined, lang: string) => {
   if (!dateStr) return null
   return new Date(dateStr).toLocaleDateString(
@@ -90,7 +92,8 @@ export default function ShopPage() {
   const [featuredProducts, setFeaturedProducts] = useState<ShopProduct[]>([])
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
-  const [activeTab, setActiveTab] = useState<'home' | 'products' | 'reviews'>('home')
+  const [activeTab, setActiveTab] = useState<'products' | 'reviews' | 'about'>('products')
+
 
   const [following, setFollowing] = useState(false)
   const [followers, setFollowers] = useState(0)
@@ -255,360 +258,344 @@ export default function ShopPage() {
     { icon: Users, value: followers, label: t('shop.statFollowers') },
   ]
 
-  return (
+    return (
     <div className="min-h-screen pb-16">
       {/* Banner */}
-      <div className="relative h-44 w-full overflow-hidden bg-gradient-to-r from-slate-800 via-slate-700 to-slate-900 sm:h-56">
+      <div className="relative h-40 w-full overflow-hidden bg-gradient-to-r from-brand-700 via-brand-600 to-sky-600 sm:h-52">
         {shop.bannerUrl && <img src={shop.bannerUrl} alt="banner" className="h-full w-full object-cover" />}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
       </div>
 
-      <div className="container relative z-10 -mt-12 sm:-mt-16">
-        <div className="flex flex-col gap-6 lg:flex-row">
-          {/* ── Sidebar ── */}
-          <aside className="lg:w-72 shrink-0">
-            <div className="card p-5">
-              <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl border-4 border-white bg-brand-600 text-3xl font-bold text-white shadow-lg dark:border-slate-900">
+      <div className="container relative z-10 -mt-14 sm:-mt-16">
+        {/* ── Card thông tin sạp ── */}
+        <div className="card p-5 sm:p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex gap-4">
+              <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-4 border-white bg-brand-600 text-2xl font-bold text-white shadow-lg dark:border-slate-900 sm:h-24 sm:w-24 sm:text-3xl">
                 {shop.logoUrl
                   ? <img src={shop.logoUrl} alt={shop.name} className="h-full w-full object-cover" />
                   : shop.name?.[0]?.toUpperCase() ?? 'S'}
               </div>
+              <div className="min-w-0 pt-1">
+                <h1 className="truncate text-xl font-bold text-slate-900 dark:text-white sm:text-2xl">{shop.name}</h1>
+                <p className="text-sm text-slate-400">@{shop.slug}</p>
+                {shop.createdAt && (
+                  <p className="mt-1 flex items-center gap-1 text-xs text-slate-400">
+                    <Calendar size={12} /> {t('shop.joined')} {formatJoined(shop.createdAt, lang)}
+                  </p>
+                )}
+              </div>
+            </div>
 
-              <h1 className="mt-3 text-xl font-bold text-slate-900 dark:text-white">{shop.name}</h1>
-              <p className="text-sm text-slate-400">@{shop.slug}</p>
-
-              {shop.createdAt && (
-                <p className="mt-1.5 flex items-center gap-1 text-xs text-slate-400">
-                  <Calendar size={12} /> {t('shop.joined')} {formatJoined(shop.createdAt, lang)}
-                </p>
-              )}
-
-              {/* Follow + Chat */}
-              {isAuthenticated && !isOwner && (
-                <div className="mt-3 flex gap-2">
+            {isAuthenticated && !isOwner && (
+              <div className="flex shrink-0 gap-2">
+                <button
+                  type="button"
+                  onClick={handleFollow}
+                  disabled={followBusy}
+                  className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition disabled:opacity-60 ${
+                    following
+                      ? 'border border-brand-300 bg-brand-50 text-brand-700 hover:bg-brand-100 dark:border-brand-700 dark:bg-brand-900/30 dark:text-brand-300'
+                      : 'bg-brand-600 text-white hover:bg-brand-700'
+                  }`}
+                >
+                  {followBusy ? <Loader2 size={16} className="animate-spin" />
+                    : following ? <><UserCheck size={16} /> {t('shop.following')}</>
+                    : <><UserPlus size={16} /> {t('shop.follow')}</>}
+                </button>
+                {shop.ownerId != null && (
                   <button
                     type="button"
-                    onClick={handleFollow}
-                    disabled={followBusy}
-                    className={`inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition disabled:opacity-60 ${
-                      following
-                        ? 'border border-brand-300 bg-brand-50 text-brand-700 hover:bg-brand-100 dark:border-brand-700 dark:bg-brand-900/30 dark:text-brand-300'
-                        : 'bg-brand-600 text-white hover:bg-brand-700'
+                    onClick={() => openChat(shop.ownerId!, shop.name)}
+                    className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-brand-300 hover:text-brand-600 dark:border-slate-700 dark:text-slate-200"
+                  >
+                    <MessageCircle size={16} /> {t('shop.message')}
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Stats hàng ngang */}
+          <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3 border-t border-slate-100 pt-4 dark:border-slate-800">
+            <div>
+              <p className="flex items-center gap-1 text-lg font-bold text-slate-900 dark:text-white">
+                <Star size={15} className="fill-amber-400 text-amber-400" /> {(shop.rating ?? 0).toFixed(1)}
+              </p>
+              <p className="text-xs text-slate-400">{t('shop.statRating')}</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-slate-900 dark:text-white">{shop.totalProducts ?? 0}</p>
+              <p className="text-xs text-slate-400">{t('shop.statProducts')}</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-slate-900 dark:text-white">{fmtCompact(followers)}</p>
+              <p className="text-xs text-slate-400">{t('shop.statFollowers')}</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-slate-900 dark:text-white">{fmtCompact(shop.totalSales ?? 0)}</p>
+              <p className="text-xs text-slate-400">{t('shop.statSold')}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Tabs ── */}
+        <div className="mt-6 mb-5 flex gap-1 border-b border-slate-200 dark:border-slate-800">
+          {([
+            { key: 'products' as const, icon: ShoppingBag, label: `${t('shop.tabProducts')} (${shop.totalProducts ?? products.length})` },
+            { key: 'reviews' as const, icon: MessageSquare, label: `${t('shop.tabReviews')} (${shop.totalReviews ?? 0})` },
+            { key: 'about' as const, icon: Store, label: t('shop.tabAbout') },
+          ] as const).map(({ key, icon: Icon, label }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setActiveTab(key)}
+              className={`flex items-center gap-1.5 border-b-2 px-4 py-2.5 text-sm font-semibold transition ${
+                activeTab === key
+                  ? 'border-brand-600 text-brand-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+              }`}
+            >
+              <Icon size={16} /> {label}
+            </button>
+          ))}
+        </div>
+
+        {/* ── Tab: Sản phẩm (nổi bật + lọc danh mục + tìm kiếm/sắp xếp) ── */}
+        {activeTab === 'products' && (
+          <div>
+            <div className="mb-5 flex flex-wrap items-center gap-3">
+              <div className="relative flex-1 min-w-[180px]">
+                <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  value={prodSearch}
+                  onChange={(e) => setProdSearch(e.target.value)}
+                  placeholder={t('shop.searchProducts')}
+                  className="input pl-10"
+                />
+              </div>
+              <div className="relative">
+                <select
+                  value={prodSort}
+                  onChange={(e) => setProdSort(e.target.value)}
+                  className="input w-44 cursor-pointer appearance-none pr-10"
+                >
+                  {SORT_OPTIONS.map((o) => (
+                    <option key={o.value} value={o.value}>{t(o.key)}</option>
+                  ))}
+                </select>
+                <ChevronDown size={14} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              </div>
+            </div>
+
+            {activeCategory === 'all' && !prodSearch && featuredProducts.length > 0 && (
+              <section className="mb-8">
+                <h2 className="mb-4 flex items-center gap-2 text-base font-semibold text-slate-900 dark:text-white">
+                  <Star size={16} className="fill-amber-400 text-amber-400" />
+                  {t('shop.featured')}
+                </h2>
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
+                  {featuredProducts.map((p, idx) => <ProductCard key={p.id} p={p} idx={idx} />)}
+                </div>
+              </section>
+            )}
+
+            {categories.length > 1 && (
+              <div className="mb-4 flex flex-wrap gap-2">
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setActiveCategory(cat)}
+                    className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${
+                      activeCategory === cat
+                        ? 'bg-brand-600 text-white'
+                        : 'bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-600 dark:bg-slate-800 dark:text-slate-300'
                     }`}
                   >
-                    {followBusy ? <Loader2 size={16} className="animate-spin" />
-                      : following ? <><UserCheck size={16} /> {t('shop.following')}</>
-                      : <><UserPlus size={16} /> {t('shop.follow')}</>}
+                    {cat === 'all' ? t('shop.catAll') : cat}
                   </button>
-                  {shop.ownerId != null && (
-                    <button
-                      type="button"
-                      onClick={() => openChat(shop.ownerId!, shop.name)}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-brand-300 hover:text-brand-600 dark:border-slate-700 dark:text-slate-200"
-                      title={t('shop.message')}
-                    >
-                      <MessageCircle size={16} /> {t('shop.message')}
-                    </button>
-                  )}
+                ))}
+              </div>
+            )}
+
+            {prodLoading ? (
+              <div className="flex justify-center py-16 text-slate-400"><Loader2 className="animate-spin" /></div>
+            ) : filteredProducts.length === 0 ? (
+              <div className="card flex flex-col items-center py-16 text-center">
+                <Package size={40} className="mb-3 text-slate-300" />
+                <p className="font-semibold text-slate-500">{t('shop.empty')}</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
+                {filteredProducts.map((p, idx) => <ProductCard key={p.id} p={p} idx={idx} />)}
+              </div>
+            )}
+
+            {prodHasMore && !prodLoading && products.length > 0 && (
+              <div className="mt-8 flex justify-center">
+                <button
+                  type="button"
+                  onClick={handleLoadMore}
+                  disabled={loadingMore}
+                  className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-6 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-brand-300 hover:text-brand-600 disabled:opacity-60 dark:border-slate-700 dark:text-slate-200"
+                >
+                  {loadingMore
+                    ? <><Loader2 size={16} className="animate-spin" /> {t('shop.loadMore')}</>
+                    : t('shop.loadMore')}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── Tab: Đánh giá ── */}
+        {activeTab === 'reviews' && (
+          <div>
+            {shop.totalReviews ? (
+              <div className="card mb-6 p-5">
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+                  <div className="flex flex-col items-center justify-center sm:w-40">
+                    <span className="text-4xl font-bold text-slate-900 dark:text-white">{(shop.rating ?? 0).toFixed(1)}</span>
+                    <Stars value={shop.rating ?? 0} size={16} />
+                    <span className="mt-1 text-xs text-slate-400">{shop.totalReviews} {t('shop.reviewsCount')}</span>
+                  </div>
+                  <div className="flex-1 space-y-1.5">
+                    {[5, 4, 3, 2, 1].map((star) => {
+                      const count = shop.ratingDistribution?.[star] ?? 0
+                      const pct = shop.totalReviews ? Math.round((count / shop.totalReviews) * 100) : 0
+                      const active = starFilter === star
+                      return (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setStarFilter(active ? null : star)}
+                          className={`flex w-full items-center gap-2 rounded-lg px-2 py-1 text-xs transition ${
+                            active ? 'bg-brand-50 dark:bg-brand-900/30' : 'hover:bg-slate-50 dark:hover:bg-slate-800'
+                          }`}
+                        >
+                          <span className="flex w-8 shrink-0 items-center gap-0.5 text-slate-500">
+                            {star} <Star size={11} className="fill-amber-400 text-amber-400" />
+                          </span>
+                          <span className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                            <span className="block h-full rounded-full bg-amber-400" style={{ width: `${pct}%` }} />
+                          </span>
+                          <span className="w-8 shrink-0 text-right text-slate-400">{count}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
                 </div>
-              )}
+                {starFilter !== null && (
+                  <button type="button" onClick={() => setStarFilter(null)} className="mt-3 text-xs font-semibold text-brand-600 hover:underline">
+                    {t('shop.clearFilter')}
+                  </button>
+                )}
+              </div>
+            ) : null}
+            {isAuthenticated && !isOwner && shop.canReview ? (
+              <form onSubmit={handleSubmitReview} className="card mb-6 p-5">
+                <p className="mb-2 text-sm font-semibold text-slate-700 dark:text-slate-200">{t('shop.writeReview')}</p>
+                <div className="mb-3 flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <button key={i} type="button" onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(0)} onClick={() => setRating(i)} className="p-0.5">
+                      <Star size={24} className={i <= (hover || rating) ? 'fill-amber-400 text-amber-400' : 'text-slate-300'} />
+                    </button>
+                  ))}
+                </div>
+                <textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  rows={3}
+                  placeholder={t('shop.reviewPlaceholder')}
+                  className="input resize-none"
+                />
+                {reviewError && <p className="mt-2 text-sm text-red-500">{reviewError}</p>}
+                <button type="submit" disabled={reviewSubmitting} className="btn-primary mt-3">
+                  {reviewSubmitting ? <Loader2 size={16} className="animate-spin" /> : <Star size={16} />}
+                  {t('shop.submitReview')}
+                </button>
+              </form>
+            ) : isAuthenticated && !isOwner && !shop.canReview ? (
+              <p className="card mb-6 p-4 text-sm text-slate-500">{t('shop.mustBuyToReview')}</p>
+            ) : !isAuthenticated ? (
+              <p className="card mb-6 p-4 text-sm text-slate-500">{t('shop.loginToReview')}</p>
+            ) : null}
 
-
-              {/* Stats */}
-              <div className="mt-4 grid grid-cols-2 gap-3">
-                {stats.map((s) => (
-                  <div key={s.label} className="rounded-xl bg-slate-50 p-3 text-center dark:bg-slate-800/60">
-                    <div className="flex items-center justify-center gap-1 text-brand-600">
-                      <s.icon size={14} />
-                      <span className="text-base font-bold text-slate-900 dark:text-white">{s.value}</span>
+            {reviewsLoading ? (
+              <div className="flex justify-center py-16 text-slate-400"><Loader2 className="animate-spin" /></div>
+            ) : !reviews?.length ? (
+              <div className="card flex flex-col items-center py-16 text-center">
+                <MessageSquare size={40} className="mb-3 text-slate-300" />
+                <p className="font-semibold text-slate-500">{starFilter !== null ? t('shop.noStarReviews') : t('shop.reviewsEmpty')}</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredReviews.map((r) => (
+                  <div key={r.shopReviewId} className="card p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-brand-600 text-sm font-bold text-white">
+                        {r.userAvatarUrl
+                          ? <img src={r.userAvatarUrl} alt={r.userName} className="h-full w-full object-cover" />
+                          : r.userName?.[0]?.toUpperCase() ?? 'U'}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">
+                          {r.userName}
+                          {r.verifiedPurchase && (
+                            <span className="inline-flex shrink-0 items-center gap-0.5 rounded-full bg-green-50 px-1.5 py-0.5 text-[10px] font-semibold text-green-600 dark:bg-green-900/30 dark:text-green-400">
+                              <BadgeCheck size={11} /> {t('shop.verifiedPurchase')}
+                            </span>
+                          )}
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <Stars value={r.rating} />
+                          <span className="text-xs text-slate-400">{new Date(r.createdAt).toLocaleDateString('vi-VN')}</span>
+                        </div>
+                      </div>
                     </div>
-                    <p className="mt-0.5 text-xs text-slate-400">{s.label}</p>
+                    {r.comment && <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{r.comment}</p>}
                   </div>
                 ))}
               </div>
-
-              {shop.description && (
-                <div className="mt-4 border-t border-slate-100 pt-4 dark:border-slate-800">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{t('shop.about')}</p>
-                  <p className="mt-1.5 whitespace-pre-line text-sm text-slate-600 dark:text-slate-300">{shop.description}</p>
-                </div>
-              )}
-
-              {shop.ownerName && (
-                <div className="mt-4 flex items-center gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
-                  <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-slate-200 text-sm font-bold text-slate-600 dark:bg-slate-700">
-                    {shop.ownerAvatarUrl
-                      ? <img src={shop.ownerAvatarUrl} alt={shop.ownerName} className="h-full w-full object-cover" />
-                      : shop.ownerName[0]?.toUpperCase()}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-slate-700 dark:text-slate-200">{shop.ownerName}</p>
-                    <p className="text-xs text-slate-400">{t('shop.owner')}</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </aside>
-
-          {/* ── Main content ── */}
-          <main className="flex-1 min-w-0 pt-16 lg:pt-20">
-            {/* Tabs */}
-            <div className="mb-5 flex gap-1 border-b border-slate-200 dark:border-slate-800">
-              {([
-                { key: 'home' as const, icon: Store, label: t('shop.tabHome') },
-                { key: 'products' as const, icon: ShoppingBag, label: `${t('shop.tabProducts')} (${shop.totalProducts ?? products.length})` },
-                { key: 'reviews' as const, icon: MessageSquare, label: `${t('shop.tabReviews')} (${shop.totalReviews ?? 0})` },
-              ] as const).map(({ key, icon: Icon, label }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setActiveTab(key)}
-                  className={`flex items-center gap-1.5 border-b-2 px-4 py-2.5 text-sm font-semibold transition ${
-                    activeTab === key
-                      ? 'border-brand-600 text-brand-600'
-                      : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
-                  }`}
-                >
-                  <Icon size={16} /> {label}
-                </button>
-              ))}
-            </div>
-
-            {/* ── Tab: Trang chủ sạp ── */}
-            {activeTab === 'home' && (
-              <div className="space-y-8">
-                {/* Sản phẩm nổi bật */}
-                <section>
-                  <h2 className="mb-4 flex items-center gap-2 text-base font-semibold text-slate-900 dark:text-white">
-                    <Star size={16} className="fill-amber-400 text-amber-400" />
-                    {t('shop.featured')}
-                  </h2>
-                  {featuredProducts.length === 0 ? (
-                    <p className="text-sm text-slate-400">{t('shop.featuredEmpty')}</p>
-                  ) : (
-                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
-                      {featuredProducts.map((p, idx) => <ProductCard key={p.id} p={p} idx={idx} />)}
-                    </div>
-                  )}
-                </section>
-
-                {/* Theo danh mục */}
-                <section>
-                  <h2 className="mb-4 flex items-center gap-2 text-base font-semibold text-slate-900 dark:text-white">
-                    <Package size={16} className="text-brand-600" />
-                    {t('shop.categories')}
-                  </h2>
-
-                  {categories.length > 1 && (
-                    <div className="mb-4 flex flex-wrap gap-2">
-                      {categories.map((cat) => (
-                        <button
-                          key={cat}
-                          type="button"
-                          onClick={() => setActiveCategory(cat)}
-                          className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${
-                            activeCategory === cat
-                              ? 'bg-brand-600 text-white'
-                              : 'bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-600 dark:bg-slate-800 dark:text-slate-300'
-                          }`}
-                        >
-                          {cat === 'all' ? t('shop.catAll') : cat}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                  {filteredProducts.length === 0 ? (
-                    <div className="card flex flex-col items-center py-12 text-center">
-                      <Package size={36} className="mb-2 text-slate-300" />
-                      <p className="text-sm text-slate-400">{t('shop.empty')}</p>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
-                      {filteredProducts.map((p, idx) => <ProductCard key={p.id} p={p} idx={idx} />)}
-                    </div>
-                  )}
-                </section>
-              </div>
             )}
+          </div>
+        )}
 
-            {/* ── Tab: Tất cả sản phẩm ── */}
-            {activeTab === 'products' && (
+        {/* ── Tab: Giới thiệu ── */}
+        {activeTab === 'about' && (
+          <div className="card space-y-5 p-6">
+            {shop.description ? (
               <div>
-                <div className="mb-5 flex flex-wrap items-center gap-3">
-                  <div className="relative flex-1 min-w-[180px]">
-                    <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                    <input
-                      type="text"
-                      value={prodSearch}
-                      onChange={(e) => setProdSearch(e.target.value)}
-                      placeholder={t('shop.searchProducts')}
-                      className="input pl-10"
-                    />
-                  </div>
-                  <div className="relative">
-                    <select
-                      value={prodSort}
-                      onChange={(e) => setProdSort(e.target.value)}
-                      className="input w-44 cursor-pointer appearance-none pr-10"
-                    >
-                      {SORT_OPTIONS.map((o) => (
-                        <option key={o.value} value={o.value}>{t(o.key)}</option>
-                      ))}
-                    </select>
-                    <ChevronDown size={14} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                  </div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{t('shop.about')}</p>
+                <p className="mt-1.5 whitespace-pre-line text-sm text-slate-600 dark:text-slate-300">{shop.description}</p>
+              </div>
+            ) : (
+              <p className="text-sm text-slate-400">{t('shop.noDescription')}</p>
+            )}
+
+            {shop.ownerName && (
+              <div className="flex items-center gap-3 border-t border-slate-100 pt-5 dark:border-slate-800">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-200 text-sm font-bold text-slate-600 dark:bg-slate-700">
+                  {shop.ownerAvatarUrl
+                    ? <img src={shop.ownerAvatarUrl} alt={shop.ownerName} className="h-full w-full object-cover" />
+                    : shop.ownerName[0]?.toUpperCase()}
                 </div>
-
-                {prodLoading ? (
-                  <div className="flex justify-center py-16 text-slate-400"><Loader2 className="animate-spin" /></div>
-                ) : products.length === 0 ? (
-                  <div className="card flex flex-col items-center py-16 text-center">
-                    <Package size={40} className="mb-3 text-slate-300" />
-                    <p className="font-semibold text-slate-500">{t('shop.empty')}</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
-                    {products.map((p, idx) => <ProductCard key={p.id} p={p} idx={idx} />)}
-                  </div>
-                )}
-                {prodHasMore && !prodLoading && products.length > 0 && (
-                  <div className="mt-8 flex justify-center">
-                    <button
-                      type="button"
-                      onClick={handleLoadMore}
-                      disabled={loadingMore}
-                      className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-6 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-brand-300 hover:text-brand-600 disabled:opacity-60 dark:border-slate-700 dark:text-slate-200"
-                    >
-                      {loadingMore
-                        ? <><Loader2 size={16} className="animate-spin" /> {t('shop.loadMore')}</>
-                        : t('shop.loadMore')}
-                    </button>
-                  </div>
-                )}
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-slate-700 dark:text-slate-200">{shop.ownerName}</p>
+                  <p className="text-xs text-slate-400">{t('shop.owner')}</p>
+                </div>
               </div>
             )}
 
-            
-
-            {/* ── Tab: Đánh giá ── */}
-            {activeTab === 'reviews' && (
-              <div>
-                {shop.totalReviews ? (
-                  <div className="card mb-6 p-5">
-                    <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-                      {/* Điểm trung bình */}
-                      <div className="flex flex-col items-center justify-center sm:w-40">
-                        <span className="text-4xl font-bold text-slate-900 dark:text-white">{(shop.rating ?? 0).toFixed(1)}</span>
-                        <Stars value={shop.rating ?? 0} size={16} />
-                        <span className="mt-1 text-xs text-slate-400">{shop.totalReviews} {t('shop.reviewsCount')}</span>
-                      </div>
-                      {/* Thanh phân bố sao */}
-                      <div className="flex-1 space-y-1.5">
-                        {[5, 4, 3, 2, 1].map((star) => {
-                          const count = shop.ratingDistribution?.[star] ?? 0
-                          const pct = shop.totalReviews ? Math.round((count / shop.totalReviews) * 100) : 0
-                          const active = starFilter === star
-                          return (
-                            <button
-                              key={star}
-                              type="button"
-                              onClick={() => setStarFilter(active ? null : star)}
-                              className={`flex w-full items-center gap-2 rounded-lg px-2 py-1 text-xs transition ${
-                                active ? 'bg-brand-50 dark:bg-brand-900/30' : 'hover:bg-slate-50 dark:hover:bg-slate-800'
-                              }`}
-                            >
-                              <span className="flex w-8 shrink-0 items-center gap-0.5 text-slate-500">
-                                {star} <Star size={11} className="fill-amber-400 text-amber-400" />
-                              </span>
-                              <span className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
-                                <span className="block h-full rounded-full bg-amber-400" style={{ width: `${pct}%` }} />
-                              </span>
-                              <span className="w-8 shrink-0 text-right text-slate-400">{count}</span>
-                            </button>
-                          )
-                        })}
-                      </div>
-                    </div>
-                    {starFilter !== null && (
-                      <button type="button" onClick={() => setStarFilter(null)} className="mt-3 text-xs font-semibold text-brand-600 hover:underline">
-                        {t('shop.clearFilter')}
-                      </button>
-                    )}
-                  </div>
-                ) : null}
-                {isAuthenticated && !isOwner && shop.canReview ? (
-                  <form onSubmit={handleSubmitReview} className="card mb-6 p-5">
-                    <p className="mb-2 text-sm font-semibold text-slate-700 dark:text-slate-200">{t('shop.writeReview')}</p>
-                    <div className="mb-3 flex items-center gap-1">
-                      {[1, 2, 3, 4, 5].map((i) => (
-                        <button key={i} type="button" onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(0)} onClick={() => setRating(i)} className="p-0.5">
-                          <Star size={24} className={i <= (hover || rating) ? 'fill-amber-400 text-amber-400' : 'text-slate-300'} />
-                        </button>
-                      ))}
-                    </div>
-                    <textarea
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                      rows={3}
-                      placeholder={t('shop.reviewPlaceholder')}
-                      className="input resize-none"
-                    />
-                    {reviewError && <p className="mt-2 text-sm text-red-500">{reviewError}</p>}
-                    <button type="submit" disabled={reviewSubmitting} className="btn-primary mt-3">
-                      {reviewSubmitting ? <Loader2 size={16} className="animate-spin" /> : <Star size={16} />}
-                      {t('shop.submitReview')}
-                    </button>
-                  </form>
-                ) : isAuthenticated && !isOwner && !shop.canReview ? (
-                  <p className="card mb-6 p-4 text-sm text-slate-500">{t('shop.mustBuyToReview')}</p>
-                ) : !isAuthenticated ? (
-                  <p className="card mb-6 p-4 text-sm text-slate-500">{t('shop.loginToReview')}</p>
-                ) : null}
-
-
-                {reviewsLoading ? (
-                  <div className="flex justify-center py-16 text-slate-400"><Loader2 className="animate-spin" /></div>
-                ) : !reviews?.length ? (
-                  <div className="card flex flex-col items-center py-16 text-center">
-                    <MessageSquare size={40} className="mb-3 text-slate-300" />
-                    <p className="font-semibold text-slate-500">{starFilter !== null ? t('shop.noStarReviews') : t('shop.reviewsEmpty')}</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {filteredReviews.map((r) => (
-                      <div key={r.shopReviewId} className="card p-4">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-brand-600 text-sm font-bold text-white">
-                            {r.userAvatarUrl
-                              ? <img src={r.userAvatarUrl} alt={r.userName} className="h-full w-full object-cover" />
-                              : r.userName?.[0]?.toUpperCase() ?? 'U'}
-                          </div>
-                          
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">
-                              {r.userName}
-                              {r.verifiedPurchase && (
-                                <span className="inline-flex shrink-0 items-center gap-0.5 rounded-full bg-green-50 px-1.5 py-0.5 text-[10px] font-semibold text-green-600 dark:bg-green-900/30 dark:text-green-400">
-                                  <BadgeCheck size={11} /> {t('shop.verifiedPurchase')}
-                                </span>
-                              )}
-                            </p>
-                            <div className="flex items-center gap-2">
-                              <Stars value={r.rating} />
-                              <span className="text-xs text-slate-400">{new Date(r.createdAt).toLocaleDateString('vi-VN')}</span>
-                            </div>
-                          </div>
-                        </div>
-                        {r.comment && <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{r.comment}</p>}
-                      </div>
-                    ))}
-                  </div>
-                )}
+            {shop.createdAt && (
+              <div className="flex items-center gap-1.5 border-t border-slate-100 pt-5 text-sm text-slate-500 dark:border-slate-800">
+                <Calendar size={14} /> {t('shop.joined')} {formatJoined(shop.createdAt, lang)}
               </div>
             )}
-          </main>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )
