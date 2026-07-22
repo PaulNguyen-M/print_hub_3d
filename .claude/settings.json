@@ -65,7 +65,15 @@
       "Bash(node \"C:\\\\Users\\\\tanh2\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\bundled-skills\\\\2.1.216\\\\14d1b57a747c40a394eae060e1ddc624\\\\dataviz\\\\scripts\\\\validate_palette.js\" \"#3987e5,#199e70,#c98500,#9085e9\" --mode dark --pairs all --surface \"#0f172a\")",
       "Bash(node \"C:\\\\Users\\\\tanh2\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\bundled-skills\\\\2.1.216\\\\14d1b57a747c40a394eae060e1ddc624\\\\dataviz\\\\scripts\\\\validate_palette.js\" \"#3987e5,#d95926,#199e70,#d55181\" --mode dark --pairs all --surface \"#0f172a\")",
       "Bash(node \"C:\\\\Users\\\\tanh2\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\bundled-skills\\\\2.1.216\\\\14d1b57a747c40a394eae060e1ddc624\\\\dataviz\\\\scripts\\\\validate_palette.js\" \"#3987e5,#e66767,#199e70,#c98500\" --mode dark --pairs all --surface \"#0f172a\")",
-      "Bash(node \"C:\\\\Users\\\\tanh2\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\bundled-skills\\\\2.1.216\\\\14d1b57a747c40a394eae060e1ddc624\\\\dataviz\\\\scripts\\\\validate_palette.js\" \"#3987e5,#d95926,#eda100,#e66767\" --mode dark --pairs all --surface \"#0f172a\")"
+      "Bash(node \"C:\\\\Users\\\\tanh2\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\bundled-skills\\\\2.1.216\\\\14d1b57a747c40a394eae060e1ddc624\\\\dataviz\\\\scripts\\\\validate_palette.js\" \"#3987e5,#d95926,#eda100,#e66767\" --mode dark --pairs all --surface \"#0f172a\")",
+      "Bash(PYTHONIOENCODING=utf-8 python gen_v2.py)",
+      "Bash('/c/Program Files \\(x86\\)/Microsoft/Edge/Application/msedge.exe' --headless --disable-gpu --screenshot=C:/Users/tanh2/AppData/Local/Temp/claude/d--LEARN-print-hub-3d/64892ed8-da5b-4885-96c7-9154d622315a/scratchpad/v54.png --window-size=1440,1000 file:///D:/LEARN/print_hub_3d/docs/figma-mockups/Hinh-3-54-Giao-dien-admin-bao-gia-yeu-cau-in.svg)",
+      "Bash('/c/Program Files \\(x86\\)/Microsoft/Edge/Application/msedge.exe' --headless --disable-gpu --screenshot=C:/Users/tanh2/AppData/Local/Temp/claude/d--LEARN-print-hub-3d/64892ed8-da5b-4885-96c7-9154d622315a/scratchpad/v41.png --window-size=1440,1000 file:///D:/LEARN/print_hub_3d/docs/figma-mockups/Hinh-3-41-Giao-dien-danh-gia.svg)",
+      "Bash('/c/Program Files \\(x86\\)/Microsoft/Edge/Application/msedge.exe' --headless --disable-gpu --screenshot=C:/Users/tanh2/AppData/Local/Temp/claude/d--LEARN-print-hub-3d/64892ed8-da5b-4885-96c7-9154d622315a/scratchpad/tc.png --window-size=1440,2420 file:///D:/LEARN/print_hub_3d/docs/figma-mockups/Hinh-3-32-Giao-dien-trang-chu.svg)",
+      "Bash(xargs -I{} grep -n \"permitAll\\\\|hasRole\\\\|hasAnyRole\\\\|authenticated\\(\\)\" {})",
+      "PowerShell($j = Get-Command java -ErrorAction SilentlyContinue; if \\($j\\) { \"JAVA: \" + $j.Source; java -version } else { \"JAVA: KHONG CO\" }; $d = Get-Command dot -ErrorAction SilentlyContinue; if \\($d\\) { \"GRAPHVIZ: \" + $d.Source } else { \"GRAPHVIZ: KHONG CO\" })",
+      "Bash(PYTHONIOENCODING=utf-8 python gen_usecase_doc.py)",
+      "Bash(PYTHONIOENCODING=utf-8 python gen_uc_detail.py)"
     ],
     "additionalDirectories": [
       "d:\\LEARN\\print_hub_3d"
