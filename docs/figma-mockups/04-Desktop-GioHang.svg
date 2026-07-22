@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+<rect x="0" y="0" width="1440" height="900" fill="#f8fafc"/>
+<rect x="0" y="0" width="1440" height="72" fill="#ffffff"/>
+<line x1="0" y1="72" x2="1440" y2="72" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="120" y="19" width="34.0" height="34.0" fill="#2563eb" rx="10.0"/>
+<text x="137.0" y="41.0" font-family="Inter, sans-serif" font-size="18.0" fill="#ffffff" font-weight="800" text-anchor="middle">P</text>
+<text x="164.0" y="41.0" font-family="Inter, sans-serif" font-size="16.0" fill="#0f172a" font-weight="700" text-anchor="start">Print Hub 3D</text>
+<text x="350" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="500" text-anchor="start">Trang chủ</text>
+<text x="461.8" y="41" font-family="Inter, sans-serif" font-size="14" fill="#2563eb" font-weight="600" text-anchor="start">Chợ mô hình</text>
+<rect x="461.8" y="50" width="88" height="2.5" fill="#2563eb" rx="2"/>
+<text x="590.0" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="500" text-anchor="start">Dịch vụ in 3D</text>
+<text x="734.6" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="500" text-anchor="start">Sạp bán hàng</text>
+<circle cx="1302" cy="36" r="18" fill="#dbeafe"/>
+<text x="1302" y="42.3" font-family="Inter, sans-serif" font-size="16.2" fill="#2563eb" font-weight="700" text-anchor="middle">T</text>
+<text x="1274" y="41" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="500" text-anchor="end">Tuấn Anh</text>
+<circle cx="1192" cy="36" r="17" fill="#f1f5f9"/>
+<text x="1192" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="400" text-anchor="middle">🔔</text>
+<circle cx="1200" cy="28" r="7" fill="#ef4444"/>
+<text x="1200" y="31" font-family="Inter, sans-serif" font-size="9" fill="#ffffff" font-weight="700" text-anchor="middle">3</text>
+<circle cx="1142" cy="36" r="17" fill="#f1f5f9"/>
+<text x="1142" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="400" text-anchor="middle">🛒</text>
+<circle cx="1150" cy="28" r="7" fill="#2563eb"/>
+<text x="1150" y="31" font-family="Inter, sans-serif" font-size="9" fill="#ffffff" font-weight="700" text-anchor="middle">2</text>
+<text x="120" y="136" font-family="Inter, sans-serif" font-size="34" fill="#0f172a" font-weight="800" text-anchor="start">Giỏ hàng</text>
+<text x="120" y="166" font-family="Inter, sans-serif" font-size="14.5" fill="#64748b" font-weight="400" text-anchor="start">Bạn có 3 mô hình trong giỏ</text>
+<rect x="120" y="200" width="800" height="400" fill="#ffffff" rx="22" stroke="#e2e8f0" stroke-width="1"/>
+<text x="148" y="240" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="600" text-anchor="start">Sản phẩm</text>
+<text x="590" y="240" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="600" text-anchor="middle">Đơn giá</text>
+<text x="740" y="240" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="600" text-anchor="middle">Số lượng</text>
+<text x="892" y="240" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="600" text-anchor="end">Thành tiền</text>
+<line x1="148" y1="258" x2="892" y2="258" stroke="#e2e8f0" stroke-width="1"/>
+<defs><linearGradient id="g95229" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="148" y="282" width="76" height="76" fill="url(#g95229)" rx="14"/>
+<path d="M186.0 300.772 L202.72 311.64 L202.72 328.36 L186.0 339.228 L169.28 328.36 L169.28 311.64 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M186.0 300.772 L202.72 311.64 L186.0 322.508 L169.28 311.64 Z" fill="#dbeafe"/>
+<path d="M186.0 322.508 L202.72 311.64 L202.72 328.36 L186.0 339.228 Z" fill="#1d4ed8" opacity="0.75"/>
+<text x="240" y="310" font-family="Inter, sans-serif" font-size="14.5" fill="#0f172a" font-weight="700" text-anchor="start">Rồng Á Đông chi tiết cao</text>
+<text x="240" y="332" font-family="Inter, sans-serif" font-size="12.5" fill="#64748b" font-weight="400" text-anchor="start">Sạp: Dragon Studio</text>
+<text x="240" y="352" font-family="Inter, sans-serif" font-size="12" fill="#ef4444" font-weight="600" text-anchor="start">🗑  Xóa</text>
+<text x="590" y="324" font-family="Inter, sans-serif" font-size="13.5" fill="#475569" font-weight="600" text-anchor="middle">250.000₫</text>
+<rect x="698" y="306" width="88" height="34" fill="#ffffff" rx="10" stroke="#e2e8f0" stroke-width="1"/>
+<text x="716" y="328" font-family="Inter, sans-serif" font-size="14" fill="#64748b" font-weight="600" text-anchor="middle">−</text>
+<text x="742" y="328" font-family="Inter, sans-serif" font-size="13" fill="#0f172a" font-weight="700" text-anchor="middle">1</text>
+<text x="768" y="328" font-family="Inter, sans-serif" font-size="14" fill="#64748b" font-weight="600" text-anchor="middle">+</text>
+<text x="892" y="328" font-family="Inter, sans-serif" font-size="15" fill="#0f172a" font-weight="800" text-anchor="end">250.000₫</text>
+<line x1="148" y1="374" x2="892" y2="374" stroke="#e2e8f0" stroke-width="1"/>
+<defs><linearGradient id="g12533" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="148" y="388" width="76" height="76" fill="url(#g12533)" rx="14"/>
+<path d="M186.0 406.772 L202.72 417.64 L202.72 434.36 L186.0 445.228 L169.28 434.36 L169.28 417.64 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M186.0 406.772 L202.72 417.64 L186.0 428.508 L169.28 417.64 Z" fill="#dbeafe"/>
+<path d="M186.0 428.508 L202.72 417.64 L202.72 434.36 L186.0 445.228 Z" fill="#1d4ed8" opacity="0.75"/>
+<text x="240" y="416" font-family="Inter, sans-serif" font-size="14.5" fill="#0f172a" font-weight="700" text-anchor="start">Bộ cờ vua Trung Cổ</text>
+<text x="240" y="438" font-family="Inter, sans-serif" font-size="12.5" fill="#64748b" font-weight="400" text-anchor="start">Sạp: Tabletop VN</text>
+<text x="240" y="458" font-family="Inter, sans-serif" font-size="12" fill="#ef4444" font-weight="600" text-anchor="start">🗑  Xóa</text>
+<text x="590" y="430" font-family="Inter, sans-serif" font-size="13.5" fill="#475569" font-weight="600" text-anchor="middle">420.000₫</text>
+<rect x="698" y="412" width="88" height="34" fill="#ffffff" rx="10" stroke="#e2e8f0" stroke-width="1"/>
+<text x="716" y="434" font-family="Inter, sans-serif" font-size="14" fill="#64748b" font-weight="600" text-anchor="middle">−</text>
+<text x="742" y="434" font-family="Inter, sans-serif" font-size="13" fill="#0f172a" font-weight="700" text-anchor="middle">1</text>
+<text x="768" y="434" font-family="Inter, sans-serif" font-size="14" fill="#64748b" font-weight="600" text-anchor="middle">+</text>
+<text x="892" y="434" font-family="Inter, sans-serif" font-size="15" fill="#0f172a" font-weight="800" text-anchor="end">420.000₫</text>
+<line x1="148" y1="480" x2="892" y2="480" stroke="#e2e8f0" stroke-width="1"/>
+<defs><linearGradient id="g45064" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="148" y="494" width="76" height="76" fill="url(#g45064)" rx="14"/>
+<path d="M186.0 512.772 L202.72 523.64 L202.72 540.36 L186.0 551.228 L169.28 540.36 L169.28 523.64 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M186.0 512.772 L202.72 523.64 L186.0 534.508 L169.28 523.64 Z" fill="#dbeafe"/>
+<path d="M186.0 534.508 L202.72 523.64 L202.72 540.36 L186.0 551.228 Z" fill="#1d4ed8" opacity="0.75"/>
+<text x="240" y="522" font-family="Inter, sans-serif" font-size="14.5" fill="#0f172a" font-weight="700" text-anchor="start">Giá đỡ điện thoại</text>
+<text x="240" y="544" font-family="Inter, sans-serif" font-size="12.5" fill="#64748b" font-weight="400" text-anchor="start">Sạp: DailyMake</text>
+<text x="240" y="564" font-family="Inter, sans-serif" font-size="12" fill="#ef4444" font-weight="600" text-anchor="start">🗑  Xóa</text>
+<text x="590" y="536" font-family="Inter, sans-serif" font-size="13.5" fill="#475569" font-weight="600" text-anchor="middle">65.000₫</text>
+<rect x="698" y="518" width="88" height="34" fill="#ffffff" rx="10" stroke="#e2e8f0" stroke-width="1"/>
+<text x="716" y="540" font-family="Inter, sans-serif" font-size="14" fill="#64748b" font-weight="600" text-anchor="middle">−</text>
+<text x="742" y="540" font-family="Inter, sans-serif" font-size="13" fill="#0f172a" font-weight="700" text-anchor="middle">2</text>
+<text x="768" y="540" font-family="Inter, sans-serif" font-size="14" fill="#64748b" font-weight="600" text-anchor="middle">+</text>
+<text x="892" y="540" font-family="Inter, sans-serif" font-size="15" fill="#0f172a" font-weight="800" text-anchor="end">130.000₫</text>
+<text x="120" y="634" font-family="Inter, sans-serif" font-size="13.5" fill="#2563eb" font-weight="600" text-anchor="start">←  Tiếp tục mua sắm</text>
+<rect x="948" y="200" width="372" height="400" fill="#ffffff" rx="22" stroke="#e2e8f0" stroke-width="1"/>
+<text x="976" y="242" font-family="Inter, sans-serif" font-size="18" fill="#0f172a" font-weight="700" text-anchor="start">Tóm tắt đơn hàng</text>
+<line x1="976" y1="262" x2="1292" y2="262" stroke="#e2e8f0" stroke-width="1"/>
+<text x="976" y="298" font-family="Inter, sans-serif" font-size="13.5" fill="#64748b" font-weight="400" text-anchor="start">Tạm tính (4 món)</text>
+<text x="1292" y="298" font-family="Inter, sans-serif" font-size="13.5" fill="#0f172a" font-weight="600" text-anchor="end">800.000₫</text>
+<text x="976" y="332" font-family="Inter, sans-serif" font-size="13.5" fill="#64748b" font-weight="400" text-anchor="start">Phí nền tảng</text>
+<text x="1292" y="332" font-family="Inter, sans-serif" font-size="13.5" fill="#22c55e" font-weight="600" text-anchor="end">Miễn phí</text>
+<text x="976" y="366" font-family="Inter, sans-serif" font-size="13.5" fill="#64748b" font-weight="400" text-anchor="start">Giảm giá (WELCOME10)</text>
+<text x="1292" y="366" font-family="Inter, sans-serif" font-size="13.5" fill="#22c55e" font-weight="600" text-anchor="end">−80.000₫</text>
+<text x="976" y="400" font-family="Inter, sans-serif" font-size="13.5" fill="#64748b" font-weight="400" text-anchor="start">Thuế VAT (10%)</text>
+<text x="1292" y="400" font-family="Inter, sans-serif" font-size="13.5" fill="#0f172a" font-weight="600" text-anchor="end">72.000₫</text>
+<line x1="976" y1="446" x2="1292" y2="446" stroke="#e2e8f0" stroke-width="1"/>
+<text x="976" y="478" font-family="Inter, sans-serif" font-size="16" fill="#0f172a" font-weight="700" text-anchor="start">Tổng cộng</text>
+<text x="1292" y="480" font-family="Inter, sans-serif" font-size="24" fill="#2563eb" font-weight="800" text-anchor="end">792.000₫</text>
+<rect x="976" y="506" width="316" height="54" fill="#2563eb" rx="12"/>
+<text x="1134.0" y="538.4" font-family="Inter, sans-serif" font-size="15" fill="#ffffff" font-weight="600" text-anchor="middle">Tiến hành thanh toán  →</text>
+<text x="1134" y="582" font-family="Inter, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="middle">🛡  Thanh toán bảo mật qua Stripe</text>
+<rect x="948" y="624" width="372" height="96" fill="#ffffff" rx="22" stroke="#e2e8f0" stroke-width="1"/>
+<text x="976" y="660" font-family="Inter, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">Mã giảm giá</text>
+<rect x="976" y="674" width="216" height="42" fill="#f8fafc" rx="10" stroke="#e2e8f0" stroke-width="1"/>
+<text x="992" y="701" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="600" text-anchor="start">WELCOME10</text>
+<rect x="1202" y="674" width="90" height="42" fill="#0f172a" rx="12"/>
+<text x="1247.0" y="699.5" font-family="Inter, sans-serif" font-size="12.5" fill="#ffffff" font-weight="600" text-anchor="middle">Áp dụng</text>
+</svg>

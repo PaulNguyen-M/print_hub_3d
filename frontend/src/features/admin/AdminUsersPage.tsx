@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   Users, Search, ShieldCheck, ChevronLeft, ChevronRight,
@@ -35,7 +36,8 @@ export default function AdminUsersPage() {
   const [totalPages, setTotalPages] = useState(1)
   const [totalElements, setTotalElements] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [search, setSearch] = useState('')
+  const [searchParams] = useSearchParams()
+  const [search, setSearch] = useState(searchParams.get('search') ?? '')
   const [savingId, setSavingId] = useState<number | null>(null)
 
   const fetchUsers = async (pageNumber = 0, keyword = search) => {

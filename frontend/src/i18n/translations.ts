@@ -129,6 +129,7 @@ export const translations: Dict = {
   'admin.backToSite':     { vi: 'Về trang web',  en: 'Back to site' },
   'admin.roleAdmin':      { vi: 'Quản trị viên', en: 'Administrator' },
   'admin.logout':         { vi: 'Đăng xuất',     en: 'Log out' },
+  'admin.searchUsers': { vi: 'Tìm người dùng...', en: 'Search users...' },
 
   // ── Admin dashboard ──
   'admin.dash.label':  { vi: 'Phân tích Admin',  en: 'Admin Analytics' },
@@ -159,7 +160,24 @@ export const translations: Dict = {
   'admin.dash.pendingOrders':      { vi: 'Đơn chờ xử lý', en: 'Pending orders' },
   'admin.dash.pendingOrdersDesc':  { vi: 'Số đơn đang chờ xác nhận', en: 'Orders awaiting confirmation' },
   'admin.dash.noRevenue':   { vi: 'Chưa có dữ liệu doanh thu', en: 'No revenue data available' },
-
+  'admin.dash.roleBuyer':  { vi: 'Người mua',   en: 'Buyers' },
+  'admin.dash.roleSeller': { vi: 'Người bán',   en: 'Sellers' },
+  'admin.dash.rolePrinter':{ vi: 'Đối tác in',  en: 'Print partners' },
+  'admin.dash.roleAdmin2': { vi: 'Quản trị',    en: 'Admins' },
+  'admin.dash.accounts':   { vi: 'tài khoản',   en: 'accounts' },
+  'admin.dash.overviewTitle':       { vi: 'Tổng quan hệ thống', en: 'System overview' },
+  'admin.dash.activeSuffix':        { vi: 'đang hoạt động', en: 'active' },
+  'admin.dash.pendingSuffix':       { vi: 'chờ duyệt', en: 'pending review' },
+  'admin.dash.pendingConfirmSuffix':{ vi: 'chờ xác nhận', en: 'awaiting confirmation' },
+  'admin.dash.userDist':            { vi: 'Phân bố người dùng', en: 'User distribution' },
+  'admin.dash.tabProducts':         { vi: 'Sản phẩm', en: 'Products' },
+  'admin.dash.tabSellerApps':       { vi: 'Đơn mở sạp', en: 'Shop applications' },
+  'admin.dash.tabWithdrawals':      { vi: 'Rút tiền', en: 'Withdrawals' },
+  'admin.dash.viewAll':             { vi: 'Xem tất cả', en: 'View all' },
+  'admin.dash.pendingEmpty':        { vi: 'Không có mục nào đang chờ duyệt.', en: 'Nothing pending review.' },
+  'admin.dash.approve':             { vi: 'Duyệt', en: 'Approve' },
+  'admin.dash.reject':              { vi: 'Từ chối', en: 'Reject' },
+  'admin.dash.rejectPrompt':        { vi: 'Nhập lý do từ chối:', en: 'Enter rejection reason:' },
 
   // ── Admin products ──
   'admin.prod.label':  { vi: 'Quản lý sản phẩm', en: 'Product Management' },

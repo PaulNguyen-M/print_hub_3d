@@ -37,6 +37,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     /** Sản phẩm theo trạng thái duyệt (PENDING/ACTIVE/REJECTED). */
     Page<Product> findByStatus(Product.ProductStatus status, Pageable pageable);
 
+    /** Đếm sản phẩm theo trạng thái (dùng cho dashboard). */
+    long countByStatus(Product.ProductStatus status);
+
     /** Sản phẩm của một người bán nhưng chưa gắn sạp (dùng khi tạo sạp để gán vào). */
     java.util.List<Product> findBySeller_UserIdAndShopIsNull(Long sellerId);
 

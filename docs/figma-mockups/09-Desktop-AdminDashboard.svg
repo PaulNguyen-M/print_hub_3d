@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+<rect x="0" y="0" width="1440" height="900" fill="#f8fafc"/>
+<rect x="0" y="0" width="1440" height="900" fill="#f8fafc"/>
+<rect x="0" y="0" width="258" height="900" fill="#0f172a"/>
+<rect x="24" y="30" width="32.3" height="32.3" fill="#2563eb" rx="9.5"/>
+<text x="40.15" y="50.9" font-family="Inter, sans-serif" font-size="17.099999999999998" fill="#ffffff" font-weight="800" text-anchor="middle">P</text>
+<text x="65.8" y="50.9" font-family="Inter, sans-serif" font-size="15.2" fill="#ffffff" font-weight="700" text-anchor="start">Print Hub 3D</text>
+<text x="24" y="96" font-family="Inter, sans-serif" font-size="10.5" fill="#64748b" font-weight="700" text-anchor="start" letter-spacing="1.1">QUẢN TRỊ HỆ THỐNG</text>
+<rect x="14" y="118" width="230" height="40" fill="#2563eb" rx="11"/>
+<text x="36" y="144" font-family="Inter, sans-serif" font-size="13.5" fill="#ffffff" font-weight="600" text-anchor="start">▦</text>
+<text x="62" y="144" font-family="Inter, sans-serif" font-size="13.5" fill="#ffffff" font-weight="600" text-anchor="start">Tổng quan</text>
+<text x="36" y="190" font-family="Inter, sans-serif" font-size="13.5" fill="#64748b" font-weight="600" text-anchor="start">👥</text>
+<text x="62" y="190" font-family="Inter, sans-serif" font-size="13.5" fill="#94a3b8" font-weight="500" text-anchor="start">Người dùng</text>
+<text x="36" y="236" font-family="Inter, sans-serif" font-size="13.5" fill="#64748b" font-weight="600" text-anchor="start">▣</text>
+<text x="62" y="236" font-family="Inter, sans-serif" font-size="13.5" fill="#94a3b8" font-weight="500" text-anchor="start">Sản phẩm</text>
+<text x="36" y="282" font-family="Inter, sans-serif" font-size="13.5" fill="#64748b" font-weight="600" text-anchor="start">🏪</text>
+<text x="62" y="282" font-family="Inter, sans-serif" font-size="13.5" fill="#94a3b8" font-weight="500" text-anchor="start">Đơn mở sạp</text>
+<circle cx="218" cy="276" r="10" fill="#ef4444"/>
+<text x="218" y="280" font-family="Inter, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">5</text>
+<text x="36" y="328" font-family="Inter, sans-serif" font-size="13.5" fill="#64748b" font-weight="600" text-anchor="start">🛒</text>
+<text x="62" y="328" font-family="Inter, sans-serif" font-size="13.5" fill="#94a3b8" font-weight="500" text-anchor="start">Đơn hàng</text>
+<text x="36" y="374" font-family="Inter, sans-serif" font-size="13.5" fill="#64748b" font-weight="600" text-anchor="start">⬆</text>
+<text x="62" y="374" font-family="Inter, sans-serif" font-size="13.5" fill="#94a3b8" font-weight="500" text-anchor="start">Yêu cầu in 3D</text>
+<text x="36" y="420" font-family="Inter, sans-serif" font-size="13.5" fill="#64748b" font-weight="600" text-anchor="start">🏦</text>
+<text x="62" y="420" font-family="Inter, sans-serif" font-size="13.5" fill="#94a3b8" font-weight="500" text-anchor="start">Rút tiền</text>
+<circle cx="218" cy="414" r="10" fill="#f59e0b"/>
+<text x="218" y="418" font-family="Inter, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">3</text>
+<text x="36" y="466" font-family="Inter, sans-serif" font-size="13.5" fill="#64748b" font-weight="600" text-anchor="start">📊</text>
+<text x="62" y="466" font-family="Inter, sans-serif" font-size="13.5" fill="#94a3b8" font-weight="500" text-anchor="start">Báo cáo</text>
+<text x="36" y="512" font-family="Inter, sans-serif" font-size="13.5" fill="#64748b" font-weight="600" text-anchor="start">⚙</text>
+<text x="62" y="512" font-family="Inter, sans-serif" font-size="13.5" fill="#94a3b8" font-weight="500" text-anchor="start">Cài đặt</text>
+<line x1="20" y1="560" x2="238" y2="560" stroke="#1e293b" stroke-width="1"/>
+<circle cx="44" cy="600" r="18" fill="#2563eb"/>
+<text x="44" y="606.3" font-family="Inter, sans-serif" font-size="16.2" fill="#ffffff" font-weight="700" text-anchor="middle">A</text>
+<text x="72" y="596" font-family="Inter, sans-serif" font-size="12.5" fill="#ffffff" font-weight="600" text-anchor="start">Quản trị viên</text>
+<text x="72" y="614" font-family="Inter, sans-serif" font-size="10.5" fill="#64748b" font-weight="400" text-anchor="start">admin@printhub3d.vn</text>
+<rect x="258" y="0" width="1182" height="68" fill="#ffffff"/>
+<line x1="258" y1="68" x2="1440" y2="68" stroke="#e2e8f0" stroke-width="1"/>
+<text x="290" y="40" font-family="Inter, sans-serif" font-size="18" fill="#0f172a" font-weight="700" text-anchor="start">Tổng quan hệ thống</text>
+<rect x="1040" y="16" width="220" height="36" fill="#f8fafc" rx="10" stroke="#e2e8f0" stroke-width="1"/>
+<text x="1056" y="39" font-family="Inter, sans-serif" font-size="12.5" fill="#94a3b8" font-weight="400" text-anchor="start">🔍  Tìm kiếm...</text>
+<circle cx="1302" cy="34" r="16" fill="#f1f5f9"/>
+<text x="1302" y="39" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="400" text-anchor="middle">🔔</text>
+<circle cx="1310" cy="26" r="7" fill="#ef4444"/>
+<text x="1310" y="29" font-family="Inter, sans-serif" font-size="9" fill="#ffffff" font-weight="700" text-anchor="middle">8</text>
+<circle cx="1372" cy="34" r="17" fill="#dbeafe"/>
+<text x="1372" y="39.95" font-family="Inter, sans-serif" font-size="15.3" fill="#2563eb" font-weight="700" text-anchor="middle">A</text>
+<text x="1398" y="39" font-family="Inter, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="start">▾</text>
+<rect x="290.0" y="100" width="264.5" height="126" fill="#ffffff" rx="18" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="312.0" y="122" width="38" height="38" fill="#eff6ff" rx="12.16"/>
+<text x="331.0" y="148.6" font-family="Inter, sans-serif" font-size="19.0" fill="#2563eb" font-weight="700" text-anchor="middle">👥</text>
+<text x="312.0" y="188" font-family="Inter, sans-serif" font-size="23" fill="#0f172a" font-weight="800" text-anchor="start">8.426</text>
+<text x="312.0" y="210" font-family="Inter, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="start">Tổng người dùng</text>
+<text x="532.5" y="144" font-family="Inter, sans-serif" font-size="11" fill="#22c55e" font-weight="600" text-anchor="end">+124 tuần này</text>
+<rect x="574.5" y="100" width="264.5" height="126" fill="#ffffff" rx="18" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="596.5" y="122" width="38" height="38" fill="#eff6ff" rx="12.16"/>
+<text x="615.5" y="148.6" font-family="Inter, sans-serif" font-size="19.0" fill="#2563eb" font-weight="700" text-anchor="middle">▣</text>
+<text x="596.5" y="188" font-family="Inter, sans-serif" font-size="23" fill="#0f172a" font-weight="800" text-anchor="start">12.418</text>
+<text x="596.5" y="210" font-family="Inter, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="start">Sản phẩm đang bán</text>
+<text x="817.0" y="144" font-family="Inter, sans-serif" font-size="11" fill="#22c55e" font-weight="600" text-anchor="end">27 chờ duyệt</text>
+<rect x="859.0" y="100" width="264.5" height="126" fill="#ffffff" rx="18" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="881.0" y="122" width="38" height="38" fill="#eff6ff" rx="12.16"/>
+<text x="900.0" y="148.6" font-family="Inter, sans-serif" font-size="19.0" fill="#2563eb" font-weight="700" text-anchor="middle">🛒</text>
+<text x="881.0" y="188" font-family="Inter, sans-serif" font-size="23" fill="#0f172a" font-weight="800" text-anchor="start">3.284</text>
+<text x="881.0" y="210" font-family="Inter, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="start">Đơn hàng tháng</text>
+<text x="1101.5" y="144" font-family="Inter, sans-serif" font-size="11" fill="#22c55e" font-weight="600" text-anchor="end">+18,4%</text>
+<rect x="1143.5" y="100" width="264.5" height="126" fill="#ffffff" rx="18" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="1165.5" y="122" width="38" height="38" fill="#eff6ff" rx="12.16"/>
+<text x="1184.5" y="148.6" font-family="Inter, sans-serif" font-size="19.0" fill="#2563eb" font-weight="700" text-anchor="middle">💰</text>
+<text x="1165.5" y="188" font-family="Inter, sans-serif" font-size="23" fill="#0f172a" font-weight="800" text-anchor="start">184,6M₫</text>
+<text x="1165.5" y="210" font-family="Inter, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="start">Doanh thu nền tảng</text>
+<text x="1386.0" y="144" font-family="Inter, sans-serif" font-size="11" fill="#22c55e" font-weight="600" text-anchor="end">Hoa hồng 15%</text>
+<rect x="290" y="250" width="715.52" height="300" fill="#ffffff" rx="18" stroke="#e2e8f0" stroke-width="1"/>
+<text x="316" y="292" font-family="Inter, sans-serif" font-size="16.5" fill="#0f172a" font-weight="700" text-anchor="start">Doanh thu nền tảng 6 tháng</text>
+<line x1="316" y1="322.0" x2="979.52" y2="322.0" stroke="#f1f5f9" stroke-width="1"/>
+<line x1="316" y1="364.0" x2="979.52" y2="364.0" stroke="#f1f5f9" stroke-width="1"/>
+<line x1="316" y1="406.0" x2="979.52" y2="406.0" stroke="#f1f5f9" stroke-width="1"/>
+<line x1="316" y1="448.0" x2="979.52" y2="448.0" stroke="#f1f5f9" stroke-width="1"/>
+<line x1="316" y1="490.0" x2="979.52" y2="490.0" stroke="#f1f5f9" stroke-width="1"/>
+<defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2563eb" stop-opacity="0.22"/><stop offset="1" stop-color="#2563eb" stop-opacity="0"/></linearGradient></defs>
+<path d="M316.0 439.6 L448.7 412.7 L581.4 422.8 L714.1 385.8 L846.8 372.4 L979.5 345.5 L979.52 490 L316 490 Z" fill="url(#ar)"/>
+<path d="M316.0 439.6 L448.7 412.7 L581.4 422.8 L714.1 385.8 L846.8 372.4 L979.5 345.5 " fill="none" stroke="#2563eb" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="316.0" cy="439.6" r="4.5" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="316.0" y="512" font-family="Inter, sans-serif" font-size="11" fill="#64748b" font-weight="600" text-anchor="middle">T2</text>
+<circle cx="448.704" cy="412.72" r="4.5" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="448.704" y="512" font-family="Inter, sans-serif" font-size="11" fill="#64748b" font-weight="600" text-anchor="middle">T3</text>
+<circle cx="581.408" cy="422.8" r="4.5" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="581.408" y="512" font-family="Inter, sans-serif" font-size="11" fill="#64748b" font-weight="600" text-anchor="middle">T4</text>
+<circle cx="714.1120000000001" cy="385.84000000000003" r="4.5" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="714.1120000000001" y="512" font-family="Inter, sans-serif" font-size="11" fill="#64748b" font-weight="600" text-anchor="middle">T5</text>
+<circle cx="846.816" cy="372.4" r="4.5" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="846.816" y="512" font-family="Inter, sans-serif" font-size="11" fill="#64748b" font-weight="600" text-anchor="middle">T6</text>
+<circle cx="979.52" cy="345.52" r="4.5" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="979.52" y="512" font-family="Inter, sans-serif" font-size="11" fill="#64748b" font-weight="600" text-anchor="middle">T7</text>
+<rect x="1025.52" y="250" width="382.48" height="300" fill="#ffffff" rx="18" stroke="#e2e8f0" stroke-width="1"/>
+<text x="1049.52" y="292" font-family="Inter, sans-serif" font-size="16.5" fill="#0f172a" font-weight="700" text-anchor="start">Phân bố người dùng</text>
+<path d="M1216.76 398 L1216.8 336.0 A62 62 0 1 1 1174.3 443.2 Z" fill="#2563eb"/>
+<path d="M1216.76 398 L1174.3 443.2 A62 62 0 0 1 1169.0 358.5 Z" fill="#06b6d4"/>
+<path d="M1216.76 398 L1169.0 358.5 A62 62 0 0 1 1201.3 337.9 Z" fill="#22c55e"/>
+<path d="M1216.76 398 L1201.3 337.9 A62 62 0 0 1 1216.8 336.0 Z" fill="#cbd5e1"/>
+<circle cx="1216.76" cy="398" r="36" fill="#ffffff"/>
+<text x="1216.76" y="396" font-family="Inter, sans-serif" font-size="17" fill="#0f172a" font-weight="800" text-anchor="middle">8.426</text>
+<text x="1216.76" y="414" font-family="Inter, sans-serif" font-size="10.5" fill="#64748b" font-weight="400" text-anchor="middle">tài khoản</text>
+<circle cx="1057.52" cy="480" r="5" fill="#2563eb"/>
+<text x="1071.52" y="484" font-family="Inter, sans-serif" font-size="11.5" fill="#475569" font-weight="400" text-anchor="start">Người mua</text>
+<text x="1384.0" y="484" font-family="Inter, sans-serif" font-size="11.5" fill="#0f172a" font-weight="600" text-anchor="end">62%</text>
+<circle cx="1057.52" cy="500" r="5" fill="#06b6d4"/>
+<text x="1071.52" y="504" font-family="Inter, sans-serif" font-size="11.5" fill="#475569" font-weight="400" text-anchor="start">Người bán</text>
+<text x="1384.0" y="504" font-family="Inter, sans-serif" font-size="11.5" fill="#0f172a" font-weight="600" text-anchor="end">24%</text>
+<circle cx="1057.52" cy="520" r="5" fill="#22c55e"/>
+<text x="1071.52" y="524" font-family="Inter, sans-serif" font-size="11.5" fill="#475569" font-weight="400" text-anchor="start">Đối tác in</text>
+<text x="1384.0" y="524" font-family="Inter, sans-serif" font-size="11.5" fill="#0f172a" font-weight="600" text-anchor="end">10%</text>
+<circle cx="1057.52" cy="540" r="5" fill="#cbd5e1"/>
+<text x="1071.52" y="544" font-family="Inter, sans-serif" font-size="11.5" fill="#475569" font-weight="400" text-anchor="start">Quản trị</text>
+<text x="1384.0" y="544" font-family="Inter, sans-serif" font-size="11.5" fill="#0f172a" font-weight="600" text-anchor="end">4%</text>
+<rect x="290" y="578" width="1118" height="252" fill="#ffffff" rx="18" stroke="#e2e8f0" stroke-width="1"/>
+<text x="316" y="620" font-family="Inter, sans-serif" font-size="16.5" fill="#0f172a" font-weight="700" text-anchor="start">Chờ duyệt</text>
+<rect x="480" y="604" width="110.71" height="26" fill="#eff6ff" rx="13.0"/>
+<text x="535.355" y="621.14" font-family="Inter, sans-serif" font-size="11.5" fill="#2563eb" font-weight="600" text-anchor="middle">Sản phẩm (27)</text>
+<rect x="630" y="604" width="117.38" height="26" fill="#f1f5f9" rx="13.0"/>
+<text x="688.69" y="621.14" font-family="Inter, sans-serif" font-size="11.5" fill="#64748b" font-weight="600" text-anchor="middle">Đơn mở sạp (5)</text>
+<rect x="780" y="604" width="104.03999999999999" height="26" fill="#f1f5f9" rx="13.0"/>
+<text x="832.02" y="621.14" font-family="Inter, sans-serif" font-size="11.5" fill="#64748b" font-weight="600" text-anchor="middle">Rút tiền (3)</text>
+<text x="1382" y="620" font-family="Inter, sans-serif" font-size="12.5" fill="#2563eb" font-weight="600" text-anchor="end">Xem tất cả →</text>
+<text x="316" y="662" font-family="Inter, sans-serif" font-size="12" fill="#64748b" font-weight="600" text-anchor="start">Sản phẩm</text>
+<text x="593.1600000000001" y="662" font-family="Inter, sans-serif" font-size="12" fill="#64748b" font-weight="600" text-anchor="start">Sạp</text>
+<text x="785.04" y="662" font-family="Inter, sans-serif" font-size="12" fill="#64748b" font-weight="600" text-anchor="start">Danh mục</text>
+<text x="955.6" y="662" font-family="Inter, sans-serif" font-size="12" fill="#64748b" font-weight="600" text-anchor="start">Giá</text>
+<text x="1083.52" y="662" font-family="Inter, sans-serif" font-size="12" fill="#64748b" font-weight="600" text-anchor="start">Ngày gửi</text>
+<text x="1243.42" y="662" font-family="Inter, sans-serif" font-size="12" fill="#64748b" font-weight="600" text-anchor="start">Thao tác</text>
+<line x1="316" y1="676" x2="1382" y2="676" stroke="#e2e8f0" stroke-width="1"/>
+<defs><linearGradient id="g52811" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="316" y="693" width="30" height="30" fill="url(#g52811)" rx="7"/>
+<path d="M331.0 700.41 L337.6 704.7 L337.6 711.3 L331.0 715.59 L324.4 711.3 L324.4 704.7 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M331.0 700.41 L337.6 704.7 L331.0 708.99 L324.4 704.7 Z" fill="#dbeafe"/>
+<path d="M331.0 708.99 L337.6 704.7 L337.6 711.3 L331.0 715.59 Z" fill="#1d4ed8" opacity="0.75"/>
+<text x="354" y="708" font-family="Inter, sans-serif" font-size="12.5" fill="#0f172a" font-weight="600" text-anchor="start">Rồng Á Đông v2</text>
+<text x="593.1600000000001" y="708" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="400" text-anchor="start">Dragon Studio</text>
+<text x="785.04" y="708" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="400" text-anchor="start">Sưu tầm</text>
+<text x="955.6" y="708" font-family="Inter, sans-serif" font-size="12.5" fill="#0f172a" font-weight="600" text-anchor="start">250.000₫</text>
+<text x="1083.52" y="708" font-family="Inter, sans-serif" font-size="12.5" fill="#64748b" font-weight="400" text-anchor="start">Hôm nay</text>
+<rect x="1243.42" y="691" width="66" height="28" fill="#22c55e" rx="12"/>
+<text x="1276.42" y="709.14" font-family="Inter, sans-serif" font-size="11.5" fill="#ffffff" font-weight="600" text-anchor="middle">Duyệt</text>
+<rect x="1317.42" y="691" width="66" height="28" fill="#ffffff" rx="12" stroke="#e2e8f0" stroke-width="1"/>
+<text x="1350.42" y="709.14" font-family="Inter, sans-serif" font-size="11.5" fill="#475569" font-weight="600" text-anchor="middle">Từ chối</text>
+<line x1="316" y1="726" x2="1382" y2="726" stroke="#f1f5f9" stroke-width="1"/>
+<defs><linearGradient id="g44759" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="316" y="737" width="30" height="30" fill="url(#g44759)" rx="7"/>
+<path d="M331.0 744.41 L337.6 748.7 L337.6 755.3 L331.0 759.59 L324.4 755.3 L324.4 748.7 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M331.0 744.41 L337.6 748.7 L331.0 752.99 L324.4 748.7 Z" fill="#dbeafe"/>
+<path d="M331.0 752.99 L337.6 748.7 L337.6 755.3 L331.0 759.59 Z" fill="#1d4ed8" opacity="0.75"/>
+<text x="354" y="752" font-family="Inter, sans-serif" font-size="12.5" fill="#0f172a" font-weight="600" text-anchor="start">Kệ sách mô-đun</text>
+<text x="593.1600000000001" y="752" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="400" text-anchor="start">GeoPrint Lab</text>
+<text x="785.04" y="752" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="400" text-anchor="start">Đồ dùng</text>
+<text x="955.6" y="752" font-family="Inter, sans-serif" font-size="12.5" fill="#0f172a" font-weight="600" text-anchor="start">120.000₫</text>
+<text x="1083.52" y="752" font-family="Inter, sans-serif" font-size="12.5" fill="#64748b" font-weight="400" text-anchor="start">Hôm qua</text>
+<rect x="1243.42" y="735" width="66" height="28" fill="#22c55e" rx="12"/>
+<text x="1276.42" y="753.14" font-family="Inter, sans-serif" font-size="11.5" fill="#ffffff" font-weight="600" text-anchor="middle">Duyệt</text>
+<rect x="1317.42" y="735" width="66" height="28" fill="#ffffff" rx="12" stroke="#e2e8f0" stroke-width="1"/>
+<text x="1350.42" y="753.14" font-family="Inter, sans-serif" font-size="11.5" fill="#475569" font-weight="600" text-anchor="middle">Từ chối</text>
+<line x1="316" y1="770" x2="1382" y2="770" stroke="#f1f5f9" stroke-width="1"/>
+<defs><linearGradient id="g37256" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="316" y="781" width="30" height="30" fill="url(#g37256)" rx="7"/>
+<path d="M331.0 788.41 L337.6 792.7 L337.6 799.3 L331.0 803.59 L324.4 799.3 L324.4 792.7 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M331.0 788.41 L337.6 792.7 L331.0 796.99 L324.4 792.7 Z" fill="#dbeafe"/>
+<path d="M331.0 796.99 L337.6 792.7 L337.6 799.3 L331.0 803.59 Z" fill="#1d4ed8" opacity="0.75"/>
+<text x="354" y="796" font-family="Inter, sans-serif" font-size="12.5" fill="#0f172a" font-weight="600" text-anchor="start">Bộ Chess Sci-Fi</text>
+<text x="593.1600000000001" y="796" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="400" text-anchor="start">Tabletop VN</text>
+<text x="785.04" y="796" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="400" text-anchor="start">Board game</text>
+<text x="955.6" y="796" font-family="Inter, sans-serif" font-size="12.5" fill="#0f172a" font-weight="600" text-anchor="start">480.000₫</text>
+<text x="1083.52" y="796" font-family="Inter, sans-serif" font-size="12.5" fill="#64748b" font-weight="400" text-anchor="start">2 ngày trước</text>
+<rect x="1243.42" y="779" width="66" height="28" fill="#22c55e" rx="12"/>
+<text x="1276.42" y="797.14" font-family="Inter, sans-serif" font-size="11.5" fill="#ffffff" font-weight="600" text-anchor="middle">Duyệt</text>
+<rect x="1317.42" y="779" width="66" height="28" fill="#ffffff" rx="12" stroke="#e2e8f0" stroke-width="1"/>
+<text x="1350.42" y="797.14" font-family="Inter, sans-serif" font-size="11.5" fill="#475569" font-weight="600" text-anchor="middle">Từ chối</text>
+</svg>

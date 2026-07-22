@@ -8,6 +8,11 @@ export interface AdminDashboardOverview {
   totalRevenue: number
   pendingOrders: number
   pendingPrintingRequests: number
+  pendingProducts: number
+  pendingSellerApplications: number
+  pendingWithdrawals: number
+  /** Số người dùng đang hoạt động theo vai trò (BUYER/SELLER/PRINTER_PARTNER/ADMIN). */
+  roleDistribution: Record<string, number>
   monthlyRevenue: Array<{ period: string; revenue: number }>
 }
 

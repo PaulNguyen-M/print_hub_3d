@@ -32,4 +32,7 @@ public interface WithdrawalRepository extends JpaRepository<Withdrawal, Long> {
     /** Tổng tiền đang bị giữ trong các yêu cầu rút chờ duyệt (PENDING) của một sạp. */
     @Query("SELECT COALESCE(SUM(w.amount), 0) FROM Withdrawal w WHERE w.shop.shopId = ?1 AND w.status = 'PENDING'")
     BigDecimal totalPendingForShop(Long shopId);
+
+    /** Đếm yêu cầu rút theo trạng thái (dùng cho dashboard). */
+    long countByStatus(WithdrawalStatus status);
 }

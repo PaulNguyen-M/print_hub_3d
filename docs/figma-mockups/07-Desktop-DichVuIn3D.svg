@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1200" viewBox="0 0 1440 1200">
+<rect x="0" y="0" width="1440" height="1200" fill="#f8fafc"/>
+<rect x="0" y="0" width="1440" height="72" fill="#ffffff"/>
+<line x1="0" y1="72" x2="1440" y2="72" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="120" y="19" width="34.0" height="34.0" fill="#2563eb" rx="10.0"/>
+<text x="137.0" y="41.0" font-family="Inter, sans-serif" font-size="18.0" fill="#ffffff" font-weight="800" text-anchor="middle">P</text>
+<text x="164.0" y="41.0" font-family="Inter, sans-serif" font-size="16.0" fill="#0f172a" font-weight="700" text-anchor="start">Print Hub 3D</text>
+<text x="350" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="500" text-anchor="start">Trang chủ</text>
+<text x="461.8" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="500" text-anchor="start">Chợ mô hình</text>
+<text x="590.0" y="41" font-family="Inter, sans-serif" font-size="14" fill="#2563eb" font-weight="600" text-anchor="start">Dịch vụ in 3D</text>
+<rect x="590.0" y="50" width="104" height="2.5" fill="#2563eb" rx="2"/>
+<text x="734.6" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="500" text-anchor="start">Sạp bán hàng</text>
+<circle cx="1302" cy="36" r="18" fill="#dbeafe"/>
+<text x="1302" y="42.3" font-family="Inter, sans-serif" font-size="16.2" fill="#2563eb" font-weight="700" text-anchor="middle">T</text>
+<text x="1274" y="41" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="500" text-anchor="end">Tuấn Anh</text>
+<circle cx="1192" cy="36" r="17" fill="#f1f5f9"/>
+<text x="1192" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="400" text-anchor="middle">🔔</text>
+<circle cx="1200" cy="28" r="7" fill="#ef4444"/>
+<text x="1200" y="31" font-family="Inter, sans-serif" font-size="9" fill="#ffffff" font-weight="700" text-anchor="middle">3</text>
+<circle cx="1142" cy="36" r="17" fill="#f1f5f9"/>
+<text x="1142" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="400" text-anchor="middle">🛒</text>
+<circle cx="1150" cy="28" r="7" fill="#2563eb"/>
+<text x="1150" y="31" font-family="Inter, sans-serif" font-size="9" fill="#ffffff" font-weight="700" text-anchor="middle">2</text>
+<text x="120" y="140" font-family="Inter, sans-serif" font-size="36" fill="#0f172a" font-weight="800" text-anchor="start">Dịch vụ in 3D theo yêu cầu</text>
+<text x="120" y="172" font-family="Inter, sans-serif" font-size="15" fill="#64748b" font-weight="400" text-anchor="start">Tải file STL của bạn lên — chúng tôi báo giá trong 24 giờ và giao tận nơi</text>
+<circle cx="216" cy="216" r="20" fill="#2563eb"/>
+<text x="216" y="222" font-family="Inter, sans-serif" font-size="14" fill="#ffffff" font-weight="700" text-anchor="middle">1</text>
+<text x="216" y="260" font-family="Inter, sans-serif" font-size="13" fill="#0f172a" font-weight="600" text-anchor="middle">Tải file STL</text>
+<line x1="238" y1="216" x2="462" y2="216" stroke="#e2e8f0" stroke-width="2.5"/>
+<circle cx="484" cy="216" r="20" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<text x="484" y="222" font-family="Inter, sans-serif" font-size="14" fill="#94a3b8" font-weight="700" text-anchor="middle">2</text>
+<text x="484" y="260" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="600" text-anchor="middle">Nhận báo giá</text>
+<line x1="506" y1="216" x2="730" y2="216" stroke="#e2e8f0" stroke-width="2.5"/>
+<circle cx="752" cy="216" r="20" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<text x="752" y="222" font-family="Inter, sans-serif" font-size="14" fill="#94a3b8" font-weight="700" text-anchor="middle">3</text>
+<text x="752" y="260" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="600" text-anchor="middle">Xác nhận &amp; thanh toán</text>
+<line x1="774" y1="216" x2="998" y2="216" stroke="#e2e8f0" stroke-width="2.5"/>
+<circle cx="1020" cy="216" r="20" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<text x="1020" y="222" font-family="Inter, sans-serif" font-size="14" fill="#94a3b8" font-weight="700" text-anchor="middle">4</text>
+<text x="1020" y="260" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="600" text-anchor="middle">In &amp; giao hàng</text>
+<rect x="120" y="300" width="760" height="430" fill="#ffffff" rx="24" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="148" y="328" width="704" height="240" rx="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2" stroke-dasharray="10 7"/>
+<circle cx="500.0" cy="412" r="34" fill="#ffffff"/>
+<text x="500.0" y="422" font-family="Inter, sans-serif" font-size="26" fill="#2563eb" font-weight="700" text-anchor="middle">⬆</text>
+<text x="500.0" y="474" font-family="Inter, sans-serif" font-size="19" fill="#0f172a" font-weight="700" text-anchor="middle">Kéo thả file STL vào đây</text>
+<text x="500.0" y="500" font-family="Inter, sans-serif" font-size="13.5" fill="#64748b" font-weight="400" text-anchor="middle">hoặc bấm để chọn từ máy tính</text>
+<rect x="420.0" y="518" width="160" height="44" fill="#2563eb" rx="12"/>
+<text x="500.0" y="544.86" font-family="Inter, sans-serif" font-size="13.5" fill="#ffffff" font-weight="600" text-anchor="middle">Chọn file</text>
+<text x="500.0" y="594" font-family="Inter, sans-serif" font-size="12.5" fill="#64748b" font-weight="400" text-anchor="middle">Định dạng: .stl, .obj, .3mf  ·  Tối đa 100 MB mỗi file</text>
+<rect x="148" y="612" width="704" height="76" fill="#f8fafc" rx="14" stroke="#e2e8f0" stroke-width="1"/>
+<defs><linearGradient id="g58476" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="164" y="624" width="52" height="52" fill="url(#g58476)" rx="10"/>
+<path d="M190.0 636.844 L201.44 644.28 L201.44 655.72 L190.0 663.156 L178.56 655.72 L178.56 644.28 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M190.0 636.844 L201.44 644.28 L190.0 651.716 L178.56 644.28 Z" fill="#dbeafe"/>
+<path d="M190.0 651.716 L201.44 644.28 L201.44 655.72 L190.0 663.156 Z" fill="#1d4ed8" opacity="0.75"/>
+<text x="232" y="644" font-family="Inter, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">rong_a_dong_v2.stl</text>
+<text x="232" y="664" font-family="Inter, sans-serif" font-size="12" fill="#22c55e" font-weight="400" text-anchor="start">48,2 MB  ·  Đã tải lên thành công</text>
+<text x="832" y="656" font-family="Inter, sans-serif" font-size="15" fill="#94a3b8" font-weight="400" text-anchor="middle">🗑</text>
+<rect x="908" y="300" width="412" height="610" fill="#ffffff" rx="24" stroke="#e2e8f0" stroke-width="1"/>
+<text x="936" y="342" font-family="Inter, sans-serif" font-size="19" fill="#0f172a" font-weight="700" text-anchor="start">Yêu cầu in</text>
+<text x="936" y="384" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="600" text-anchor="start">Vật liệu</text>
+<rect x="936" y="396" width="78" height="40" fill="#eff6ff" rx="11" stroke="#2563eb" stroke-width="2"/>
+<text x="975" y="421" font-family="Inter, sans-serif" font-size="13" fill="#2563eb" font-weight="600" text-anchor="middle">PLA</text>
+<rect x="1024" y="396" width="78" height="40" fill="#ffffff" rx="11" stroke="#e2e8f0" stroke-width="1"/>
+<text x="1063" y="421" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="600" text-anchor="middle">ABS</text>
+<rect x="1112" y="396" width="78" height="40" fill="#ffffff" rx="11" stroke="#e2e8f0" stroke-width="1"/>
+<text x="1151" y="421" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="600" text-anchor="middle">Resin</text>
+<rect x="1200" y="396" width="78" height="40" fill="#ffffff" rx="11" stroke="#e2e8f0" stroke-width="1"/>
+<text x="1239" y="421" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="600" text-anchor="middle">PETG</text>
+<text x="936" y="470" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="600" text-anchor="start">Màu sắc</text>
+<circle cx="952" cy="504" r="17" fill="#0f172a"/>
+<circle cx="1002" cy="504" r="17" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+<circle cx="1052" cy="504" r="17" fill="#ef4444"/>
+<circle cx="1102" cy="504" r="17" fill="#2563eb"/>
+<circle cx="1102" cy="504" r="22" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+<circle cx="1152" cy="504" r="17" fill="#22c55e"/>
+<circle cx="1202" cy="504" r="17" fill="#f59e0b"/>
+<text x="936" y="556" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="600" text-anchor="start">Độ phân giải lớp</text>
+<rect x="936" y="568" width="356" height="46" fill="#f8fafc" rx="11" stroke="#e2e8f0" stroke-width="1"/>
+<text x="952" y="597" font-family="Inter, sans-serif" font-size="13.5" fill="#0f172a" font-weight="400" text-anchor="start">0,12 mm — Chi tiết cao</text>
+<text x="1276" y="597" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="400" text-anchor="end">▾</text>
+<text x="936" y="644" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="600" text-anchor="start">Tỉ lệ lấp đầy (infill)</text>
+<rect x="936" y="668" width="356" height="5" fill="#e2e8f0" rx="3"/>
+<rect x="936" y="668" width="124.6" height="5" fill="#2563eb" rx="3"/>
+<circle cx="1060.6" cy="670" r="10" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="936" y="702" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="600" text-anchor="start">20%</text>
+<text x="1292" y="702" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8" font-weight="400" text-anchor="end">Nhẹ &amp; tiết kiệm</text>
+<text x="936" y="736" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="600" text-anchor="start">Số lượng</text>
+<rect x="936" y="748" width="110" height="42" fill="#ffffff" rx="11" stroke="#e2e8f0" stroke-width="1"/>
+<text x="958" y="775" font-family="Inter, sans-serif" font-size="15" fill="#64748b" font-weight="600" text-anchor="middle">−</text>
+<text x="991" y="775" font-family="Inter, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="middle">1</text>
+<text x="1024" y="775" font-family="Inter, sans-serif" font-size="15" fill="#64748b" font-weight="600" text-anchor="middle">+</text>
+<text x="936" y="822" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="600" text-anchor="start">Ghi chú cho xưởng in</text>
+<rect x="936" y="834" width="356" height="56" fill="#f8fafc" rx="11" stroke="#e2e8f0" stroke-width="1"/>
+<text x="952" y="860" font-family="Inter, sans-serif" font-size="12.5" fill="#94a3b8" font-weight="400" text-anchor="start">VD: cần bề mặt nhẵn, đánh bóng...</text>
+<rect x="908" y="932" width="412" height="176" fill="#ffffff" rx="24" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="908" y="932" width="412" height="176" fill="#eff6ff" rx="24"/>
+<text x="936" y="972" font-family="Inter, sans-serif" font-size="15" fill="#0f172a" font-weight="700" text-anchor="start">Ước tính chi phí</text>
+<rect x="1190" y="956" width="68.72" height="24" fill="#ffffff" rx="12.0"/>
+<text x="1224.36" y="971.78" font-family="Inter, sans-serif" font-size="10.5" fill="#2563eb" font-weight="600" text-anchor="middle">Tạm tính</text>
+<text x="936" y="1004" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="400" text-anchor="start">Vật liệu (PLA · 128 g)</text>
+<text x="1292" y="1004" font-family="Inter, sans-serif" font-size="12.5" fill="#0f172a" font-weight="600" text-anchor="end">96.000₫</text>
+<text x="936" y="1030" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="400" text-anchor="start">Thời gian in (~14 giờ)</text>
+<text x="1292" y="1030" font-family="Inter, sans-serif" font-size="12.5" fill="#0f172a" font-weight="600" text-anchor="end">168.000₫</text>
+<text x="936" y="1056" font-family="Inter, sans-serif" font-size="12.5" fill="#475569" font-weight="400" text-anchor="start">Phí xử lý &amp; vận chuyển</text>
+<text x="1292" y="1056" font-family="Inter, sans-serif" font-size="12.5" fill="#0f172a" font-weight="600" text-anchor="end">45.000₫</text>
+<line x1="936" y1="1074" x2="1292" y2="1074" stroke="#bfdbfe" stroke-width="1"/>
+<text x="936" y="1098" font-family="Inter, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">Tổng ước tính</text>
+<text x="1292" y="1100" font-family="Inter, sans-serif" font-size="22" fill="#2563eb" font-weight="800" text-anchor="end">309.000₫</text>
+<rect x="908" y="1132" width="412" height="56" fill="#2563eb" rx="12"/>
+<text x="1114.0" y="1165.4" font-family="Inter, sans-serif" font-size="15" fill="#ffffff" font-weight="600" text-anchor="middle">Gửi yêu cầu báo giá  →</text>
+<text x="1114.0" y="1212" font-family="Inter, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="middle">Xưởng in sẽ phản hồi báo giá chính thức trong 24 giờ</text>
+</svg>

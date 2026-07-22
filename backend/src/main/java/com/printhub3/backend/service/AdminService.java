@@ -13,13 +13,17 @@ import com.printhub3.backend.entity.Order;
 import com.printhub3.backend.entity.Payment;
 import com.printhub3.backend.entity.PrintingRequest;
 import com.printhub3.backend.entity.Product;
+import com.printhub3.backend.entity.SellerApplication;
 import com.printhub3.backend.entity.User;
+import com.printhub3.backend.entity.Withdrawal;
 import com.printhub3.backend.repository.OrderRepository;
 import com.printhub3.backend.repository.PaymentRepository;
 import com.printhub3.backend.repository.PrintingRequestRepository;
 import com.printhub3.backend.repository.ProductRepository;
 import com.printhub3.backend.repository.RoleRepository;
+import com.printhub3.backend.repository.SellerApplicationRepository;
 import com.printhub3.backend.repository.UserRepository;
+import com.printhub3.backend.repository.WithdrawalRepository;
 import com.printhub3.backend.dto.response.ShopFulfillmentDto;
 import com.printhub3.backend.entity.OrderItem;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +35,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Map;
 
 /**
  * AdminService — Nghiệp vụ quản trị: dashboard, duyệt sản phẩm, quản lý đơn/người dùng,
@@ -56,9 +63,11 @@ public class AdminService {
     private final PaymentRepository paymentRepository;
     private final PrintingRequestRepository printingRequestRepository;
     private final RoleRepository roleRepository;
+    private final SellerApplicationRepository sellerApplicationRepository;
+    private final WithdrawalRepository withdrawalRepository;
 
     /** Tổng hợp số liệu tổng quan (người dùng, sản phẩm, đơn, doanh thu, đơn/yêu cầu chờ). */
-    @Transactional(readOnly = true)
+        @Transactional(readOnly = true)
     public AdminDashboardDto getDashboardOverview() {
         long totalUsers = userRepository.count();
         long activeUsers = userRepository.findAllActiveUsers(Pageable.unpaged()).getTotalElements();
@@ -72,6 +81,15 @@ public class AdminService {
                 .sum();
         long pendingOrders = orderRepository.countPendingOrders();
         long pendingPrintingRequests = printingRequestRepository.findRequestsByStatus(PrintingRequest.ModelStatus.REVIEWING, Pageable.unpaged()).getTotalElements();
+        long pendingProducts = productRepository.countByStatus(Product.ProductStatus.PENDING);
+        long pendingSellerApplications = sellerApplicationRepository.countByStatus(SellerApplication.ApplicationStatus.PENDING);
+        long pendingWithdrawals = withdrawalRepository.countByStatus(Withdrawal.WithdrawalStatus.PENDING);
+
+        Map<String, Long> roleDistribution = new LinkedHashMap<>();
+        for (String roleName : List.of("BUYER", "SELLER", "PRINTER_PARTNER", "ADMIN")) {
+            roleDistribution.put(roleName, userRepository.findUsersByRole(roleName, Pageable.unpaged()).getTotalElements());
+        }
+
         List<RevenuePointDto> monthlyRevenue = getRevenuePoints();
 
         return AdminDashboardDto.builder()
@@ -82,9 +100,14 @@ public class AdminService {
                 .totalRevenue(totalRevenue)
                 .pendingOrders(pendingOrders)
                 .pendingPrintingRequests(pendingPrintingRequests)
+                .pendingProducts(pendingProducts)
+                .pendingSellerApplications(pendingSellerApplications)
+                .pendingWithdrawals(pendingWithdrawals)
+                .roleDistribution(roleDistribution)
                 .monthlyRevenue(monthlyRevenue)
                 .build();
     }
+
 
     /** Danh sách sản phẩm cho admin duyệt, lọc theo trạng thái (phân trang). */
     @Transactional(readOnly = true)

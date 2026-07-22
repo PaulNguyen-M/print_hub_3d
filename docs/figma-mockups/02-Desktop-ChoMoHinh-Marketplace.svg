@@ -1,0 +1,279 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1460" viewBox="0 0 1440 1460">
+<rect x="0" y="0" width="1440" height="1460" fill="#f8fafc"/>
+<rect x="0" y="0" width="1440" height="72" fill="#ffffff"/>
+<line x1="0" y1="72" x2="1440" y2="72" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="120" y="19" width="34.0" height="34.0" fill="#2563eb" rx="10.0"/>
+<text x="137.0" y="41.0" font-family="Inter, sans-serif" font-size="18.0" fill="#ffffff" font-weight="800" text-anchor="middle">P</text>
+<text x="164.0" y="41.0" font-family="Inter, sans-serif" font-size="16.0" fill="#0f172a" font-weight="700" text-anchor="start">Print Hub 3D</text>
+<text x="350" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="500" text-anchor="start">Trang chủ</text>
+<text x="461.8" y="41" font-family="Inter, sans-serif" font-size="14" fill="#2563eb" font-weight="600" text-anchor="start">Chợ mô hình</text>
+<rect x="461.8" y="50" width="88" height="2.5" fill="#2563eb" rx="2"/>
+<text x="590.0" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="500" text-anchor="start">Dịch vụ in 3D</text>
+<text x="734.6" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="500" text-anchor="start">Sạp bán hàng</text>
+<circle cx="1302" cy="36" r="18" fill="#dbeafe"/>
+<text x="1302" y="42.3" font-family="Inter, sans-serif" font-size="16.2" fill="#2563eb" font-weight="700" text-anchor="middle">T</text>
+<text x="1274" y="41" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="500" text-anchor="end">Tuấn Anh</text>
+<circle cx="1192" cy="36" r="17" fill="#f1f5f9"/>
+<text x="1192" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="400" text-anchor="middle">🔔</text>
+<circle cx="1200" cy="28" r="7" fill="#ef4444"/>
+<text x="1200" y="31" font-family="Inter, sans-serif" font-size="9" fill="#ffffff" font-weight="700" text-anchor="middle">3</text>
+<circle cx="1142" cy="36" r="17" fill="#f1f5f9"/>
+<text x="1142" y="41" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="400" text-anchor="middle">🛒</text>
+<circle cx="1150" cy="28" r="7" fill="#2563eb"/>
+<text x="1150" y="31" font-family="Inter, sans-serif" font-size="9" fill="#ffffff" font-weight="700" text-anchor="middle">2</text>
+<text x="120" y="132" font-family="Inter, sans-serif" font-size="34" fill="#0f172a" font-weight="800" text-anchor="start">Chợ mô hình 3D</text>
+<text x="120" y="162" font-family="Inter, sans-serif" font-size="14.5" fill="#64748b" font-weight="400" text-anchor="start">12.418 mô hình từ 850 sạp bán hàng</text>
+<rect x="120" y="192" width="900" height="52" fill="#ffffff" rx="14" stroke="#e2e8f0" stroke-width="1"/>
+<text x="142" y="224" font-family="Inter, sans-serif" font-size="15" fill="#94a3b8" font-weight="400" text-anchor="start">🔍</text>
+<text x="170" y="224" font-family="Inter, sans-serif" font-size="14.5" fill="#94a3b8" font-weight="400" text-anchor="start">Tìm mô hình, danh mục hoặc tên sạp...</text>
+<rect x="1032" y="192" width="130" height="52" fill="#ffffff" rx="12" stroke="#e2e8f0" stroke-width="1"/>
+<text x="1097.0" y="223.04" font-family="Inter, sans-serif" font-size="14" fill="#475569" font-weight="600" text-anchor="middle">Sắp xếp ▾</text>
+<rect x="1172" y="192" width="148" height="52" fill="#2563eb" rx="12"/>
+<text x="1246.0" y="223.04" font-family="Inter, sans-serif" font-size="14" fill="#ffffff" font-weight="600" text-anchor="middle">Bộ lọc  (2)</text>
+<rect x="120" y="270" width="260" height="640" fill="#ffffff" rx="22" stroke="#e2e8f0" stroke-width="1"/>
+<text x="144" y="308" font-family="Inter, sans-serif" font-size="17" fill="#0f172a" font-weight="700" text-anchor="start">Bộ lọc</text>
+<text x="356" y="308" font-family="Inter, sans-serif" font-size="12.5" fill="#2563eb" font-weight="600" text-anchor="end">Xóa</text>
+<line x1="144" y1="328" x2="356" y2="328" stroke="#e2e8f0" stroke-width="1"/>
+<text x="144" y="360" font-family="Inter, sans-serif" font-size="13.5" fill="#0f172a" font-weight="700" text-anchor="start">Danh mục</text>
+<rect x="144" y="375" width="17" height="17" fill="#2563eb" rx="5"/>
+<path d="M148 383 l3 3 l6 -7" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="170" y="389" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="400" text-anchor="start">Mô hình sưu tầm</text>
+<text x="356" y="389" font-family="Inter, sans-serif" font-size="11.5" fill="#94a3b8" font-weight="400" text-anchor="end">3.204</text>
+<rect x="144" y="407" width="17" height="17" fill="#2563eb" rx="5"/>
+<path d="M148 415 l3 3 l6 -7" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="170" y="421" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="400" text-anchor="start">Đồ dùng chức năng</text>
+<text x="356" y="421" font-family="Inter, sans-serif" font-size="11.5" fill="#94a3b8" font-weight="400" text-anchor="end">2.180</text>
+<rect x="144" y="439" width="17" height="17" fill="#ffffff" rx="5" stroke="#cbd5e1" stroke-width="1"/>
+<text x="170" y="453" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="400" text-anchor="start">Trang trí nhà cửa</text>
+<text x="356" y="453" font-family="Inter, sans-serif" font-size="11.5" fill="#94a3b8" font-weight="400" text-anchor="end">1.940</text>
+<rect x="144" y="471" width="17" height="17" fill="#ffffff" rx="5" stroke="#cbd5e1" stroke-width="1"/>
+<text x="170" y="485" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="400" text-anchor="start">Board game</text>
+<text x="356" y="485" font-family="Inter, sans-serif" font-size="11.5" fill="#94a3b8" font-weight="400" text-anchor="end">1.520</text>
+<rect x="144" y="503" width="17" height="17" fill="#ffffff" rx="5" stroke="#cbd5e1" stroke-width="1"/>
+<text x="170" y="517" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="400" text-anchor="start">Trang sức</text>
+<text x="356" y="517" font-family="Inter, sans-serif" font-size="11.5" fill="#94a3b8" font-weight="400" text-anchor="end">860</text>
+<rect x="144" y="535" width="17" height="17" fill="#ffffff" rx="5" stroke="#cbd5e1" stroke-width="1"/>
+<text x="170" y="549" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="400" text-anchor="start">Linh kiện thay thế</text>
+<text x="356" y="549" font-family="Inter, sans-serif" font-size="11.5" fill="#94a3b8" font-weight="400" text-anchor="end">1.310</text>
+<line x1="144" y1="592" x2="356" y2="592" stroke="#e2e8f0" stroke-width="1"/>
+<text x="144" y="624" font-family="Inter, sans-serif" font-size="13.5" fill="#0f172a" font-weight="700" text-anchor="start">Khoảng giá</text>
+<rect x="144" y="648" width="212" height="5" fill="#e2e8f0" rx="3"/>
+<rect x="172" y="648" width="120" height="5" fill="#2563eb" rx="3"/>
+<circle cx="172" cy="650" r="9" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+<circle cx="292" cy="650" r="9" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="144" y="682" font-family="Inter, sans-serif" font-size="12" fill="#475569" font-weight="600" text-anchor="start">50.000₫</text>
+<text x="356" y="682" font-family="Inter, sans-serif" font-size="12" fill="#475569" font-weight="600" text-anchor="end">500.000₫</text>
+<line x1="144" y1="708" x2="356" y2="708" stroke="#e2e8f0" stroke-width="1"/>
+<text x="144" y="740" font-family="Inter, sans-serif" font-size="13.5" fill="#0f172a" font-weight="700" text-anchor="start">Đánh giá</text>
+<circle cx="152" cy="766" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+<circle cx="152" cy="766" r="4" fill="#2563eb"/>
+<path d="M170 764.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#f59e0b"/>
+<path d="M183 764.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#f59e0b"/>
+<path d="M196 764.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#f59e0b"/>
+<path d="M209 764.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#f59e0b"/>
+<path d="M222 764.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#f59e0b"/>
+<text x="242" y="773" font-family="Inter, sans-serif" font-size="12" fill="#475569" font-weight="400" text-anchor="start">trở lên</text>
+<circle cx="152" cy="798" r="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<path d="M170 796.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#f59e0b"/>
+<path d="M183 796.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#f59e0b"/>
+<path d="M196 796.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#f59e0b"/>
+<path d="M209 796.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#f59e0b"/>
+<path d="M222 796.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#cbd5e1"/>
+<text x="242" y="805" font-family="Inter, sans-serif" font-size="12" fill="#475569" font-weight="400" text-anchor="start">trở lên</text>
+<circle cx="152" cy="830" r="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<path d="M170 828.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#f59e0b"/>
+<path d="M183 828.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#f59e0b"/>
+<path d="M196 828.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#f59e0b"/>
+<path d="M209 828.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#cbd5e1"/>
+<path d="M222 828.5 l1.76 3.74 l4.18 0.05 l-3.3 2.5300000000000002 l1.21 3.96 l-3.8499999999999996 -2.42 l-3.8499999999999996 2.42 l1.21 -3.96 l-3.3 -2.5300000000000002 l4.18 -0.05 Z" fill="#cbd5e1"/>
+<text x="242" y="837" font-family="Inter, sans-serif" font-size="12" fill="#475569" font-weight="400" text-anchor="start">trở lên</text>
+<line x1="144" y1="862" x2="356" y2="862" stroke="#e2e8f0" stroke-width="1"/>
+<text x="144" y="890" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="400" text-anchor="start">Chỉ sạp đã xác minh</text>
+<rect x="320" y="878" width="36" height="20" fill="#2563eb" rx="10"/>
+<circle cx="346" cy="888" r="8" fill="#ffffff"/>
+<text x="412" y="274" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="400" text-anchor="start">Hiển thị 1–12 trong 12.418 kết quả</text>
+<rect x="662" y="256" width="134.83999999999997" height="24" fill="#f1f5f9" rx="12.0"/>
+<text x="729.42" y="271.96" font-family="Inter, sans-serif" font-size="11" fill="#475569" font-weight="600" text-anchor="middle">Mô hình sưu tầm  ✕</text>
+<rect x="812" y="256" width="102.94" height="24" fill="#f1f5f9" rx="12.0"/>
+<text x="863.47" y="271.96" font-family="Inter, sans-serif" font-size="11" fill="#475569" font-weight="600" text-anchor="middle">4★ trở lên  ✕</text>
+<rect x="412.0" y="300" width="210.5" height="306" fill="#ffffff" rx="20" stroke="#e2e8f0" stroke-width="1"/>
+<defs><linearGradient id="g13783" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="413.0" y="301" width="208.5" height="172" fill="url(#g13783)" rx="20"/>
+<path d="M517.25 343.484 L555.09 368.08 L555.09 405.92 L517.25 430.516 L479.40999999999997 405.92 L479.40999999999997 368.08 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M517.25 343.484 L555.09 368.08 L517.25 392.676 L479.40999999999997 368.08 Z" fill="#dbeafe"/>
+<path d="M517.25 392.676 L555.09 368.08 L555.09 405.92 L517.25 430.516 Z" fill="#1d4ed8" opacity="0.75"/>
+<circle cx="592.5" cy="328" r="15" fill="#ffffff"/>
+<text x="592.5" y="333" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="400" text-anchor="middle">♡</text>
+<rect x="426.0" y="314" width="50.8" height="20" fill="#ffffff" rx="10.0"/>
+<text x="451.4" y="327.6" font-family="Inter, sans-serif" font-size="10" fill="#2563eb" font-weight="600" text-anchor="middle">STL ×4</text>
+<text x="428.0" y="502" font-family="Inter, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">Rồng Á Đông</text>
+<text x="428.0" y="523" font-family="Inter, sans-serif" font-size="11.5" fill="#64748b" font-weight="400" text-anchor="start">Dragon Studio</text>
+<path d="M428.0 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M440.0 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M452.0 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M464.0 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M476.0 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<text x="492.0" y="551" font-family="Inter, sans-serif" font-size="11" fill="#64748b" font-weight="600" text-anchor="start">4.9</text>
+<text x="428.0" y="582" font-family="Inter, sans-serif" font-size="16.5" fill="#2563eb" font-weight="800" text-anchor="start">250.000₫</text>
+<rect x="576.5" y="564" width="32" height="32" fill="#eff6ff" rx="10"/>
+<text x="592.5" y="585" font-family="Inter, sans-serif" font-size="13" fill="#2563eb" font-weight="400" text-anchor="middle">🛒</text>
+<rect x="644.5" y="300" width="210.5" height="306" fill="#ffffff" rx="20" stroke="#e2e8f0" stroke-width="1"/>
+<defs><linearGradient id="g56972" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="645.5" y="301" width="208.5" height="172" fill="url(#g56972)" rx="20"/>
+<path d="M749.75 343.484 L787.59 368.08 L787.59 405.92 L749.75 430.516 L711.91 405.92 L711.91 368.08 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M749.75 343.484 L787.59 368.08 L749.75 392.676 L711.91 368.08 Z" fill="#dbeafe"/>
+<path d="M749.75 392.676 L787.59 368.08 L787.59 405.92 L749.75 430.516 Z" fill="#1d4ed8" opacity="0.75"/>
+<circle cx="825.0" cy="328" r="15" fill="#ffffff"/>
+<text x="825.0" y="333" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="400" text-anchor="middle">♡</text>
+<rect x="658.5" y="314" width="50.8" height="20" fill="#ffffff" rx="10.0"/>
+<text x="683.9" y="327.6" font-family="Inter, sans-serif" font-size="10" fill="#2563eb" font-weight="600" text-anchor="middle">STL ×1</text>
+<text x="660.5" y="502" font-family="Inter, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">Chậu cây hình học</text>
+<text x="660.5" y="523" font-family="Inter, sans-serif" font-size="11.5" fill="#64748b" font-weight="400" text-anchor="start">GeoPrint</text>
+<path d="M660.5 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M672.5 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M684.5 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M696.5 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M708.5 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<text x="724.5" y="551" font-family="Inter, sans-serif" font-size="11" fill="#64748b" font-weight="600" text-anchor="start">4.7</text>
+<text x="660.5" y="582" font-family="Inter, sans-serif" font-size="16.5" fill="#2563eb" font-weight="800" text-anchor="start">89.000₫</text>
+<rect x="809.0" y="564" width="32" height="32" fill="#eff6ff" rx="10"/>
+<text x="825.0" y="585" font-family="Inter, sans-serif" font-size="13" fill="#2563eb" font-weight="400" text-anchor="middle">🛒</text>
+<rect x="877.0" y="300" width="210.5" height="306" fill="#ffffff" rx="20" stroke="#e2e8f0" stroke-width="1"/>
+<defs><linearGradient id="g85349" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="878.0" y="301" width="208.5" height="172" fill="url(#g85349)" rx="20"/>
+<path d="M982.25 343.484 L1020.09 368.08 L1020.09 405.92 L982.25 430.516 L944.41 405.92 L944.41 368.08 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M982.25 343.484 L1020.09 368.08 L982.25 392.676 L944.41 368.08 Z" fill="#dbeafe"/>
+<path d="M982.25 392.676 L1020.09 368.08 L1020.09 405.92 L982.25 430.516 Z" fill="#1d4ed8" opacity="0.75"/>
+<circle cx="1057.5" cy="328" r="15" fill="#ffffff"/>
+<text x="1057.5" y="333" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="400" text-anchor="middle">♡</text>
+<rect x="891.0" y="314" width="56.599999999999994" height="20" fill="#ffffff" rx="10.0"/>
+<text x="919.3" y="327.6" font-family="Inter, sans-serif" font-size="10" fill="#2563eb" font-weight="600" text-anchor="middle">STL ×32</text>
+<text x="893.0" y="502" font-family="Inter, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">Bộ cờ Trung Cổ</text>
+<text x="893.0" y="523" font-family="Inter, sans-serif" font-size="11.5" fill="#64748b" font-weight="400" text-anchor="start">Tabletop VN</text>
+<path d="M893.0 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M905.0 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M917.0 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M929.0 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M941.0 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<text x="957.0" y="551" font-family="Inter, sans-serif" font-size="11" fill="#64748b" font-weight="600" text-anchor="start">5.0</text>
+<text x="893.0" y="582" font-family="Inter, sans-serif" font-size="16.5" fill="#2563eb" font-weight="800" text-anchor="start">420.000₫</text>
+<rect x="1041.5" y="564" width="32" height="32" fill="#eff6ff" rx="10"/>
+<text x="1057.5" y="585" font-family="Inter, sans-serif" font-size="13" fill="#2563eb" font-weight="400" text-anchor="middle">🛒</text>
+<rect x="1109.5" y="300" width="210.5" height="306" fill="#ffffff" rx="20" stroke="#e2e8f0" stroke-width="1"/>
+<defs><linearGradient id="g10218" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="1110.5" y="301" width="208.5" height="172" fill="url(#g10218)" rx="20"/>
+<path d="M1214.75 343.484 L1252.59 368.08 L1252.59 405.92 L1214.75 430.516 L1176.91 405.92 L1176.91 368.08 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M1214.75 343.484 L1252.59 368.08 L1214.75 392.676 L1176.91 368.08 Z" fill="#dbeafe"/>
+<path d="M1214.75 392.676 L1252.59 368.08 L1252.59 405.92 L1214.75 430.516 Z" fill="#1d4ed8" opacity="0.75"/>
+<circle cx="1290.0" cy="328" r="15" fill="#ffffff"/>
+<text x="1290.0" y="333" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="400" text-anchor="middle">♡</text>
+<rect x="1123.5" y="314" width="50.8" height="20" fill="#ffffff" rx="10.0"/>
+<text x="1148.9" y="327.6" font-family="Inter, sans-serif" font-size="10" fill="#2563eb" font-weight="600" text-anchor="middle">STL ×2</text>
+<text x="1125.5" y="502" font-family="Inter, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">Giá đỡ điện thoại</text>
+<text x="1125.5" y="523" font-family="Inter, sans-serif" font-size="11.5" fill="#64748b" font-weight="400" text-anchor="start">DailyMake</text>
+<path d="M1125.5 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M1137.5 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M1149.5 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M1161.5 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M1173.5 543.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<text x="1189.5" y="551" font-family="Inter, sans-serif" font-size="11" fill="#64748b" font-weight="600" text-anchor="start">4.8</text>
+<text x="1125.5" y="582" font-family="Inter, sans-serif" font-size="16.5" fill="#2563eb" font-weight="800" text-anchor="start">65.000₫</text>
+<rect x="1274.0" y="564" width="32" height="32" fill="#eff6ff" rx="10"/>
+<text x="1290.0" y="585" font-family="Inter, sans-serif" font-size="13" fill="#2563eb" font-weight="400" text-anchor="middle">🛒</text>
+<rect x="412.0" y="628" width="210.5" height="306" fill="#ffffff" rx="20" stroke="#e2e8f0" stroke-width="1"/>
+<defs><linearGradient id="g46365" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="413.0" y="629" width="208.5" height="172" fill="url(#g46365)" rx="20"/>
+<path d="M517.25 671.484 L555.09 696.08 L555.09 733.92 L517.25 758.516 L479.40999999999997 733.92 L479.40999999999997 696.08 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M517.25 671.484 L555.09 696.08 L517.25 720.676 L479.40999999999997 696.08 Z" fill="#dbeafe"/>
+<path d="M517.25 720.676 L555.09 696.08 L555.09 733.92 L517.25 758.516 Z" fill="#1d4ed8" opacity="0.75"/>
+<circle cx="592.5" cy="656" r="15" fill="#ffffff"/>
+<text x="592.5" y="661" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="400" text-anchor="middle">♡</text>
+<rect x="426.0" y="642" width="50.8" height="20" fill="#ffffff" rx="10.0"/>
+<text x="451.4" y="655.6" font-family="Inter, sans-serif" font-size="10" fill="#2563eb" font-weight="600" text-anchor="middle">STL ×3</text>
+<text x="428.0" y="830" font-family="Inter, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">Tượng Phi hành gia</text>
+<text x="428.0" y="851" font-family="Inter, sans-serif" font-size="11.5" fill="#64748b" font-weight="400" text-anchor="start">SpaceForm</text>
+<path d="M428.0 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M440.0 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M452.0 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M464.0 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M476.0 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<text x="492.0" y="879" font-family="Inter, sans-serif" font-size="11" fill="#64748b" font-weight="600" text-anchor="start">4.6</text>
+<text x="428.0" y="910" font-family="Inter, sans-serif" font-size="16.5" fill="#2563eb" font-weight="800" text-anchor="start">185.000₫</text>
+<rect x="576.5" y="892" width="32" height="32" fill="#eff6ff" rx="10"/>
+<text x="592.5" y="913" font-family="Inter, sans-serif" font-size="13" fill="#2563eb" font-weight="400" text-anchor="middle">🛒</text>
+<rect x="644.5" y="628" width="210.5" height="306" fill="#ffffff" rx="20" stroke="#e2e8f0" stroke-width="1"/>
+<defs><linearGradient id="g44208" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="645.5" y="629" width="208.5" height="172" fill="url(#g44208)" rx="20"/>
+<path d="M749.75 671.484 L787.59 696.08 L787.59 733.92 L749.75 758.516 L711.91 733.92 L711.91 696.08 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M749.75 671.484 L787.59 696.08 L749.75 720.676 L711.91 696.08 Z" fill="#dbeafe"/>
+<path d="M749.75 720.676 L787.59 696.08 L787.59 733.92 L749.75 758.516 Z" fill="#1d4ed8" opacity="0.75"/>
+<circle cx="825.0" cy="656" r="15" fill="#ffffff"/>
+<text x="825.0" y="661" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="400" text-anchor="middle">♡</text>
+<rect x="658.5" y="642" width="50.8" height="20" fill="#ffffff" rx="10.0"/>
+<text x="683.9" y="655.6" font-family="Inter, sans-serif" font-size="10" fill="#2563eb" font-weight="600" text-anchor="middle">STL ×2</text>
+<text x="660.5" y="830" font-family="Inter, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">Hộp đựng bút</text>
+<text x="660.5" y="851" font-family="Inter, sans-serif" font-size="11.5" fill="#64748b" font-weight="400" text-anchor="start">DailyMake</text>
+<path d="M660.5 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M672.5 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M684.5 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M696.5 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M708.5 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<text x="724.5" y="879" font-family="Inter, sans-serif" font-size="11" fill="#64748b" font-weight="600" text-anchor="start">4.5</text>
+<text x="660.5" y="910" font-family="Inter, sans-serif" font-size="16.5" fill="#2563eb" font-weight="800" text-anchor="start">72.000₫</text>
+<rect x="809.0" y="892" width="32" height="32" fill="#eff6ff" rx="10"/>
+<text x="825.0" y="913" font-family="Inter, sans-serif" font-size="13" fill="#2563eb" font-weight="400" text-anchor="middle">🛒</text>
+<rect x="877.0" y="628" width="210.5" height="306" fill="#ffffff" rx="20" stroke="#e2e8f0" stroke-width="1"/>
+<defs><linearGradient id="g39812" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="878.0" y="629" width="208.5" height="172" fill="url(#g39812)" rx="20"/>
+<path d="M982.25 671.484 L1020.09 696.08 L1020.09 733.92 L982.25 758.516 L944.41 733.92 L944.41 696.08 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M982.25 671.484 L1020.09 696.08 L982.25 720.676 L944.41 696.08 Z" fill="#dbeafe"/>
+<path d="M982.25 720.676 L1020.09 696.08 L1020.09 733.92 L982.25 758.516 Z" fill="#1d4ed8" opacity="0.75"/>
+<circle cx="1057.5" cy="656" r="15" fill="#ffffff"/>
+<text x="1057.5" y="661" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="400" text-anchor="middle">♡</text>
+<rect x="891.0" y="642" width="50.8" height="20" fill="#ffffff" rx="10.0"/>
+<text x="916.4" y="655.6" font-family="Inter, sans-serif" font-size="10" fill="#2563eb" font-weight="600" text-anchor="middle">STL ×8</text>
+<text x="893.0" y="830" font-family="Inter, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">Mô hình xe cổ</text>
+<text x="893.0" y="851" font-family="Inter, sans-serif" font-size="11.5" fill="#64748b" font-weight="400" text-anchor="start">RetroPrint</text>
+<path d="M893.0 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M905.0 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M917.0 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M929.0 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M941.0 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<text x="957.0" y="879" font-family="Inter, sans-serif" font-size="11" fill="#64748b" font-weight="600" text-anchor="start">4.9</text>
+<text x="893.0" y="910" font-family="Inter, sans-serif" font-size="16.5" fill="#2563eb" font-weight="800" text-anchor="start">310.000₫</text>
+<rect x="1041.5" y="892" width="32" height="32" fill="#eff6ff" rx="10"/>
+<text x="1057.5" y="913" font-family="Inter, sans-serif" font-size="13" fill="#2563eb" font-weight="400" text-anchor="middle">🛒</text>
+<rect x="1109.5" y="628" width="210.5" height="306" fill="#ffffff" rx="20" stroke="#e2e8f0" stroke-width="1"/>
+<defs><linearGradient id="g32220" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eff6ff"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient></defs>
+<rect x="1110.5" y="629" width="208.5" height="172" fill="url(#g32220)" rx="20"/>
+<path d="M1214.75 671.484 L1252.59 696.08 L1252.59 733.92 L1214.75 758.516 L1176.91 733.92 L1176.91 696.08 Z" fill="#3b82f6" opacity="0.9"/>
+<path d="M1214.75 671.484 L1252.59 696.08 L1214.75 720.676 L1176.91 696.08 Z" fill="#dbeafe"/>
+<path d="M1214.75 720.676 L1252.59 696.08 L1252.59 733.92 L1214.75 758.516 Z" fill="#1d4ed8" opacity="0.75"/>
+<circle cx="1290.0" cy="656" r="15" fill="#ffffff"/>
+<text x="1290.0" y="661" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="400" text-anchor="middle">♡</text>
+<rect x="1123.5" y="642" width="50.8" height="20" fill="#ffffff" rx="10.0"/>
+<text x="1148.9" y="655.6" font-family="Inter, sans-serif" font-size="10" fill="#2563eb" font-weight="600" text-anchor="middle">STL ×1</text>
+<text x="1125.5" y="830" font-family="Inter, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">Kệ tai nghe</text>
+<text x="1125.5" y="851" font-family="Inter, sans-serif" font-size="11.5" fill="#64748b" font-weight="400" text-anchor="start">GeoPrint</text>
+<path d="M1125.5 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M1137.5 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M1149.5 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M1161.5 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<path d="M1173.5 871.0 l1.6 3.4000000000000004 l3.8 0.05 l-3.0 2.3000000000000003 l1.1 3.5999999999999996 l-3.5 -2.2 l-3.5 2.2 l1.1 -3.5999999999999996 l-3.0 -2.3000000000000003 l3.8 -0.05 Z" fill="#f59e0b"/>
+<text x="1189.5" y="879" font-family="Inter, sans-serif" font-size="11" fill="#64748b" font-weight="600" text-anchor="start">4.7</text>
+<text x="1125.5" y="910" font-family="Inter, sans-serif" font-size="16.5" fill="#2563eb" font-weight="800" text-anchor="start">95.000₫</text>
+<rect x="1274.0" y="892" width="32" height="32" fill="#eff6ff" rx="10"/>
+<text x="1290.0" y="913" font-family="Inter, sans-serif" font-size="13" fill="#2563eb" font-weight="400" text-anchor="middle">🛒</text>
+<text x="412" y="970" font-family="Inter, sans-serif" font-size="13" fill="#64748b" font-weight="600" text-anchor="start">‹  Trước</text>
+<rect x="532" y="952" width="38" height="38" fill="#2563eb" rx="11"/>
+<text x="551" y="975" font-family="Inter, sans-serif" font-size="13" fill="#ffffff" font-weight="600" text-anchor="middle">1</text>
+<rect x="578" y="952" width="38" height="38" fill="#ffffff" rx="11" stroke="#e2e8f0" stroke-width="1"/>
+<text x="597" y="975" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="600" text-anchor="middle">2</text>
+<rect x="624" y="952" width="38" height="38" fill="#ffffff" rx="11" stroke="#e2e8f0" stroke-width="1"/>
+<text x="643" y="975" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="600" text-anchor="middle">3</text>
+<rect x="670" y="952" width="38" height="38" fill="#ffffff" rx="11" stroke="#e2e8f0" stroke-width="1"/>
+<text x="689" y="975" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="600" text-anchor="middle">…</text>
+<rect x="716" y="952" width="38" height="38" fill="#ffffff" rx="11" stroke="#e2e8f0" stroke-width="1"/>
+<text x="735" y="975" font-family="Inter, sans-serif" font-size="13" fill="#475569" font-weight="600" text-anchor="middle">1035</text>
+<text x="832" y="970" font-family="Inter, sans-serif" font-size="13" fill="#2563eb" font-weight="600" text-anchor="start">Sau  ›</text>
+</svg>
